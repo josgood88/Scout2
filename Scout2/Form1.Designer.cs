@@ -28,6 +28,10 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnReport = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.progressReport = new System.Windows.Forms.ProgressBar();
+         this.progressImport = new System.Windows.Forms.ProgressBar();
+         this.progressZipFile = new System.Windows.Forms.ProgressBar();
+         this.progressLegSite = new System.Windows.Forms.ProgressBar();
          this.groupBox2 = new System.Windows.Forms.GroupBox();
          this.progressTwoWordsNear = new System.Windows.Forms.ProgressBar();
          this.button1 = new System.Windows.Forms.Button();
@@ -39,9 +43,14 @@
          this.txt2ndWord = new System.Windows.Forms.TextBox();
          this.txt1stWord = new System.Windows.Forms.TextBox();
          this.bgw_TwoWordsNear = new System.ComponentModel.BackgroundWorker();
-         this.progressLegSite = new System.Windows.Forms.ProgressBar();
+         this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+         this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+         this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
+         this.menuStrip1.SuspendLayout();
          this.SuspendLayout();
          // 
          // btnLegSite
@@ -66,7 +75,7 @@
          // 
          // btnImport
          // 
-         this.btnImport.Location = new System.Drawing.Point(132, 53);
+         this.btnImport.Location = new System.Drawing.Point(12, 91);
          this.btnImport.Name = "btnImport";
          this.btnImport.Size = new System.Drawing.Size(104, 23);
          this.btnImport.TabIndex = 2;
@@ -76,7 +85,7 @@
          // 
          // btnReport
          // 
-         this.btnReport.Location = new System.Drawing.Point(263, 53);
+         this.btnReport.Location = new System.Drawing.Point(12, 131);
          this.btnReport.Name = "btnReport";
          this.btnReport.Size = new System.Drawing.Size(104, 23);
          this.btnReport.TabIndex = 3;
@@ -86,6 +95,9 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.progressReport);
+         this.groupBox1.Controls.Add(this.progressImport);
+         this.groupBox1.Controls.Add(this.progressZipFile);
          this.groupBox1.Controls.Add(this.progressLegSite);
          this.groupBox1.Controls.Add(this.btnReport);
          this.groupBox1.Controls.Add(this.btnImport);
@@ -93,10 +105,38 @@
          this.groupBox1.Controls.Add(this.btnLegSite);
          this.groupBox1.Location = new System.Drawing.Point(38, 34);
          this.groupBox1.Name = "groupBox1";
-         this.groupBox1.Size = new System.Drawing.Size(509, 99);
+         this.groupBox1.Size = new System.Drawing.Size(509, 176);
          this.groupBox1.TabIndex = 4;
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
+         // 
+         // progressReport
+         // 
+         this.progressReport.Location = new System.Drawing.Point(132, 131);
+         this.progressReport.Name = "progressReport";
+         this.progressReport.Size = new System.Drawing.Size(347, 23);
+         this.progressReport.TabIndex = 7;
+         // 
+         // progressImport
+         // 
+         this.progressImport.Location = new System.Drawing.Point(132, 91);
+         this.progressImport.Name = "progressImport";
+         this.progressImport.Size = new System.Drawing.Size(347, 23);
+         this.progressImport.TabIndex = 6;
+         // 
+         // progressZipFile
+         // 
+         this.progressZipFile.Location = new System.Drawing.Point(132, 53);
+         this.progressZipFile.Name = "progressZipFile";
+         this.progressZipFile.Size = new System.Drawing.Size(347, 23);
+         this.progressZipFile.TabIndex = 5;
+         // 
+         // progressLegSite
+         // 
+         this.progressLegSite.Location = new System.Drawing.Point(132, 16);
+         this.progressLegSite.Name = "progressLegSite";
+         this.progressLegSite.Size = new System.Drawing.Size(347, 23);
+         this.progressLegSite.TabIndex = 4;
          // 
          // groupBox2
          // 
@@ -109,9 +149,9 @@
          this.groupBox2.Controls.Add(this.label1);
          this.groupBox2.Controls.Add(this.txt2ndWord);
          this.groupBox2.Controls.Add(this.txt1stWord);
-         this.groupBox2.Location = new System.Drawing.Point(44, 158);
+         this.groupBox2.Location = new System.Drawing.Point(38, 236);
          this.groupBox2.Name = "groupBox2";
-         this.groupBox2.Size = new System.Drawing.Size(416, 161);
+         this.groupBox2.Size = new System.Drawing.Size(509, 162);
          this.groupBox2.TabIndex = 5;
          this.groupBox2.TabStop = false;
          this.groupBox2.Text = "Two Words Near Each Other";
@@ -193,26 +233,65 @@
          this.bgw_TwoWordsNear.WorkerReportsProgress = true;
          this.bgw_TwoWordsNear.WorkerSupportsCancellation = true;
          // 
-         // progressLegSite
+         // menuStrip1
          // 
-         this.progressLegSite.Location = new System.Drawing.Point(132, 16);
-         this.progressLegSite.Name = "progressLegSite";
-         this.progressLegSite.Size = new System.Drawing.Size(347, 23);
-         this.progressLegSite.TabIndex = 4;
+         this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.updateFoldersFileToolStripMenuItem});
+         this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+         this.menuStrip1.Name = "menuStrip1";
+         this.menuStrip1.Size = new System.Drawing.Size(600, 24);
+         this.menuStrip1.TabIndex = 6;
+         this.menuStrip1.Text = "menuStrip1";
+         // 
+         // fileToolStripMenuItem
+         // 
+         this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripMenuItem1,
+            this.exitToolStripMenuItem});
+         this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+         this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+         this.fileToolStripMenuItem.Text = "File";
+         // 
+         // helpToolStripMenuItem1
+         // 
+         this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+         this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+         this.helpToolStripMenuItem1.Text = "Help";
+         this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
+         // 
+         // exitToolStripMenuItem
+         // 
+         this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+         this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.exitToolStripMenuItem.Text = "Exit";
+         this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+         // 
+         // updateFoldersFileToolStripMenuItem
+         // 
+         this.updateFoldersFileToolStripMenuItem.Name = "updateFoldersFileToolStripMenuItem";
+         this.updateFoldersFileToolStripMenuItem.Size = new System.Drawing.Size(113, 20);
+         this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
+         this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(600, 628);
+         this.ClientSize = new System.Drawing.Size(600, 431);
          this.Controls.Add(this.groupBox2);
          this.Controls.Add(this.groupBox1);
+         this.Controls.Add(this.menuStrip1);
+         this.MainMenuStrip = this.menuStrip1;
          this.Name = "Form1";
          this.Text = "Scout California Legislature";
          this.groupBox1.ResumeLayout(false);
          this.groupBox2.ResumeLayout(false);
          this.groupBox2.PerformLayout();
+         this.menuStrip1.ResumeLayout(false);
+         this.menuStrip1.PerformLayout();
          this.ResumeLayout(false);
+         this.PerformLayout();
 
       }
 
@@ -235,6 +314,14 @@
       private System.ComponentModel.BackgroundWorker bgw_TwoWordsNear;
       public System.Windows.Forms.ProgressBar progressTwoWordsNear;
       public System.Windows.Forms.ProgressBar progressLegSite;
+      public System.Windows.Forms.ProgressBar progressReport;
+      public System.Windows.Forms.ProgressBar progressImport;
+      public System.Windows.Forms.ProgressBar progressZipFile;
+      private System.Windows.Forms.MenuStrip menuStrip1;
+      private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
+      private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem updateFoldersFileToolStripMenuItem;
    }
 }
 

@@ -58,5 +58,22 @@ namespace Scout2 {
       /// </summary>
       /// <param name="value"></param>
       public void UpdateProgressLegSite(int value) { this.progressLegSite.Value = value; }
+
+      private void helpToolStripMenuItem_Click(object sender, EventArgs e) {
+         MessageBox.Show("Clicked", "Define Constants");
+      }
+
+      private void helpToolStripMenuItem1_Click(object sender, EventArgs e) {
+         MessageBox.Show("Clicked", "Help");
+      }
+
+      private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+         Application.Exit();
+      }
+
+      private void updateFoldersFileToolStripMenuItem_Click(object sender, EventArgs e) {
+         var form = new FormEditConstants();
+         form.ShowDialog();
+      }
    }
 }
