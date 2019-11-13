@@ -283,6 +283,7 @@
          this.Controls.Add(this.label1);
          this.Name = "FormEditConstants";
          this.Text = "FormEditConstants";
+         this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEditConstants_FormClosing);
          this.ResumeLayout(false);
          this.PerformLayout();
 
