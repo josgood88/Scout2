@@ -285,6 +285,7 @@
          this.MainMenuStrip = this.menuStrip1;
          this.Name = "Form1";
          this.Text = "Scout California Legislature";
+         this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
          this.groupBox1.ResumeLayout(false);
          this.groupBox2.ResumeLayout(false);
          this.groupBox2.PerformLayout();

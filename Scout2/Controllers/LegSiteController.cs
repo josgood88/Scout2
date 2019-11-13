@@ -13,7 +13,7 @@ namespace Scout2.Controllers {
       private IWebDriver Driver { get; set; }
 
       public async Task<int> Run(Form1 form1) {
-         LogThis($"Connecting to {ManifestConstants.LegSite}.");
+         LogThis($"Connecting to {Config.Instance.LegSite}.");
          try {
             InitializeChrome();
             FindLastModified().Click();         // Sort zip files in ascending date order
@@ -53,7 +53,7 @@ namespace Scout2.Controllers {
          Driver = new ChromeDriver();
          Driver.Manage().Timeouts().PageLoad = page_load_timeout;
          Driver.Manage().Window.Maximize();
-         Driver.Navigate().GoToUrl(ManifestConstants.LegSite);
+         Driver.Navigate().GoToUrl(Config.Instance.LegSite);
       }
 
       private void CloseChrome() {
@@ -87,7 +87,7 @@ namespace Scout2.Controllers {
       /// <param name="form1">Need to update progressLegSite, so need the form.</param>
       private async Task<TimeSpan> DownloadLegSiteFileAsync(string filename, Form1 form1) {
          LogThis($"Downloading {filename}, which is the most recent zip file on the leg site.");
-         var leg_site_path = Path.Combine(ManifestConstants.LegSite, filename);
+         var leg_site_path = Path.Combine(Config.Instance.LegSite, filename);
          var output_path = OutputPath(filename);   // Throw if output file cannot be created.
          ProgressBar progress = form1.progressLegSite;
          var start_time = DateTime.Now;
@@ -110,7 +110,7 @@ namespace Scout2.Controllers {
       /// </summary>
       /// <param name="filename"></param>
       private string OutputPath(string filename) {
-         var full_path = Path.Combine(ManifestConstants.DownloadsFolder, filename);
+         var full_path = Path.Combine(Config.Instance.DownloadsFolder, filename);
          var test_file_creation = new FileStream(full_path, FileMode.Create);
          test_file_creation.Close();
          return full_path;

@@ -3,39 +3,102 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Library;
 
 namespace Scout2 {
    public partial class FormEditConstants : Form {
       public FormEditConstants() {
          InitializeComponent();
+         txtBillsFolder.Text     = Config.Instance.BillsFolder;
+         txtDatabaseFolder.Text  = Config.Instance.DatabaseFolder;
+         txtDownloadsFolder.Text = Config.Instance.DownloadsFolder;
+         txtHtmlFolder.Text      = Config.Instance.HtmlFolder;
+         txtNegativeFile.Text    = Config.Instance.NegativeFile;
+         txtPositiveFile.Text    = Config.Instance.PositiveFile;
+         txtScoutFile.Text       = Config.Instance.ScoutFile;
       }
 
       private void btnBillsFolder_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Bills Folder");
+         UpdateFolder(txtBillsFolder);
       }
 
       private void btnDataBaseFolder_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Database Folder");
+         UpdateFolder(txtDatabaseFolder);
+      }
+
+      private void btnDownloadsFolder_Click(object sender, EventArgs e) {
+         UpdateFolder(txtDownloadsFolder);
       }
 
       private void btnHtmlFolder_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Html Folder");
+         UpdateFolder(txtHtmlFolder);
       }
 
       private void btnNegativeFile_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Negative File");
+         UpdateFile(txtNegativeFile);
       }
 
       private void btnPositiveFile_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Positive File");
+         UpdateFile(txtPositiveFile);
       }
 
       private void btnScoutFile_Click(object sender, EventArgs e) {
-         MessageBox.Show("Clicked", "Scout File");
+         UpdateFile(txtScoutFile);
+      }
+
+      private void ClearIfFolderNotExists(TextBox field) {
+         if (field.Text.Length > 0) {
+            if (!Directory.Exists(field.Text)) {
+               field.Text = string.Empty;
+               field.Update();
+            }
+         }
+      }
+
+      private void ClearIfFileNotExists(TextBox field) {
+         if (field.Text.Length > 0) {
+            if (!File.Exists(field.Text)) {
+               field.Text = string.Empty;
+               field.Update();
+            }
+         }
+      }
+
+      private void InitializeFolderDialog(TextBox field) {
+         if (field.Text.Length > 0) {
+            folderBrowserDialog1.SelectedPath = field.Text;
+         }
+      }
+
+      private void InitializeFileDialog(TextBox field) {
+         if (field.Text.Length > 0) {
+            openFileDialog1.FileName = field.Text;
+         }
+      }
+
+      private void UpdateFolder(TextBox field) {
+         ClearIfFolderNotExists(field);
+         InitializeFolderDialog(field);
+         var result = folderBrowserDialog1.ShowDialog();
+         if (result == DialogResult.OK) {
+            field.Text = folderBrowserDialog1.SelectedPath;
+            field.Update();
+         }
+      }
+
+      private void UpdateFile(TextBox field) {
+         ClearIfFileNotExists(field);
+         InitializeFileDialog(field);
+         var result = openFileDialog1.ShowDialog();
+         if (result == DialogResult.OK) {
+            field.Text = openFileDialog1.FileName;
+            field.Update();
+         }
       }
    }
 }

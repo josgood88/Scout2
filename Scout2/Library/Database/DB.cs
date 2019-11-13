@@ -14,7 +14,7 @@ namespace Library.Database {
          }
       }
 
-      public static string DBPath() { return Path.Combine(ManifestConstants.DatabaseFolder,"Scout.db"); }
+      public static string DBPath() { return Path.Combine(Config.Instance.DatabaseFolder,"Scout.db"); }
 
       public static SQLiteConnection Connect() {
          return new SQLiteConnection($"Data Source={DBPath()}");

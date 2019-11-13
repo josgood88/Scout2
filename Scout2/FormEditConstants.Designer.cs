@@ -44,6 +44,10 @@
          this.btnNegativeFile = new System.Windows.Forms.Button();
          this.btnPositiveFile = new System.Windows.Forms.Button();
          this.btnScoutFile = new System.Windows.Forms.Button();
+         this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+         this.label8 = new System.Windows.Forms.Label();
+         this.txtDownloadsFolder = new System.Windows.Forms.TextBox();
+         this.btnDownloadsFolder = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // label1
@@ -58,7 +62,7 @@
          // label2
          // 
          this.label2.AutoSize = true;
-         this.label2.Location = new System.Drawing.Point(38, 71);
+         this.label2.Location = new System.Drawing.Point(38, 70);
          this.label2.Name = "label2";
          this.label2.Size = new System.Drawing.Size(85, 13);
          this.label2.TabIndex = 1;
@@ -67,7 +71,7 @@
          // label3
          // 
          this.label3.AutoSize = true;
-         this.label3.Location = new System.Drawing.Point(38, 103);
+         this.label3.Location = new System.Drawing.Point(38, 132);
          this.label3.Name = "label3";
          this.label3.Size = new System.Drawing.Size(69, 13);
          this.label3.TabIndex = 2;
@@ -76,7 +80,7 @@
          // label4
          // 
          this.label4.AutoSize = true;
-         this.label4.Location = new System.Drawing.Point(38, 135);
+         this.label4.Location = new System.Drawing.Point(38, 163);
          this.label4.Name = "label4";
          this.label4.Size = new System.Drawing.Size(79, 13);
          this.label4.TabIndex = 3;
@@ -85,7 +89,7 @@
          // label5
          // 
          this.label5.AutoSize = true;
-         this.label5.Location = new System.Drawing.Point(38, 167);
+         this.label5.Location = new System.Drawing.Point(38, 194);
          this.label5.Name = "label5";
          this.label5.Size = new System.Drawing.Size(69, 13);
          this.label5.TabIndex = 4;
@@ -94,7 +98,7 @@
          // label6
          // 
          this.label6.AutoSize = true;
-         this.label6.Location = new System.Drawing.Point(38, 199);
+         this.label6.Location = new System.Drawing.Point(38, 225);
          this.label6.Name = "label6";
          this.label6.Size = new System.Drawing.Size(63, 13);
          this.label6.TabIndex = 5;
@@ -103,7 +107,7 @@
          // label7
          // 
          this.label7.AutoSize = true;
-         this.label7.Location = new System.Drawing.Point(38, 231);
+         this.label7.Location = new System.Drawing.Point(38, 256);
          this.label7.Name = "label7";
          this.label7.Size = new System.Drawing.Size(54, 13);
          this.label7.TabIndex = 6;
@@ -118,42 +122,42 @@
          // 
          // txtDatabaseFolder
          // 
-         this.txtDatabaseFolder.Location = new System.Drawing.Point(133, 71);
+         this.txtDatabaseFolder.Location = new System.Drawing.Point(133, 70);
          this.txtDatabaseFolder.Name = "txtDatabaseFolder";
          this.txtDatabaseFolder.Size = new System.Drawing.Size(300, 20);
          this.txtDatabaseFolder.TabIndex = 8;
          // 
          // txtHtmlFolder
          // 
-         this.txtHtmlFolder.Location = new System.Drawing.Point(133, 103);
+         this.txtHtmlFolder.Location = new System.Drawing.Point(133, 132);
          this.txtHtmlFolder.Name = "txtHtmlFolder";
          this.txtHtmlFolder.Size = new System.Drawing.Size(300, 20);
          this.txtHtmlFolder.TabIndex = 9;
          // 
          // txtLegislatureSite
          // 
-         this.txtLegislatureSite.Location = new System.Drawing.Point(133, 135);
+         this.txtLegislatureSite.Location = new System.Drawing.Point(133, 163);
          this.txtLegislatureSite.Name = "txtLegislatureSite";
          this.txtLegislatureSite.Size = new System.Drawing.Size(300, 20);
          this.txtLegislatureSite.TabIndex = 10;
          // 
          // txtNegativeFile
          // 
-         this.txtNegativeFile.Location = new System.Drawing.Point(133, 167);
+         this.txtNegativeFile.Location = new System.Drawing.Point(133, 194);
          this.txtNegativeFile.Name = "txtNegativeFile";
          this.txtNegativeFile.Size = new System.Drawing.Size(300, 20);
          this.txtNegativeFile.TabIndex = 11;
          // 
          // txtPositiveFile
          // 
-         this.txtPositiveFile.Location = new System.Drawing.Point(133, 199);
+         this.txtPositiveFile.Location = new System.Drawing.Point(133, 225);
          this.txtPositiveFile.Name = "txtPositiveFile";
          this.txtPositiveFile.Size = new System.Drawing.Size(300, 20);
          this.txtPositiveFile.TabIndex = 12;
          // 
          // txtScoutFile
          // 
-         this.txtScoutFile.Location = new System.Drawing.Point(133, 231);
+         this.txtScoutFile.Location = new System.Drawing.Point(133, 256);
          this.txtScoutFile.Name = "txtScoutFile";
          this.txtScoutFile.Size = new System.Drawing.Size(300, 20);
          this.txtScoutFile.TabIndex = 13;
@@ -175,7 +179,7 @@
          // 
          // btnDatabaseFolder
          // 
-         this.btnDatabaseFolder.Location = new System.Drawing.Point(461, 71);
+         this.btnDatabaseFolder.Location = new System.Drawing.Point(461, 70);
          this.btnDatabaseFolder.Name = "btnDatabaseFolder";
          this.btnDatabaseFolder.Size = new System.Drawing.Size(75, 23);
          this.btnDatabaseFolder.TabIndex = 15;
@@ -185,7 +189,7 @@
          // 
          // btnHtmlFolder
          // 
-         this.btnHtmlFolder.Location = new System.Drawing.Point(461, 100);
+         this.btnHtmlFolder.Location = new System.Drawing.Point(461, 132);
          this.btnHtmlFolder.Name = "btnHtmlFolder";
          this.btnHtmlFolder.Size = new System.Drawing.Size(75, 23);
          this.btnHtmlFolder.TabIndex = 16;
@@ -195,7 +199,7 @@
          // 
          // btnNegativeFile
          // 
-         this.btnNegativeFile.Location = new System.Drawing.Point(461, 167);
+         this.btnNegativeFile.Location = new System.Drawing.Point(461, 194);
          this.btnNegativeFile.Name = "btnNegativeFile";
          this.btnNegativeFile.Size = new System.Drawing.Size(75, 23);
          this.btnNegativeFile.TabIndex = 18;
@@ -205,7 +209,7 @@
          // 
          // btnPositiveFile
          // 
-         this.btnPositiveFile.Location = new System.Drawing.Point(461, 199);
+         this.btnPositiveFile.Location = new System.Drawing.Point(461, 225);
          this.btnPositiveFile.Name = "btnPositiveFile";
          this.btnPositiveFile.Size = new System.Drawing.Size(75, 23);
          this.btnPositiveFile.TabIndex = 19;
@@ -215,7 +219,7 @@
          // 
          // btnScoutFile
          // 
-         this.btnScoutFile.Location = new System.Drawing.Point(461, 231);
+         this.btnScoutFile.Location = new System.Drawing.Point(461, 256);
          this.btnScoutFile.Name = "btnScoutFile";
          this.btnScoutFile.Size = new System.Drawing.Size(75, 23);
          this.btnScoutFile.TabIndex = 20;
@@ -223,11 +227,40 @@
          this.btnScoutFile.UseVisualStyleBackColor = true;
          this.btnScoutFile.Click += new System.EventHandler(this.btnScoutFile_Click);
          // 
+         // label8
+         // 
+         this.label8.AutoSize = true;
+         this.label8.Location = new System.Drawing.Point(38, 101);
+         this.label8.Name = "label8";
+         this.label8.Size = new System.Drawing.Size(92, 13);
+         this.label8.TabIndex = 21;
+         this.label8.Text = "Downloads Folder";
+         // 
+         // txtDownloadsFolder
+         // 
+         this.txtDownloadsFolder.Location = new System.Drawing.Point(133, 101);
+         this.txtDownloadsFolder.Name = "txtDownloadsFolder";
+         this.txtDownloadsFolder.Size = new System.Drawing.Size(300, 20);
+         this.txtDownloadsFolder.TabIndex = 22;
+         // 
+         // btnDownloadsFolder
+         // 
+         this.btnDownloadsFolder.Location = new System.Drawing.Point(461, 101);
+         this.btnDownloadsFolder.Name = "btnDownloadsFolder";
+         this.btnDownloadsFolder.Size = new System.Drawing.Size(75, 23);
+         this.btnDownloadsFolder.TabIndex = 23;
+         this.btnDownloadsFolder.Text = "Browse";
+         this.btnDownloadsFolder.UseVisualStyleBackColor = true;
+         this.btnDownloadsFolder.Click += new System.EventHandler(this.btnDownloadsFolder_Click);
+         // 
          // FormEditConstants
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(800, 280);
+         this.ClientSize = new System.Drawing.Size(800, 313);
+         this.Controls.Add(this.btnDownloadsFolder);
+         this.Controls.Add(this.txtDownloadsFolder);
+         this.Controls.Add(this.label8);
          this.Controls.Add(this.btnScoutFile);
          this.Controls.Add(this.btnPositiveFile);
          this.Controls.Add(this.btnNegativeFile);
@@ -264,19 +297,23 @@
       private System.Windows.Forms.Label label5;
       private System.Windows.Forms.Label label6;
       private System.Windows.Forms.Label label7;
+      private System.Windows.Forms.Label label8;
       private System.Windows.Forms.TextBox txtBillsFolder;
       private System.Windows.Forms.TextBox txtDatabaseFolder;
+      private System.Windows.Forms.TextBox txtDownloadsFolder;
       private System.Windows.Forms.TextBox txtHtmlFolder;
       private System.Windows.Forms.TextBox txtLegislatureSite;
       private System.Windows.Forms.TextBox txtNegativeFile;
       private System.Windows.Forms.TextBox txtPositiveFile;
       private System.Windows.Forms.TextBox txtScoutFile;
-      private System.Windows.Forms.OpenFileDialog openFileDialog1;
       private System.Windows.Forms.Button btnBillsFolder;
       private System.Windows.Forms.Button btnDatabaseFolder;
+      private System.Windows.Forms.Button btnDownloadsFolder;
       private System.Windows.Forms.Button btnHtmlFolder;
       private System.Windows.Forms.Button btnNegativeFile;
       private System.Windows.Forms.Button btnPositiveFile;
       private System.Windows.Forms.Button btnScoutFile;
+      private System.Windows.Forms.OpenFileDialog openFileDialog1;
+      private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
    }
 }

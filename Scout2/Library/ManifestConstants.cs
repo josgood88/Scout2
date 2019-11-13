@@ -1,24 +1,64 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace Library {
-   public static class ManifestConstants {
-      public static string BillsFolder          { get { return bills_folder; } }
-      public static string DatabaseFolder       { get { return database_folder; } }
-      public static string DownloadsFolder      { get { return downloads_folder; } }
-      public static string HtmlFolder           { get { return html_folder; } }
-      public static string LegSite              { get { return leg_site; } }
-      public static string NegativeFile         { get { return negative_file; } }
-      public static string PositiveFile         { get { return positive_file; } }
-      public static string ScoutFile            { get { return scout_file; } }
+   /// <summary>
+   /// This class uses the Singleton pattern and owns the configuration data.
+   /// It is responsible for deserializing the configuration data upon singleton construction
+   /// and serializing the configuration data upon singleton destruction.
+   /// </summary>
+   public sealed class Config {
+      private Dictionary<string, string> own = new Dictionary<string, string>();  // This contains the configuration information
+      private static Config instance = null;
+      private static readonly object padlock = new object();
+      private Config() { }
+      public static Config Instance {
+         get {
+            lock (padlock) {
+               if (instance == null) {
+                  instance = new Config();
+               }
+               return instance;
+            }
+         }
+      }
 
-      private const string bills_folder           = "D:/CCHR/2019-2020/LatestDownload/Bills/";
-      private const string database_folder        = "D:/CCHR/Projects/Scout/Data/";
-      private const string downloads_folder       = "C:/Users/Joe/Downloads/";
-      private const string html_folder            = "D:/CCHR/2019-2020/Html";
-      private const string leg_site               = "https://downloads.leginfo.legislature.ca.gov/";
-      private const string negative_file          = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Negative.xml";
-      private const string positive_file          = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Positive.xml";
-      private const string scout_file             = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Scout.xml";
+      public string BillsFolder     { get { EnsureContents(); return own["bills_folder"]; } }
+      public string DatabaseFolder  { get { EnsureContents(); return own["database_folder"]; } }
+      public string DownloadsFolder { get { EnsureContents(); return own["downloads_folder"]; } }
+      public string HtmlFolder      { get { EnsureContents(); return own["html_folder"]; } }
+      public string LegSite         { get { EnsureContents(); return own["leg_site"]; } }
+      public string NegativeFile    { get { EnsureContents(); return own["negative_file"]; } }
+      public string PositiveFile    { get { EnsureContents(); return own["positive_file"]; } }
+      public string ScoutFile       { get { EnsureContents(); return own["scout_file"]; } }
+      private void EnsureContents() { if (own.Count == 0) ReadYourself();  }
+      private const string manifest_file = "D:/CCHR/Projects/Scout2/Data/Config.json";
 
-   }
+      private void ReadYourself() {
+         if (File.Exists(manifest_file)) {
+            var contents = File.ReadAllText(manifest_file);
+            own = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
+         } else {
+            own["bills_folder"]     = "D:/CCHR/2019-2020/LatestDownload/Bills/";
+            own["database_folder"]  = "D:/CCHR/Projects/Scout/Data/";
+            own["downloads_folder"] = "C:/Users/Joe/Downloads/";
+            own["html_folder"]      = "D:/CCHR/2019-2020/Html/";
+            own["leg_site"]         = "https://downloads.leginfo.legislature.ca.gov/";
+            own["negative_file"]    = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Negative.xml";
+            own["positive_file"]    = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Positive.xml";
+            own["scout_file"]       = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Scout.xml";
+         }
+      }
+
+      public void WriteYourself() {
+         using (var file = File.CreateText(manifest_file)) {
+            var serializer = new JsonSerializer();
+            serializer.Serialize(file, own);
+         }
+      }
+   };
 }
