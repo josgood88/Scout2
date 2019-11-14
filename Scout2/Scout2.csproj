@@ -106,7 +106,7 @@
     <Compile Include="Library\GlobalData.cs" />
     <Compile Include="Library\HttpClientDownloadWithProgress.cs" />
     <Compile Include="Library\Log.cs" />
-    <Compile Include="Library\ManifestConstants.cs" />
+    <Compile Include="Library\Configuration.cs" />
     <Compile Include="Library\PartialScore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

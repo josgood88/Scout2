@@ -117,49 +117,56 @@
          // 
          this.txtBillsFolder.Location = new System.Drawing.Point(133, 39);
          this.txtBillsFolder.Name = "txtBillsFolder";
-         this.txtBillsFolder.Size = new System.Drawing.Size(300, 20);
+         this.txtBillsFolder.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtBillsFolder.Size = new System.Drawing.Size(441, 20);
          this.txtBillsFolder.TabIndex = 7;
          // 
          // txtDatabaseFolder
          // 
          this.txtDatabaseFolder.Location = new System.Drawing.Point(133, 70);
          this.txtDatabaseFolder.Name = "txtDatabaseFolder";
-         this.txtDatabaseFolder.Size = new System.Drawing.Size(300, 20);
+         this.txtDatabaseFolder.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtDatabaseFolder.Size = new System.Drawing.Size(441, 20);
          this.txtDatabaseFolder.TabIndex = 8;
          // 
          // txtHtmlFolder
          // 
          this.txtHtmlFolder.Location = new System.Drawing.Point(133, 132);
          this.txtHtmlFolder.Name = "txtHtmlFolder";
-         this.txtHtmlFolder.Size = new System.Drawing.Size(300, 20);
+         this.txtHtmlFolder.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtHtmlFolder.Size = new System.Drawing.Size(441, 20);
          this.txtHtmlFolder.TabIndex = 9;
          // 
          // txtLegislatureSite
          // 
          this.txtLegislatureSite.Location = new System.Drawing.Point(133, 163);
          this.txtLegislatureSite.Name = "txtLegislatureSite";
-         this.txtLegislatureSite.Size = new System.Drawing.Size(300, 20);
+         this.txtLegislatureSite.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtLegislatureSite.Size = new System.Drawing.Size(441, 20);
          this.txtLegislatureSite.TabIndex = 10;
          // 
          // txtNegativeFile
          // 
          this.txtNegativeFile.Location = new System.Drawing.Point(133, 194);
          this.txtNegativeFile.Name = "txtNegativeFile";
-         this.txtNegativeFile.Size = new System.Drawing.Size(300, 20);
+         this.txtNegativeFile.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtNegativeFile.Size = new System.Drawing.Size(441, 20);
          this.txtNegativeFile.TabIndex = 11;
          // 
          // txtPositiveFile
          // 
          this.txtPositiveFile.Location = new System.Drawing.Point(133, 225);
          this.txtPositiveFile.Name = "txtPositiveFile";
-         this.txtPositiveFile.Size = new System.Drawing.Size(300, 20);
+         this.txtPositiveFile.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtPositiveFile.Size = new System.Drawing.Size(441, 20);
          this.txtPositiveFile.TabIndex = 12;
          // 
          // txtScoutFile
          // 
          this.txtScoutFile.Location = new System.Drawing.Point(133, 256);
          this.txtScoutFile.Name = "txtScoutFile";
-         this.txtScoutFile.Size = new System.Drawing.Size(300, 20);
+         this.txtScoutFile.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtScoutFile.Size = new System.Drawing.Size(441, 20);
          this.txtScoutFile.TabIndex = 13;
          // 
          // openFileDialog1
@@ -169,7 +176,7 @@
          // 
          // btnBillsFolder
          // 
-         this.btnBillsFolder.Location = new System.Drawing.Point(461, 39);
+         this.btnBillsFolder.Location = new System.Drawing.Point(588, 39);
          this.btnBillsFolder.Name = "btnBillsFolder";
          this.btnBillsFolder.Size = new System.Drawing.Size(75, 23);
          this.btnBillsFolder.TabIndex = 14;
@@ -179,7 +186,7 @@
          // 
          // btnDatabaseFolder
          // 
-         this.btnDatabaseFolder.Location = new System.Drawing.Point(461, 70);
+         this.btnDatabaseFolder.Location = new System.Drawing.Point(588, 70);
          this.btnDatabaseFolder.Name = "btnDatabaseFolder";
          this.btnDatabaseFolder.Size = new System.Drawing.Size(75, 23);
          this.btnDatabaseFolder.TabIndex = 15;
@@ -189,7 +196,7 @@
          // 
          // btnHtmlFolder
          // 
-         this.btnHtmlFolder.Location = new System.Drawing.Point(461, 132);
+         this.btnHtmlFolder.Location = new System.Drawing.Point(588, 132);
          this.btnHtmlFolder.Name = "btnHtmlFolder";
          this.btnHtmlFolder.Size = new System.Drawing.Size(75, 23);
          this.btnHtmlFolder.TabIndex = 16;
@@ -199,7 +206,7 @@
          // 
          // btnNegativeFile
          // 
-         this.btnNegativeFile.Location = new System.Drawing.Point(461, 194);
+         this.btnNegativeFile.Location = new System.Drawing.Point(588, 194);
          this.btnNegativeFile.Name = "btnNegativeFile";
          this.btnNegativeFile.Size = new System.Drawing.Size(75, 23);
          this.btnNegativeFile.TabIndex = 18;
@@ -209,7 +216,7 @@
          // 
          // btnPositiveFile
          // 
-         this.btnPositiveFile.Location = new System.Drawing.Point(461, 225);
+         this.btnPositiveFile.Location = new System.Drawing.Point(588, 225);
          this.btnPositiveFile.Name = "btnPositiveFile";
          this.btnPositiveFile.Size = new System.Drawing.Size(75, 23);
          this.btnPositiveFile.TabIndex = 19;
@@ -219,7 +226,7 @@
          // 
          // btnScoutFile
          // 
-         this.btnScoutFile.Location = new System.Drawing.Point(461, 256);
+         this.btnScoutFile.Location = new System.Drawing.Point(588, 256);
          this.btnScoutFile.Name = "btnScoutFile";
          this.btnScoutFile.Size = new System.Drawing.Size(75, 23);
          this.btnScoutFile.TabIndex = 20;
@@ -240,12 +247,13 @@
          // 
          this.txtDownloadsFolder.Location = new System.Drawing.Point(133, 101);
          this.txtDownloadsFolder.Name = "txtDownloadsFolder";
-         this.txtDownloadsFolder.Size = new System.Drawing.Size(300, 20);
+         this.txtDownloadsFolder.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+         this.txtDownloadsFolder.Size = new System.Drawing.Size(441, 20);
          this.txtDownloadsFolder.TabIndex = 22;
          // 
          // btnDownloadsFolder
          // 
-         this.btnDownloadsFolder.Location = new System.Drawing.Point(461, 101);
+         this.btnDownloadsFolder.Location = new System.Drawing.Point(588, 101);
          this.btnDownloadsFolder.Name = "btnDownloadsFolder";
          this.btnDownloadsFolder.Size = new System.Drawing.Size(75, 23);
          this.btnDownloadsFolder.TabIndex = 23;
@@ -257,7 +265,7 @@
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(800, 313);
+         this.ClientSize = new System.Drawing.Size(688, 313);
          this.Controls.Add(this.btnDownloadsFolder);
          this.Controls.Add(this.txtDownloadsFolder);
          this.Controls.Add(this.label8);
