@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using Library;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -40,6 +39,7 @@ namespace Scout2.Controllers {
          } finally {
             CloseChrome();
          }
+         form1.TopMost = false;
          LogAndShow($"Download complete,  elapsed time = {interval}.");
          return 0;
       }

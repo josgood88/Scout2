@@ -9,6 +9,7 @@ namespace Scout2 {
 
       public Form1() {
          InitializeComponent();
+         this.TopMost = true;
          Config.Instance.ReadYourself();
       }
 
