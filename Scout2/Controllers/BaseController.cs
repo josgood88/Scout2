@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Library;
 
 namespace Scout2.Controllers {
@@ -8,6 +9,16 @@ namespace Scout2.Controllers {
          string output = $"{DateTime.Now.ToLocalTime()} {message}";
          Console.WriteLine(message);
          Log.Instance.Info(message);
+      }
+
+      protected void LogAndShow(string message) {
+         LogThis(message);
+         MessageBox.Show(message);
+      }
+
+      protected void LogAndThrow(string message) {
+         LogThis(message);
+         throw new ApplicationException(message);
       }
    }
 }

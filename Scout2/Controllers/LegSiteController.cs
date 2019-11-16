@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Library;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,6 +15,7 @@ namespace Scout2.Controllers {
 
       public async Task<int> Run(Form1 form1) {
          LogThis($"Connecting to {Config.Instance.LegSite}.");
+         TimeSpan interval = new TimeSpan(0);
          try {
             InitializeChrome();
             FindLastModified().Click();         // Sort zip files in ascending date order
@@ -23,28 +25,22 @@ namespace Scout2.Controllers {
                bool found_zip = false;
                while (!found_zip) {
                   if (!etr.MoveNext()) {
-                     var message = "LegsiteController.Index failed to find any pubinfo zip files.";
-                     LogThis(message);
-                     throw new ApplicationException(message);
+                     LogAndThrow("LegsiteController.Index failed to find any pubinfo zip files.");
                   } else if (etr.Current != null) {
                      if (etr.Current.Text.Contains("pubinfo_daily")) {
                         found_zip = true;
                         Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
-                        var interval = await DownloadLegSiteFileAsync(etr.Current.Text, form1);
-                        var message = $"Download complete,  elapsed time = {interval}.";
-                        LogThis(message);
-                        MessageBox.Show(message);
+                        interval = await DownloadLegSiteFileAsync(etr.Current.Text, form1);
                      }
                   }
                }
             }
          } catch (Exception ex) {
-            var message = $"LegSiteController.Run: {ex.Message}";
-            LogThis(message);
-            MessageBox.Show(message);
+            LogAndShow($"LegSiteController.Run: {ex.Message}");
          } finally {
             CloseChrome();
          }
+         LogAndShow($"Download complete,  elapsed time = {interval}.");
          return 0;
       }
 

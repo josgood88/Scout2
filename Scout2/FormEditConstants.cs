@@ -7,7 +7,6 @@ namespace Scout2 {
    public partial class FormEditConstants : Form {
       public FormEditConstants() {
          InitializeComponent();
-         Config.Instance.ReadYourself();
          txtBillsFolder.Text     = Config.Instance.BillsFolder;
          txtDatabaseFolder.Text  = Config.Instance.DatabaseFolder;
          txtDownloadsFolder.Text = Config.Instance.DownloadsFolder;
@@ -16,10 +15,6 @@ namespace Scout2 {
          txtPositiveFile.Text    = Config.Instance.PositiveFile;
          txtScoutFile.Text       = Config.Instance.ScoutFile;
          txtLegislatureSite.Text = Config.Instance.LegSite;
-      }
-
-      private void FormEditConstants_FormClosing(object sender, FormClosingEventArgs e) {
-         Config.Instance.WriteYourself();
       }
 
       private void btnBillsFolder_Click(object sender, EventArgs e) {

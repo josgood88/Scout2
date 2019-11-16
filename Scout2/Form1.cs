@@ -9,11 +9,11 @@ namespace Scout2 {
 
       public Form1() {
          InitializeComponent();
-         //ManifestConstants.ReadYourself();
+         Config.Instance.ReadYourself();
       }
 
       private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-         //ManifestConstants.WriteYourself();
+         Config.Instance.WriteYourself();
       }
 
       /// <summary>
