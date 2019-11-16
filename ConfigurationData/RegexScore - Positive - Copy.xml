@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<Regex_Score>
+   <Pair>
+      priest;^priest;10
+   </Pair>
+   <Pair>
+      penitent;^penitent;10
+   </Pair>
+   <Pair>
+      religious;^religious;10
+   </Pair>
+   <Pair>
+      exemption;^exemption;1
+   </Pair>
+   <Pair>
+      constitution;^constitution$;10
+   </Pair>
+   <Pair>
+      convention;^convention;1
+   </Pair>
+
+   <Pair>
+      priest-penitent;priest/s?-?/s?penitent;20
+   </Pair>
+   <Pair>
+      religious exemption;religious\s+exemption;20
+   </Pair>
+   <Pair>
+      con con;con\s+con;20
+   </Pair>
+   <Pair>
+      Constitutional Convention;[cC]onstitutional/s+[cC]onvention;20
+   </Pair>
+   <Pair>
+      civil rights;civil\s+rights;20
+   </Pair>
+   <Pair>
+      human rights;human\s+rights;20
+   </Pair>
+</Regex_Score>

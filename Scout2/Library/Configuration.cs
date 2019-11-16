@@ -43,7 +43,7 @@ namespace Library {
       }
 
       // File location is hardwired
-      private const string configuration_file = "D:/CCHR/Projects/Scout2/Data/Config.json";
+      private const string configuration_file = "D:/CCHR/Projects/Scout2/ConfigurationData/Config.json";
 
       // Calling program given responsibilty for initializing dictionary contents.
       // See WriteYourself comments for discussion of this decision.
@@ -53,13 +53,13 @@ namespace Library {
             own = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
          } else {
             own["bills_folder"]     = "D:/CCHR/2019-2020/LatestDownload/Bills/";
-            own["database_folder"]  = "D:/CCHR/Projects/Scout/Data/";
+            own["database_folder"]  = "D:/CCHR/Projects/Scout2/Data/";
             own["downloads_folder"] = "C:/Users/Joe/Downloads/";
             own["html_folder"]      = "D:/CCHR/2019-2020/Html/";
             own["leg_site"]         = "https://downloads.leginfo.legislature.ca.gov/";
-            own["negative_file"]    = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Negative.xml";
-            own["positive_file"]    = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Positive.xml";
-            own["scout_file"]       = "D:/CCHR/Projects/Scout/ConfigurationData/RegexScore - Scout.xml";
+            own["negative_file"]    = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Negative.xml";
+            own["positive_file"]    = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Positive.xml";
+            own["scout_file"]       = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Scout.xml";
          }
       }
 

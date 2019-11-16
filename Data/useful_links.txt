@@ -1,0 +1,2 @@
+http://www.sqlitetutorial.net
+http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/

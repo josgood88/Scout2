@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS BillRow ( 
+  BillID            Text NOT NULL PRIMARY KEY, 
+  MeasureType       Text NOT NULL, 
+  MeasureNum        Text NOT NULL, 
+  Lob               Text NOT NULL, 
+  NegativeScore     Int NULL, 
+  PositiveScore     Int NULL, 
+  Position          Text NULL, 
+  Bill              Text NULL, 
+  BillVersionID     Text NULL, 
+  Author            Text NULL, 
+  Title             Text NULL, 
+  Location          Text NULL, 
+  SecondaryLocation Text NULL, 
+  MeasureState      Text NULL, 
+  CurrentHouse      Text NULL, 
+  CurrentStatus     Text NULL, 
+  );
