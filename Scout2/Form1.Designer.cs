@@ -28,9 +28,9 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnReport = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.txtZipProgress = new System.Windows.Forms.TextBox();
          this.progressReport = new System.Windows.Forms.ProgressBar();
          this.progressImport = new System.Windows.Forms.ProgressBar();
-         this.progressZipFile = new System.Windows.Forms.ProgressBar();
          this.progressLegSite = new System.Windows.Forms.ProgressBar();
          this.groupBox2 = new System.Windows.Forms.GroupBox();
          this.progressTwoWordsNear = new System.Windows.Forms.ProgressBar();
@@ -95,9 +95,9 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.txtZipProgress);
          this.groupBox1.Controls.Add(this.progressReport);
          this.groupBox1.Controls.Add(this.progressImport);
-         this.groupBox1.Controls.Add(this.progressZipFile);
          this.groupBox1.Controls.Add(this.progressLegSite);
          this.groupBox1.Controls.Add(this.btnReport);
          this.groupBox1.Controls.Add(this.btnImport);
@@ -110,6 +110,14 @@
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
          // 
+         // txtZipProgress
+         // 
+         this.txtZipProgress.AccessibleName = "txtZipProgress";
+         this.txtZipProgress.Location = new System.Drawing.Point(132, 53);
+         this.txtZipProgress.Name = "txtZipProgress";
+         this.txtZipProgress.Size = new System.Drawing.Size(347, 20);
+         this.txtZipProgress.TabIndex = 8;
+         // 
          // progressReport
          // 
          this.progressReport.Location = new System.Drawing.Point(132, 131);
@@ -119,17 +127,11 @@
          // 
          // progressImport
          // 
+         this.progressImport.AccessibleName = "txtZipProgress";
          this.progressImport.Location = new System.Drawing.Point(132, 91);
          this.progressImport.Name = "progressImport";
          this.progressImport.Size = new System.Drawing.Size(347, 23);
          this.progressImport.TabIndex = 6;
-         // 
-         // progressZipFile
-         // 
-         this.progressZipFile.Location = new System.Drawing.Point(132, 53);
-         this.progressZipFile.Name = "progressZipFile";
-         this.progressZipFile.Size = new System.Drawing.Size(347, 23);
-         this.progressZipFile.TabIndex = 5;
          // 
          // progressLegSite
          // 
@@ -256,14 +258,14 @@
          // helpToolStripMenuItem1
          // 
          this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-         this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+         this.helpToolStripMenuItem1.Size = new System.Drawing.Size(99, 22);
          this.helpToolStripMenuItem1.Text = "Help";
          this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
          // 
          // exitToolStripMenuItem
          // 
          this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-         this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.exitToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
          this.exitToolStripMenuItem.Text = "Exit";
          this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
          // 
@@ -287,6 +289,7 @@
          this.Text = "Scout California Legislature";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
          this.groupBox1.ResumeLayout(false);
+         this.groupBox1.PerformLayout();
          this.groupBox2.ResumeLayout(false);
          this.groupBox2.PerformLayout();
          this.menuStrip1.ResumeLayout(false);
@@ -317,12 +320,12 @@
       public System.Windows.Forms.ProgressBar progressLegSite;
       public System.Windows.Forms.ProgressBar progressReport;
       public System.Windows.Forms.ProgressBar progressImport;
-      public System.Windows.Forms.ProgressBar progressZipFile;
       private System.Windows.Forms.MenuStrip menuStrip1;
       private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
       private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem updateFoldersFileToolStripMenuItem;
+      public System.Windows.Forms.TextBox txtZipProgress;
    }
 }
 

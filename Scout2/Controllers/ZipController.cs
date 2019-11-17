@@ -7,21 +7,32 @@ using Library;
 namespace Scout2.Controllers {
    public class ZipController : BaseController {
       public void Run(Form1 form1) {
+         var start_time = DateTime.Now;
          try {
             var latest = FindLatestZipFile(Config.Instance.DownloadsFolder);  // Zip downloaded from leg site
             var di = new DirectoryInfo(Config.Instance.BillsFolder);          // BillsFolder contains leg site files
-            Log.Instance.Info($"ZipController.Index: Clearing contents of {Config.Instance.BillsFolder}.");
+            form1.txtZipProgress.Text = $"Clearing contents of {Config.Instance.BillsFolder}.";
+            form1.txtZipProgress.Update();
             if (di.Exists) di.Delete(true);                             // Clear out the target folder
             var latest_zip_file = Path.Combine(Config.Instance.DownloadsFolder,latest);
+
             // LatestDownloadFolder contains BillsFolder, zip file contains Bills folder
-            Log.Instance.Info($"ZipController.Index: Extracting {latest_zip_file} contents to {Config.Instance.BillsFolder}.");
+            form1.txtZipProgress.Text = $"Extracting {latest_zip_file} contents to {Config.Instance.BillsFolder}.";
+            form1.txtZipProgress.Update();
             ZipFile.ExtractToDirectory(latest_zip_file,Config.Instance.BillsFolder);  // Extract zip file to target folder
+
+            form1.txtZipProgress.Text = "Removing analysis files";
+            form1.txtZipProgress.Update();
             RemoveAnalysisFiles();
          } catch (Exception ex) {
             LogAndThrow($"ZipController.Index: {ex.Message}.");
             throw;
          }
-         Log.Instance.Info("ZipController.Index: Extraction complete.");
+         var elapsed = DateTime.Now - start_time;
+         var message = $"Extraction complete. {elapsed.ToString("c")} ";
+         LogThis(message);
+         form1.txtZipProgress.Text = message;
+         form1.txtZipProgress.Update();
       }
 
       /// Remove bill analysis files from the download folder. 
