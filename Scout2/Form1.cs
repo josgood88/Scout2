@@ -10,29 +10,38 @@ namespace Scout2 {
       public Form1() {
          InitializeComponent();
          this.TopMost = true;
-         Config.Instance.ReadYourself();
+         Config.Instance.ReadYourself();  // Start of configuration data lifetime
       }
 
       private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-         Config.Instance.WriteYourself();
+         Config.Instance.WriteYourself(); // End of configuration data lifetime
       }
 
       /// <summary>
-      /// Start downloading the most recent leginfo file, which is a zipped file.
-      /// Downloading proceeds asychronously -- control is returned to the UI while downloading proceeds.
+      /// Download the most recent leginfo file, which is a zipped file.
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
       private async void btnLegSite_Click(object sender, EventArgs e) {
          try {
-            await new LegSiteController().Run(this);   // Returns once the download is started
+            await new LegSiteController().Run(this);   // Download the latest leginfo zip file
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to start downloading the most recent leginfo zip file.");
          }
       }
-
+      /// <summary>
+      /// Extract the contents of the downloaded zip file.
+      /// Analysis files are not extracted because Scout does not use them.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
       private void btnZipFile_Click(object sender, EventArgs e) {
-         Log.Instance.Info("Start At Zip File clicked");
+         try {
+            TopMost = false;                 // If download not performed then form is still topmost
+            new ZipController().Run(this);   // Extract the contents of the downloaded zip file.
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file..");
+         }
       }
 
       private void btnImport_Click(object sender, EventArgs e) {

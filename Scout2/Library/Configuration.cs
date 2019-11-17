@@ -51,7 +51,7 @@ namespace Library {
          if (File.Exists(configuration_file)) {
             var contents = File.ReadAllText(configuration_file);
             own = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
-         } else {
+         } else { // If no configuration file, use hard-coded initial data
             own["bills_folder"]     = "D:/CCHR/2019-2020/LatestDownload/Bills/";
             own["database_folder"]  = "D:/CCHR/Projects/Scout2/Data/";
             own["downloads_folder"] = "C:/Users/Joe/Downloads/";
@@ -63,19 +63,23 @@ namespace Library {
          }
       }
 
-      // Calling program given responsibilty for persisting dictionary contents.
+      // Calling program given responsibilty for persisting configuration data.
       // The primary argument against giving the user this responsibility is "Make it easy to use correctly
       // and hard to use incorrectly", which would mean 
-      //    1. Having each accessor (e.g. BillsFolder()) check dictionary for 0 contents and reading
-      //       dictionary data if dictionary contains no data.  ValueFor() could do this.
+      //    1. Having each accessor (e.g. BillsFolder()) check configuration data for 0 contents and read
+      //       configuration data if no data is present.  ValueFor() could do this.
       //    2. Attaching an event handler to program exit -- the handler given responsibility for 
-      //       persisting dictionary data.
-      // I don't like the idea of waiting an unknown length of time before persisting the data.
-      // I do like the idea of giving responsibility for initialization and persistence to a known form --
-      // the one that provides editing for this data.  That feels to me as if similar items -- reading, editing,
-      // and persistence of configuration data -- are correctly grouped together.
+      //       persisting configuration data.
       //
-      // That is why I decided on this implementation.
+      // The problem with this approach is that this makes the lifetime of the configuration data dependent on the
+      // lifetime of the class that first references the configuration data.  In this application, a sequence of
+      // of class instances process the data from initial download to report generation.  Configuration data would
+      // be created and destroyed with each of these classes.  Realizing this would surprise a future developer and
+      // thus is bad design.
+      //
+      // It is cleaner to begin the configuration data's lifetime with the primary form and the end the
+      // configuration data's lifetime when the primary form closes.
+      //
       public void WriteYourself() {
          using (var file = File.CreateText(configuration_file)) {
             var serializer = new JsonSerializer();
