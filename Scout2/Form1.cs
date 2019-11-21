@@ -40,15 +40,21 @@ namespace Scout2 {
             TopMost = false;                 // If download not performed then form is still topmost
             new ZipController().Run(this);   // Extract the contents of the downloaded zip file.
          } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file..");
+            MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file.");
          }
       }
 
       private void btnImport_Click(object sender, EventArgs e) {
-         Log.Instance.Info("Start At Import clicked");
+         try {
+            TopMost = false;                 // If download not performed then form is still topmost
+            new ImportController().Run(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to import the bill files.");
+         }
       }
 
       private void btnReport_Click(object sender, EventArgs e) {
+         TopMost = false;                 // If download not performed then form is still topmost
          Log.Instance.Info("Start At Report clicked");
       }
 

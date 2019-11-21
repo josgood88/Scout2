@@ -30,7 +30,6 @@
          this.groupBox1 = new System.Windows.Forms.GroupBox();
          this.txtZipProgress = new System.Windows.Forms.TextBox();
          this.progressReport = new System.Windows.Forms.ProgressBar();
-         this.progressImport = new System.Windows.Forms.ProgressBar();
          this.progressLegSite = new System.Windows.Forms.ProgressBar();
          this.groupBox2 = new System.Windows.Forms.GroupBox();
          this.progressTwoWordsNear = new System.Windows.Forms.ProgressBar();
@@ -48,6 +47,7 @@
          this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.txtImportProgress = new System.Windows.Forms.TextBox();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -95,9 +95,9 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.txtImportProgress);
          this.groupBox1.Controls.Add(this.txtZipProgress);
          this.groupBox1.Controls.Add(this.progressReport);
-         this.groupBox1.Controls.Add(this.progressImport);
          this.groupBox1.Controls.Add(this.progressLegSite);
          this.groupBox1.Controls.Add(this.btnReport);
          this.groupBox1.Controls.Add(this.btnImport);
@@ -124,14 +124,6 @@
          this.progressReport.Name = "progressReport";
          this.progressReport.Size = new System.Drawing.Size(347, 23);
          this.progressReport.TabIndex = 7;
-         // 
-         // progressImport
-         // 
-         this.progressImport.AccessibleName = "txtZipProgress";
-         this.progressImport.Location = new System.Drawing.Point(132, 91);
-         this.progressImport.Name = "progressImport";
-         this.progressImport.Size = new System.Drawing.Size(347, 23);
-         this.progressImport.TabIndex = 6;
          // 
          // progressLegSite
          // 
@@ -276,6 +268,14 @@
          this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
          this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
          // 
+         // txtImportProgress
+         // 
+         this.txtImportProgress.AccessibleName = "txtImportProgress";
+         this.txtImportProgress.Location = new System.Drawing.Point(132, 94);
+         this.txtImportProgress.Name = "txtImportProgress";
+         this.txtImportProgress.Size = new System.Drawing.Size(347, 20);
+         this.txtImportProgress.TabIndex = 9;
+         // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -319,13 +319,13 @@
       public System.Windows.Forms.ProgressBar progressTwoWordsNear;
       public System.Windows.Forms.ProgressBar progressLegSite;
       public System.Windows.Forms.ProgressBar progressReport;
-      public System.Windows.Forms.ProgressBar progressImport;
       private System.Windows.Forms.MenuStrip menuStrip1;
       private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
       private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem updateFoldersFileToolStripMenuItem;
       public System.Windows.Forms.TextBox txtZipProgress;
+      public System.Windows.Forms.TextBox txtImportProgress;
    }
 }
 

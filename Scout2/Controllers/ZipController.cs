@@ -26,7 +26,6 @@ namespace Scout2.Controllers {
             RemoveAnalysisFiles();
          } catch (Exception ex) {
             LogAndThrow($"ZipController.Index: {ex.Message}.");
-            throw;
          }
          var elapsed = DateTime.Now - start_time;
          var message = $"Extraction complete. {elapsed.ToString("c")} ";
