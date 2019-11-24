@@ -9,12 +9,11 @@ namespace Scout2 {
 
       public Form1() {
          InitializeComponent();
-         this.TopMost = true;
          Config.Instance.ReadYourself();  // Start of configuration data lifetime
       }
 
       private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-         Config.Instance.WriteYourself(); // End of configuration data lifetime
+         // End of configuration data lifetime
       }
 
       /// <summary>
@@ -24,8 +23,12 @@ namespace Scout2 {
       /// <param name="e"></param>
       private async void btnLegSite_Click(object sender, EventArgs e) {
          try {
-            await new LegSiteController().Run(this);   // Download the latest leginfo zip file
+            this.TopMost = true;                      // Don't let Selemium hide this program's form
+            await new LegSiteController().Run(this);  // Download the latest leginfo zip file
+            this.TopMost = false;
+            btnZipFile_Click(sender, e);              // Automatically go on to extracting zip file contents
          } catch (Exception ex) {
+            this.TopMost = false;
             MessageBox.Show(ex.Message, "Unable to start downloading the most recent leginfo zip file.");
          }
       }
@@ -37,8 +40,8 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnZipFile_Click(object sender, EventArgs e) {
          try {
-            TopMost = false;                 // If download not performed then form is still topmost
             new ZipController().Run(this);   // Extract the contents of the downloaded zip file.
+            btnImport_Click(sender, e);      // Automatically go on to importing the bill files
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file.");
          }
@@ -46,17 +49,20 @@ namespace Scout2 {
 
       private void btnImport_Click(object sender, EventArgs e) {
          try {
-            TopMost = false;                 // If download not performed then form is still topmost
             new ImportController().Run(this);
+            btnReport_Click(sender, e);      // Automatically go on to generating the report
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to import the bill files.");
          }
       }
 
       private void btnReport_Click(object sender, EventArgs e) {
-         TopMost = false;                 // If download not performed then form is still topmost
-         Log.Instance.Info("Start At Report clicked");
-      }
+         try {
+            new ReportController().Run(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to generate the report.");
+         }
+}
 
       private async void button1_Click(object sender, EventArgs e) {
          Log.Instance.Info("Searching for two words near each other");

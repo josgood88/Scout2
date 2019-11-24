@@ -14,7 +14,7 @@ namespace Scout2.Controllers {
 
       public async Task<int> Run(Form1 form1) {
          LogThis($"Connecting to {Config.Instance.LegSite}.");
-         TimeSpan interval = new TimeSpan(0);
+         var start_time = DateTime.Now;
          try {
             InitializeChrome();
             FindLastModified().Click();         // Sort zip files in ascending date order
@@ -29,7 +29,7 @@ namespace Scout2.Controllers {
                      if (etr.Current.Text.Contains("pubinfo_daily")) {
                         found_zip = true;
                         Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
-                        interval = await DownloadLegSiteFileAsync(etr.Current.Text, form1);
+                        await DownloadLegSiteFileAsync(etr.Current.Text, form1);
                      }
                   }
                }
@@ -38,9 +38,13 @@ namespace Scout2.Controllers {
             LogAndShow($"LegSiteController.Run: {ex.Message}");
          } finally {
             CloseChrome();
+            form1.TopMost = false;
+            var elapsed = DateTime.Now - start_time;
+            var message = $"Latest zip file fetched. {elapsed.ToString("c")} ";
+            LogThis(message);
+            form1.txtLegSiteCompletion.Text = message;
+            form1.txtLegSiteCompletion.Update();
          }
-         form1.TopMost = false;
-         LogAndShow($"Download complete,  elapsed time = {interval}.");
          return 0;
       }
 

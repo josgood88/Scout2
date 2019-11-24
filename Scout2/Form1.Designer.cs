@@ -28,8 +28,8 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnReport = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.txtImportProgress = new System.Windows.Forms.TextBox();
          this.txtZipProgress = new System.Windows.Forms.TextBox();
-         this.progressReport = new System.Windows.Forms.ProgressBar();
          this.progressLegSite = new System.Windows.Forms.ProgressBar();
          this.groupBox2 = new System.Windows.Forms.GroupBox();
          this.progressTwoWordsNear = new System.Windows.Forms.ProgressBar();
@@ -47,7 +47,8 @@
          this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.txtImportProgress = new System.Windows.Forms.TextBox();
+         this.txtReportProgress = new System.Windows.Forms.TextBox();
+         this.txtLegSiteCompletion = new System.Windows.Forms.TextBox();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -65,7 +66,7 @@
          // 
          // btnZipFile
          // 
-         this.btnZipFile.Location = new System.Drawing.Point(12, 53);
+         this.btnZipFile.Location = new System.Drawing.Point(12, 77);
          this.btnZipFile.Name = "btnZipFile";
          this.btnZipFile.Size = new System.Drawing.Size(104, 23);
          this.btnZipFile.TabIndex = 1;
@@ -75,7 +76,7 @@
          // 
          // btnImport
          // 
-         this.btnImport.Location = new System.Drawing.Point(12, 91);
+         this.btnImport.Location = new System.Drawing.Point(12, 115);
          this.btnImport.Name = "btnImport";
          this.btnImport.Size = new System.Drawing.Size(104, 23);
          this.btnImport.TabIndex = 2;
@@ -85,7 +86,7 @@
          // 
          // btnReport
          // 
-         this.btnReport.Location = new System.Drawing.Point(12, 131);
+         this.btnReport.Location = new System.Drawing.Point(12, 155);
          this.btnReport.Name = "btnReport";
          this.btnReport.Size = new System.Drawing.Size(104, 23);
          this.btnReport.TabIndex = 3;
@@ -95,9 +96,10 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.txtLegSiteCompletion);
+         this.groupBox1.Controls.Add(this.txtReportProgress);
          this.groupBox1.Controls.Add(this.txtImportProgress);
          this.groupBox1.Controls.Add(this.txtZipProgress);
-         this.groupBox1.Controls.Add(this.progressReport);
          this.groupBox1.Controls.Add(this.progressLegSite);
          this.groupBox1.Controls.Add(this.btnReport);
          this.groupBox1.Controls.Add(this.btnImport);
@@ -105,25 +107,26 @@
          this.groupBox1.Controls.Add(this.btnLegSite);
          this.groupBox1.Location = new System.Drawing.Point(38, 34);
          this.groupBox1.Name = "groupBox1";
-         this.groupBox1.Size = new System.Drawing.Size(509, 176);
+         this.groupBox1.Size = new System.Drawing.Size(509, 197);
          this.groupBox1.TabIndex = 4;
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
          // 
+         // txtImportProgress
+         // 
+         this.txtImportProgress.AccessibleName = "txtImportProgress";
+         this.txtImportProgress.Location = new System.Drawing.Point(132, 118);
+         this.txtImportProgress.Name = "txtImportProgress";
+         this.txtImportProgress.Size = new System.Drawing.Size(347, 20);
+         this.txtImportProgress.TabIndex = 9;
+         // 
          // txtZipProgress
          // 
          this.txtZipProgress.AccessibleName = "txtZipProgress";
-         this.txtZipProgress.Location = new System.Drawing.Point(132, 53);
+         this.txtZipProgress.Location = new System.Drawing.Point(132, 77);
          this.txtZipProgress.Name = "txtZipProgress";
          this.txtZipProgress.Size = new System.Drawing.Size(347, 20);
          this.txtZipProgress.TabIndex = 8;
-         // 
-         // progressReport
-         // 
-         this.progressReport.Location = new System.Drawing.Point(132, 131);
-         this.progressReport.Name = "progressReport";
-         this.progressReport.Size = new System.Drawing.Size(347, 23);
-         this.progressReport.TabIndex = 7;
          // 
          // progressLegSite
          // 
@@ -143,7 +146,7 @@
          this.groupBox2.Controls.Add(this.label1);
          this.groupBox2.Controls.Add(this.txt2ndWord);
          this.groupBox2.Controls.Add(this.txt1stWord);
-         this.groupBox2.Location = new System.Drawing.Point(38, 236);
+         this.groupBox2.Location = new System.Drawing.Point(38, 257);
          this.groupBox2.Name = "groupBox2";
          this.groupBox2.Size = new System.Drawing.Size(509, 162);
          this.groupBox2.TabIndex = 5;
@@ -268,19 +271,27 @@
          this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
          this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
          // 
-         // txtImportProgress
+         // txtReportProgress
          // 
-         this.txtImportProgress.AccessibleName = "txtImportProgress";
-         this.txtImportProgress.Location = new System.Drawing.Point(132, 94);
-         this.txtImportProgress.Name = "txtImportProgress";
-         this.txtImportProgress.Size = new System.Drawing.Size(347, 20);
-         this.txtImportProgress.TabIndex = 9;
+         this.txtReportProgress.AccessibleName = "txtReportProgress";
+         this.txtReportProgress.Location = new System.Drawing.Point(132, 158);
+         this.txtReportProgress.Name = "txtReportProgress";
+         this.txtReportProgress.Size = new System.Drawing.Size(347, 20);
+         this.txtReportProgress.TabIndex = 10;
+         // 
+         // txtLegSiteCompletion
+         // 
+         this.txtLegSiteCompletion.AccessibleName = "txtZipProgress";
+         this.txtLegSiteCompletion.Location = new System.Drawing.Point(132, 45);
+         this.txtLegSiteCompletion.Name = "txtLegSiteCompletion";
+         this.txtLegSiteCompletion.Size = new System.Drawing.Size(347, 20);
+         this.txtLegSiteCompletion.TabIndex = 11;
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(600, 431);
+         this.ClientSize = new System.Drawing.Size(600, 520);
          this.Controls.Add(this.groupBox2);
          this.Controls.Add(this.groupBox1);
          this.Controls.Add(this.menuStrip1);
@@ -318,7 +329,6 @@
       private System.ComponentModel.BackgroundWorker bgw_TwoWordsNear;
       public System.Windows.Forms.ProgressBar progressTwoWordsNear;
       public System.Windows.Forms.ProgressBar progressLegSite;
-      public System.Windows.Forms.ProgressBar progressReport;
       private System.Windows.Forms.MenuStrip menuStrip1;
       private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
@@ -326,6 +336,8 @@
       private System.Windows.Forms.ToolStripMenuItem updateFoldersFileToolStripMenuItem;
       public System.Windows.Forms.TextBox txtZipProgress;
       public System.Windows.Forms.TextBox txtImportProgress;
+      public System.Windows.Forms.TextBox txtReportProgress;
+      public System.Windows.Forms.TextBox txtLegSiteCompletion;
    }
 }
 

@@ -94,5 +94,13 @@ namespace Scout2 {
             field.Update();
          }
       }
+      /// <summary>
+      /// Update the configuration file when the form closes
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void FormEditConstants_FormClosing(object sender, FormClosingEventArgs e) {
+         Config.Instance.WriteYourself(); // For now, always update.  Later perhaps can be a bit smarter.
+      }
    }
 }
