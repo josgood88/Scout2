@@ -119,7 +119,6 @@
     <Compile Include="Report\Definitions.cs" />
     <Compile Include="Report\RemainingSchedule.cs" />
     <Compile Include="Report\Report.cs" />
-    <Compile Include="Report\ReportOneBill.cs" />
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>

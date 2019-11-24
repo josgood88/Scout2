@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,13 +51,28 @@ namespace Scout2.Report {
             throw;
          }
       }
+
+      public int CompareByMeasure(BillReport rhs) {
+         string m_lhs = this.Measure, m_rhs = rhs.Measure;
+         string house_lhs = House(m_lhs), house_rhs = House(m_rhs);
+         if (house_lhs != house_rhs) return house_lhs.CompareTo(house_rhs);
+         string bill_lhs = BillNumber(m_lhs), bill_rhs = BillNumber(m_rhs);
+         if (!int.TryParse(bill_lhs, out int i_lhs)) throw new ApplicationException($"BillReport.CompareByMeasure: Invalid measure {m_lhs}");
+         if (!int.TryParse(bill_rhs, out int i_rhs)) throw new ApplicationException($"BillReport.CompareByMeasure: Invalid measure {m_rhs}");
+         return i_lhs.CompareTo(i_rhs);
+      }
+
+      private string House(string measure) { return Regex.Match(measure, "^[A-Z]+").ToString();  }
+      private string BillNumber(string measure) { return Regex.Replace(measure,@".*?(\d+)","$1").ToString(); }
    }
 
-
-   public class BillReportCollection {
-
+   /// <summary>
+   /// Provide an IEnumerable collection of BillReport, each of which is created from an actual bill report.
+   /// This is used in generating the "Changes This Week" section of the report.
+   /// </summary>
+   public class BillReportCollection : IEnumerable<BillReport> {
       private string report_folder { get; set; }
-      private List<BillReport> reports;
+      private readonly List<BillReport> reports;
       /// <summary>
       /// Create a collection of bill reports by iterating over the contents of the passed folder path.
       /// Ignore the file named WeeklyNewsMonitoredBills.html, as it is the weekly report.
@@ -70,6 +86,16 @@ namespace Scout2.Report {
          foreach (var file in files) {
             if (!file.Contains("WeeklyNewsMonitoredBills")) reports.Add(new BillReport(file));
          }
+         reports.Sort((a, b) => a.CompareByMeasure(b));
       }
+      /// <summary>
+      /// IEnumerable of T requires an implementation of GetEnumerator().
+      /// </summary>
+      public IEnumerator<BillReport> GetEnumerator() {
+         foreach (BillReport report in reports) {
+            yield return report;
+         }
+      }
+      IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
    }
 }
