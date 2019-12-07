@@ -26,8 +26,10 @@
          this.btnLegSite = new System.Windows.Forms.Button();
          this.btnZipFile = new System.Windows.Forms.Button();
          this.btnImport = new System.Windows.Forms.Button();
-         this.btnReport = new System.Windows.Forms.Button();
+         this.btnShowChanges = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.txtLegSiteCompletion = new System.Windows.Forms.TextBox();
+         this.txtBillUpdatesProgress = new System.Windows.Forms.TextBox();
          this.txtImportProgress = new System.Windows.Forms.TextBox();
          this.txtZipProgress = new System.Windows.Forms.TextBox();
          this.progressLegSite = new System.Windows.Forms.ProgressBar();
@@ -48,7 +50,7 @@
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.txtReportProgress = new System.Windows.Forms.TextBox();
-         this.txtLegSiteCompletion = new System.Windows.Forms.TextBox();
+         this.btnReport = new System.Windows.Forms.Button();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -84,33 +86,51 @@
          this.btnImport.UseVisualStyleBackColor = true;
          this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
          // 
-         // btnReport
+         // btnShowChanges
          // 
-         this.btnReport.Location = new System.Drawing.Point(12, 155);
-         this.btnReport.Name = "btnReport";
-         this.btnReport.Size = new System.Drawing.Size(104, 23);
-         this.btnReport.TabIndex = 3;
-         this.btnReport.Text = "Start At Report";
-         this.btnReport.UseVisualStyleBackColor = true;
-         this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
+         this.btnShowChanges.Location = new System.Drawing.Point(12, 155);
+         this.btnShowChanges.Name = "btnShowChanges";
+         this.btnShowChanges.Size = new System.Drawing.Size(104, 23);
+         this.btnShowChanges.TabIndex = 3;
+         this.btnShowChanges.Text = "Show Changes";
+         this.btnShowChanges.UseVisualStyleBackColor = true;
+         this.btnShowChanges.Click += new System.EventHandler(this.btnShowChanges_Click);
          // 
          // groupBox1
          // 
-         this.groupBox1.Controls.Add(this.txtLegSiteCompletion);
          this.groupBox1.Controls.Add(this.txtReportProgress);
+         this.groupBox1.Controls.Add(this.btnReport);
+         this.groupBox1.Controls.Add(this.txtLegSiteCompletion);
+         this.groupBox1.Controls.Add(this.txtBillUpdatesProgress);
          this.groupBox1.Controls.Add(this.txtImportProgress);
          this.groupBox1.Controls.Add(this.txtZipProgress);
          this.groupBox1.Controls.Add(this.progressLegSite);
-         this.groupBox1.Controls.Add(this.btnReport);
+         this.groupBox1.Controls.Add(this.btnShowChanges);
          this.groupBox1.Controls.Add(this.btnImport);
          this.groupBox1.Controls.Add(this.btnZipFile);
          this.groupBox1.Controls.Add(this.btnLegSite);
          this.groupBox1.Location = new System.Drawing.Point(38, 34);
          this.groupBox1.Name = "groupBox1";
-         this.groupBox1.Size = new System.Drawing.Size(509, 197);
+         this.groupBox1.Size = new System.Drawing.Size(509, 234);
          this.groupBox1.TabIndex = 4;
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
+         // 
+         // txtLegSiteCompletion
+         // 
+         this.txtLegSiteCompletion.AccessibleName = "txtZipProgress";
+         this.txtLegSiteCompletion.Location = new System.Drawing.Point(132, 45);
+         this.txtLegSiteCompletion.Name = "txtLegSiteCompletion";
+         this.txtLegSiteCompletion.Size = new System.Drawing.Size(347, 20);
+         this.txtLegSiteCompletion.TabIndex = 11;
+         // 
+         // txtBillUpdatesProgress
+         // 
+         this.txtBillUpdatesProgress.AccessibleName = "txtReportProgress";
+         this.txtBillUpdatesProgress.Location = new System.Drawing.Point(132, 158);
+         this.txtBillUpdatesProgress.Name = "txtBillUpdatesProgress";
+         this.txtBillUpdatesProgress.Size = new System.Drawing.Size(347, 20);
+         this.txtBillUpdatesProgress.TabIndex = 10;
          // 
          // txtImportProgress
          // 
@@ -146,7 +166,7 @@
          this.groupBox2.Controls.Add(this.label1);
          this.groupBox2.Controls.Add(this.txt2ndWord);
          this.groupBox2.Controls.Add(this.txt1stWord);
-         this.groupBox2.Location = new System.Drawing.Point(38, 257);
+         this.groupBox2.Location = new System.Drawing.Point(38, 296);
          this.groupBox2.Name = "groupBox2";
          this.groupBox2.Size = new System.Drawing.Size(509, 162);
          this.groupBox2.TabIndex = 5;
@@ -274,18 +294,20 @@
          // txtReportProgress
          // 
          this.txtReportProgress.AccessibleName = "txtReportProgress";
-         this.txtReportProgress.Location = new System.Drawing.Point(132, 158);
+         this.txtReportProgress.Location = new System.Drawing.Point(132, 198);
          this.txtReportProgress.Name = "txtReportProgress";
          this.txtReportProgress.Size = new System.Drawing.Size(347, 20);
-         this.txtReportProgress.TabIndex = 10;
+         this.txtReportProgress.TabIndex = 13;
          // 
-         // txtLegSiteCompletion
+         // btnReport
          // 
-         this.txtLegSiteCompletion.AccessibleName = "txtZipProgress";
-         this.txtLegSiteCompletion.Location = new System.Drawing.Point(132, 45);
-         this.txtLegSiteCompletion.Name = "txtLegSiteCompletion";
-         this.txtLegSiteCompletion.Size = new System.Drawing.Size(347, 20);
-         this.txtLegSiteCompletion.TabIndex = 11;
+         this.btnReport.Location = new System.Drawing.Point(13, 195);
+         this.btnReport.Name = "btnReport";
+         this.btnReport.Size = new System.Drawing.Size(104, 23);
+         this.btnReport.TabIndex = 12;
+         this.btnReport.Text = "Start At Report";
+         this.btnReport.UseVisualStyleBackColor = true;
+         this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
          // 
          // Form1
          // 
@@ -315,7 +337,7 @@
       private System.Windows.Forms.Button btnLegSite;
       private System.Windows.Forms.Button btnZipFile;
       private System.Windows.Forms.Button btnImport;
-      private System.Windows.Forms.Button btnReport;
+      private System.Windows.Forms.Button btnShowChanges;
       private System.Windows.Forms.GroupBox groupBox1;
       private System.Windows.Forms.GroupBox groupBox2;
       private System.Windows.Forms.Button button1;
@@ -336,8 +358,10 @@
       private System.Windows.Forms.ToolStripMenuItem updateFoldersFileToolStripMenuItem;
       public System.Windows.Forms.TextBox txtZipProgress;
       public System.Windows.Forms.TextBox txtImportProgress;
-      public System.Windows.Forms.TextBox txtReportProgress;
+      public System.Windows.Forms.TextBox txtBillUpdatesProgress;
       public System.Windows.Forms.TextBox txtLegSiteCompletion;
+      public System.Windows.Forms.TextBox txtReportProgress;
+      private System.Windows.Forms.Button btnReport;
    }
 }
 

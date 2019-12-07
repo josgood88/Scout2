@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BillUpdates.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LegSiteController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -122,6 +123,12 @@
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UpdatedBillsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdatedBillsForm.Designer.cs">
+      <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,6 +144,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UpdatedBillsForm.resx">
+      <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

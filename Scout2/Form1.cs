@@ -50,9 +50,18 @@ namespace Scout2 {
       private void btnImport_Click(object sender, EventArgs e) {
          try {
             new ImportController().Run(this);
-            btnReport_Click(sender, e);      // Automatically go on to generating the report
+            btnShowChanges_Click(sender, e);      // Automatically show which bills have changed
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to import the bill files.");
+         }
+      }
+
+      private void btnShowChanges_Click(object sender, EventArgs e) {
+         try {
+            var form = new UpdatedBillsForm();
+            new BillUpdates().Run(this, form);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to show changes.");
          }
       }
 
@@ -62,7 +71,7 @@ namespace Scout2 {
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to generate the report.");
          }
-}
+      }
 
       private async void button1_Click(object sender, EventArgs e) {
          Log.Instance.Info("Searching for two words near each other");

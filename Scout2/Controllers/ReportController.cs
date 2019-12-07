@@ -16,8 +16,8 @@ namespace Scout2.Controllers {
          var elapsed = DateTime.Now - start_time;
          var message = $"Report generation complete. {elapsed.ToString("c")} ";
          LogThis(message);
-         form1.txtReportProgress.Text = message;
-         form1.txtReportProgress.Update();
+         form1.txtBillUpdatesProgress.Text = message;
+         form1.txtBillUpdatesProgress.Update();
       }
    }
 }

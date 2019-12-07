@@ -48,6 +48,10 @@
          this.label8 = new System.Windows.Forms.Label();
          this.txtDownloadsFolder = new System.Windows.Forms.TextBox();
          this.btnDownloadsFolder = new System.Windows.Forms.Button();
+         this.btnHighPriorityFile = new System.Windows.Forms.Button();
+         this.label9 = new System.Windows.Forms.Label();
+         this.dataGridHighestPriority = new System.Windows.Forms.DataGridView();
+         ((System.ComponentModel.ISupportInitialize)(this.dataGridHighestPriority)).BeginInit();
          this.SuspendLayout();
          // 
          // label1
@@ -261,11 +265,41 @@
          this.btnDownloadsFolder.UseVisualStyleBackColor = true;
          this.btnDownloadsFolder.Click += new System.EventHandler(this.btnDownloadsFolder_Click);
          // 
+         // btnHighPriorityFile
+         // 
+         this.btnHighPriorityFile.Location = new System.Drawing.Point(588, 292);
+         this.btnHighPriorityFile.Name = "btnHighPriorityFile";
+         this.btnHighPriorityFile.Size = new System.Drawing.Size(75, 23);
+         this.btnHighPriorityFile.TabIndex = 26;
+         this.btnHighPriorityFile.Text = "Browse";
+         this.btnHighPriorityFile.UseVisualStyleBackColor = true;
+         this.btnHighPriorityFile.Click += new System.EventHandler(this.btnHighPriorityFile_Click);
+         // 
+         // label9
+         // 
+         this.label9.AutoSize = true;
+         this.label9.Location = new System.Drawing.Point(38, 292);
+         this.label9.Name = "label9";
+         this.label9.Size = new System.Drawing.Size(82, 13);
+         this.label9.TabIndex = 24;
+         this.label9.Text = "High Priority File";
+         // 
+         // dataGridHighestPriority
+         // 
+         this.dataGridHighestPriority.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dataGridHighestPriority.Location = new System.Drawing.Point(133, 292);
+         this.dataGridHighestPriority.Name = "dataGridHighestPriority";
+         this.dataGridHighestPriority.Size = new System.Drawing.Size(240, 61);
+         this.dataGridHighestPriority.TabIndex = 27;
+         // 
          // FormEditConstants
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(688, 313);
+         this.ClientSize = new System.Drawing.Size(688, 431);
+         this.Controls.Add(this.dataGridHighestPriority);
+         this.Controls.Add(this.btnHighPriorityFile);
+         this.Controls.Add(this.label9);
          this.Controls.Add(this.btnDownloadsFolder);
          this.Controls.Add(this.txtDownloadsFolder);
          this.Controls.Add(this.label8);
@@ -292,6 +326,7 @@
          this.Name = "FormEditConstants";
          this.Text = "FormEditConstants";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEditConstants_FormClosing);
+         ((System.ComponentModel.ISupportInitialize)(this.dataGridHighestPriority)).EndInit();
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -324,5 +359,8 @@
       private System.Windows.Forms.Button btnScoutFile;
       private System.Windows.Forms.OpenFileDialog openFileDialog1;
       private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+      private System.Windows.Forms.Button btnHighPriorityFile;
+      private System.Windows.Forms.Label label9;
+      private System.Windows.Forms.DataGridView dataGridHighestPriority;
    }
 }

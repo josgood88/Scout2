@@ -95,6 +95,14 @@ namespace Scout2 {
          }
       }
       /// <summary>
+      /// Update contents of the highest-priority-bills file
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnHighPriorityFile_Click(object sender, EventArgs e) {
+         MessageBox.Show("Highest Priority file update");
+      }
+      /// <summary>
       /// Update the configuration file when the form closes
       /// </summary>
       /// <param name="sender"></param>

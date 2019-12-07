@@ -8,6 +8,7 @@ namespace Library {
    /// </summary>
    public sealed class Config {
       private Dictionary<string, string> own = new Dictionary<string, string>();  // This contains the configuration information
+      private List<string> highest_priority = new List<string>(); // Define the highest-priority bills
       private static Config instance = null;
       private static readonly object access = new object();    // Lock this to prevent concurrent access
       private Config() { }                                     // Private is part of singleton pattern
@@ -31,6 +32,7 @@ namespace Library {
       public string NegativeFile    { get { return ValueFor("negative_file"); } }
       public string PositiveFile    { get { return ValueFor("positive_file"); } }
       public string ScoutFile       { get { return ValueFor("scout_file"); } }
+      public List<string> HighestPriority { get { return highest_priority;  } }
 
       // Guarantee no exception when accessing configuration data
       private string ValueFor(string key) {
@@ -44,10 +46,15 @@ namespace Library {
 
       // File location is hardwired
       private const string configuration_file = "D:/CCHR/Projects/Scout2/ConfigurationData/Config.json";
+      private const string high_priority_file = "D:/CCHR/Projects/Scout2/ConfigurationData/HighestPriority.json";
 
       // Calling program given responsibilty for initializing dictionary contents.
       // See WriteYourself comments for discussion of this decision.
       public void ReadYourself() {
+         ReadConfigFileItems();
+         ReadHighestPriorityItems();
+      }
+      private void ReadConfigFileItems() {
          if (File.Exists(configuration_file)) {
             var contents = File.ReadAllText(configuration_file);
             own = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
@@ -60,6 +67,14 @@ namespace Library {
             own["negative_file"]    = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Negative.xml";
             own["positive_file"]    = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Positive.xml";
             own["scout_file"]       = "D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Scout.xml";
+         }
+      }
+      private void ReadHighestPriorityItems() {
+         if (File.Exists(high_priority_file)) {
+            var contents = File.ReadAllText(high_priority_file);
+            highest_priority = JsonConvert.DeserializeObject<List<string>>(contents);
+         } else {
+            highest_priority = new List<string>();
          }
       }
 
