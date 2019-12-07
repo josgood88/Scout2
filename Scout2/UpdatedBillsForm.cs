@@ -10,11 +10,17 @@ using System.Windows.Forms;
 using Scout2.Controllers;
 
 namespace Scout2 {
+   /// This view shows which bills have been updated by the legislature in some way -- the bill text may have been
+   /// modified or there may merely have been some process-related change -- moved to a different committee or had
+   /// a co-sponsor added.  Regardless the bill reviewer needs to take a look at the bill and update the bill's
+   /// report if that is needed.
    public partial class UpdatedBillsForm : Form {
-      public UpdatedBillsForm() {
-         InitializeComponent();
-      }
-
+      private static List<UpdateNeeded> contents_DataGridView = new List<UpdateNeeded>();
+      public UpdatedBillsForm() { InitializeComponent(); }
+      /// <summary>
+      /// Update this view's DataGridView to have a grid appropriate to displaying which bills have been updated.
+      /// An updated bill is whose review is now out of date because the legislature has updated the bill in some way.
+      /// </summary>
       public void PrepareDataGridView() {
          DataGridViewTextBoxColumn dgv_measure = new DataGridViewTextBoxColumn();
          dgv_measure.HeaderText = "Measure";
@@ -34,11 +40,33 @@ namespace Scout2 {
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_la_bill);
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_la_hist);
       }
+      /// <summary>
+      /// This view's DataGrideView is filled manually from the passed collection.
+      /// </summary>
+      /// <param name="collection">A list of UpdateNeeded which provides the information displayed in the DataGridView.</param>
+      public void AddRows(List<UpdateNeeded> collection) {
+         contents_DataGridView = collection;
+         Display();
+      }
+      /// <summary>
+      /// Update the DataGridView when the controlling "whether to display all bills" checkbox is toggled.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void OnToggleCheckbox(object sender, EventArgs e) { Display(); }
 
-      public void AddRows(List<BillUpdates.UpdateNeeded> c) {
-         foreach (var row in c) {
-            this.ViewBillsRequiringUpdate.Rows.Add(false, row.Measure, row.Position, row.BillLastAction, row.HistoryLastAction);
+      private void Display() {
+         ViewBillsRequiringUpdate.Rows.Clear();
+         foreach (var row in contents_DataGridView) {
+            if (IsNotPositionNone(row) || DisplayAll()) DisplayBillSummary(row);
          }
+         ViewBillsRequiringUpdate.Refresh();
+      }
+
+      private bool IsNotPositionNone(UpdateNeeded row) { return row.Position != "None"; }
+      private bool DisplayAll() { return this.chkNonNoneOnly.Checked == false; }
+      private void DisplayBillSummary(UpdateNeeded row) {
+         this.ViewBillsRequiringUpdate.Rows.Add(false, row.Measure, row.Position, row.BillLastAction, row.HistoryLastAction);
       }
    }
 }
