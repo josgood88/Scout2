@@ -41,7 +41,7 @@ namespace Scout2 {
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_la_hist);
       }
       /// <summary>
-      /// This view's DataGrideView is filled manually from the passed collection.
+      /// This view's DataGridView is filled manually from the passed collection.
       /// </summary>
       /// <param name="collection">A list of UpdateNeeded which provides the information displayed in the DataGridView.</param>
       public void AddRows(List<UpdateNeeded> collection) {

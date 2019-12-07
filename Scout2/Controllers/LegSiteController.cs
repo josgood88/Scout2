@@ -24,7 +24,7 @@ namespace Scout2.Controllers {
                bool found_zip = false;
                while (!found_zip) {
                   if (!etr.MoveNext()) {
-                     LogAndThrow("LegsiteController.Index failed to find any pubinfo zip files.");
+                     LogAndThrow("LegsiteController.Run failed to find any pubinfo zip files.");
                   } else if (etr.Current != null) {
                      if (etr.Current.Text.Contains("pubinfo_daily")) {
                         found_zip = true;

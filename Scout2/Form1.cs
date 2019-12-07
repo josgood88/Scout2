@@ -46,16 +46,38 @@ namespace Scout2 {
             MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file.");
          }
       }
-
+      /// <summary>
+      /// Update the database with the latest data on the bill's text, status, committee location, etc.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
       private void btnImport_Click(object sender, EventArgs e) {
          try {
             new ImportController().Run(this);
-            btnShowChanges_Click(sender, e);      // Automatically show which bills have changed
+            btnRegenerate_Click(sender, e);        // Automatically show which bills have changed
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to import the bill files.");
          }
       }
-
+      /// <summary>
+      /// Regenerate the individual bill reports.  In particular, update the bill's history
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnRegenerate_Click(object sender, EventArgs e) {
+         try {
+            new Regenerate().Run(this);
+            btnShowChanges_Click(sender, e);      // Automatically show which bills have changed
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to regenerate at least one bill report.");
+         }
+      }
+      /// <summary>
+      /// Show those bills that have changed in some way from the last time the bill reports were regenerated.
+      /// The most import change is a change in the bill's text.  Committee location is also important.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
       private void btnShowChanges_Click(object sender, EventArgs e) {
          try {
             var form = new UpdatedBillsForm();
@@ -64,7 +86,11 @@ namespace Scout2 {
             MessageBox.Show(ex.Message, "Unable to show changes.");
          }
       }
-
+      /// <summary>
+      /// Generate the weekly report.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
       private void btnReport_Click(object sender, EventArgs e) {
          try {
             new ReportController().Run(this);

@@ -35,9 +35,9 @@
          this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
          this.label1.Location = new System.Drawing.Point(215, 23);
          this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(182, 20);
+         this.label1.Size = new System.Drawing.Size(237, 20);
          this.label1.TabIndex = 0;
-         this.label1.Text = "Update these bill reports";
+         this.label1.Text = "These bill reports are out of date";
          // 
          // ViewBillsRequiringUpdate
          // 
@@ -53,9 +53,9 @@
          this.chkNonNoneOnly.AutoSize = true;
          this.chkNonNoneOnly.Location = new System.Drawing.Point(40, 58);
          this.chkNonNoneOnly.Name = "chkNonNoneOnly";
-         this.chkNonNoneOnly.Size = new System.Drawing.Size(239, 17);
+         this.chkNonNoneOnly.Size = new System.Drawing.Size(250, 17);
          this.chkNonNoneOnly.TabIndex = 2;
-         this.chkNonNoneOnly.Text = "Show only reports who position is not \"None\"";
+         this.chkNonNoneOnly.Text = "Show only reports whose position is not \"None\"";
          this.chkNonNoneOnly.UseVisualStyleBackColor = true;
          this.chkNonNoneOnly.CheckStateChanged += new System.EventHandler(this.OnToggleCheckbox);
          // 

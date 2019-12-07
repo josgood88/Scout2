@@ -11,7 +11,7 @@ namespace Scout2.Controllers {
             var path_log_file = "D:/Scratch/Scout.log";
             new Scout2.Report.Report(output_folder, path_log_file, Config.Instance.HtmlFolder).Generate();
          } catch (Exception ex) {
-            LogAndThrow($"ReportController.Index: {ex.Message}.");
+            LogAndThrow($"ReportController.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
          var message = $"Report generation complete. {elapsed.ToString("c")} ";

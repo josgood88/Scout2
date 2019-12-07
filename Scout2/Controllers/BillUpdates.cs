@@ -46,7 +46,7 @@ namespace Scout2.Controllers {
             update_form.AddRows(updated_bills);
             update_form.ShowDialog();
          } catch (Exception ex) {
-            LogAndThrow($"BillUpdates.Index: {ex.Message}.");
+            LogAndThrow($"BillUpdates.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
          var message = $"Bill Updates report complete. {elapsed.ToString("c")} ";
