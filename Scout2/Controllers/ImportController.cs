@@ -12,10 +12,8 @@ namespace Scout2.Controllers {
          try {
             form1.txtImportProgress.Text = "Re-creating database tables.";
             form1.txtImportProgress.Update();
-            GlobalData.BillRows = BillRow.RowSet();
-            GlobalData.VersionTable  = new BillVersionTable(Path.Combine(Config.Instance.BillsFolder, "BILL_VERSION_TBL.dat"));
-            GlobalData.HistoryTable  = new BillHistoryTable(Path.Combine(Config.Instance.BillsFolder, "BILL_HISTORY_TBL.dat"));
-            GlobalData.LocationTable = new LocationCodeTable(Path.Combine(Config.Instance.BillsFolder, "LOCATION_CODE_TBL.dat"));
+            EnsureGlobalData();  // Ensure that database tables have been read into memory
+
             form1.txtImportProgress.Text = "Writing Bill Version table.";
             form1.txtImportProgress.Update();
             BillVersionTable.ClearYourself(); 

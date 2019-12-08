@@ -54,22 +54,9 @@ namespace Scout2 {
       private void btnImport_Click(object sender, EventArgs e) {
          try {
             new ImportController().Run(this);
-            btnRegenerate_Click(sender, e);        // Automatically show which bills have changed
-         } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to import the bill files.");
-         }
-      }
-      /// <summary>
-      /// Regenerate the individual bill reports.  In particular, update the bill's history
-      /// </summary>
-      /// <param name="sender"></param>
-      /// <param name="e"></param>
-      private void btnRegenerate_Click(object sender, EventArgs e) {
-         try {
-            new Regenerate().Run(this);
             btnShowChanges_Click(sender, e);      // Automatically show which bills have changed
          } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to regenerate at least one bill report.");
+            MessageBox.Show(ex.Message, "Unable to import the bill files.");
          }
       }
       /// <summary>
@@ -82,8 +69,22 @@ namespace Scout2 {
          try {
             var form = new UpdatedBillsForm();
             new BillUpdates().Run(this, form);
+            btnRegenerate_Click(sender, e);        // Automatically regenerate outdated bill reports
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to show changes.");
+         }
+      }
+      /// <summary>
+      /// Regenerate the individual bill reports.  In particular, update the bill's history
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnRegenerate_Click(object sender, EventArgs e) {
+         try {
+            new Regenerate().Run(this);
+            btnReport_Click(sender, e);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to regenerate at least one bill report.");
          }
       }
       /// <summary>
@@ -93,9 +94,9 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnReport_Click(object sender, EventArgs e) {
          try {
-            new ReportController().Run(this);
+            new WeeklyReport().Run(this);
          } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to generate the report.");
+            MessageBox.Show(ex.Message, "Unable to generate the weekly report.");
          }
       }
 

@@ -12,13 +12,15 @@ digraph diagram
 "Import"   [label="Import into Database",shape = rectangle,style = filled,color = gray]
 "Regen"    [label="Regenerate Bill Reports",shape = rectangle,style = filled,color = gray]
 "Changes"  [label="Show Changes",shape = rectangle,style = filled,color = gray]
-"Report"   [label="Generate Report",shape = rectangle,style = filled,color = gray]
+"Report"   [label="Generate Weekly Report",shape = rectangle,style = filled,color = gray]
 "Done"     [label="Run Complete",shape = ellipse,style = filled,color = gray]
 
 "LegSite"  -> "ZipFile" [label="Zip File Fetched\nFrom Leg Site"]
 "ZipFile"  -> "Import"  [label="Bills Exracted\nFrom Zip File"]
-"Import"   -> "Regen"   [label="Bill File data\nImported to Database"]
-"Regen"    -> "Changes" [label="Bill Report Files\nhave been Regenerated"]
-"Changes"  -> "Report"  [label="Individual Report Files\nhave been edited"]
+"Import"   -> "Changes" [label="Bill File data\nImported to Database"]
+"Changes"  -> "Regen"   [label="Outdated Bill Report\nFiles have been found"]
+"Regen"    -> "Report"  [label="Bill Report Files\nhave been Regenerated"]
 "Report"   -> "Done"    [label="Weekly Report\nhas been generated"]
 }
+Changes
+Regen

@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 
-namespace Scout2.WeeklyReport {
-   public class CreateReport {
+namespace Scout2.IndividualReport {
+   public class CreateIndividualReport {
       // Extract house and number from bill id, returning house and number through argument references
       public static bool ExtractHouseNumber(string bill, out string house, out string number) {
          house = number = string.Empty;

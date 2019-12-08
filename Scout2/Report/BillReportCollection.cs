@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Library;
 
 namespace Scout2.Report {
    public class BillReport {
@@ -64,6 +65,31 @@ namespace Scout2.Report {
 
       private string House(string measure) { return Regex.Match(measure, "^[A-Z]+").ToString();  }
       private string BillNumber(string measure) { return Regex.Replace(measure,@".*?(\d+)","$1").ToString(); }
+      /// <summary>
+      /// Answer whether our position on a bill is Oppose
+      /// </summary>
+      /// <returns></returns>
+      public bool IsOppose() {
+         return (Position == "Oppose") ? true : false;
+      }
+      /// <summary>
+      /// Answer whether our position on a bill is Modify or Monitor
+      /// </summary>
+      /// <returns></returns>
+      public bool IsModifyOrMonitor() {
+         return (Position == "Modify" || Position == "Monitor") ? true : false;
+      }
+      /// <summary>
+      /// Answer whether a bill is chaptered by examining the bill's history
+      /// </summary>
+      /// <returns></returns>
+      public bool IsChaptered() {
+         var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
+         var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
+         var lines = File.ReadLines(location).ToList();
+         var line = lines.Find(x => x.Contains("Chaptered by Secretary of State"));
+         return (line != null) ? true : false;
+      }
    }
 
    /// <summary>

@@ -90,7 +90,7 @@
          // 
          // btnShowChanges
          // 
-         this.btnShowChanges.Location = new System.Drawing.Point(12, 190);
+         this.btnShowChanges.Location = new System.Drawing.Point(12, 156);
          this.btnShowChanges.Name = "btnShowChanges";
          this.btnShowChanges.Size = new System.Drawing.Size(144, 23);
          this.btnShowChanges.TabIndex = 3;
@@ -134,7 +134,7 @@
          this.btnReport.Name = "btnReport";
          this.btnReport.Size = new System.Drawing.Size(144, 23);
          this.btnReport.TabIndex = 12;
-         this.btnReport.Text = "Generate Report";
+         this.btnReport.Text = "Generate Weekly Report";
          this.btnReport.UseVisualStyleBackColor = true;
          this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
          // 
@@ -149,7 +149,7 @@
          // txtBillUpdatesProgress
          // 
          this.txtBillUpdatesProgress.AccessibleName = "txtReportProgress";
-         this.txtBillUpdatesProgress.Location = new System.Drawing.Point(162, 193);
+         this.txtBillUpdatesProgress.Location = new System.Drawing.Point(162, 159);
          this.txtBillUpdatesProgress.Name = "txtBillUpdatesProgress";
          this.txtBillUpdatesProgress.Size = new System.Drawing.Size(347, 20);
          this.txtBillUpdatesProgress.TabIndex = 10;
@@ -316,14 +316,14 @@
          // textBox1
          // 
          this.textBox1.AccessibleName = "txtReportProgress";
-         this.textBox1.Location = new System.Drawing.Point(162, 155);
+         this.textBox1.Location = new System.Drawing.Point(162, 196);
          this.textBox1.Name = "textBox1";
          this.textBox1.Size = new System.Drawing.Size(347, 20);
          this.textBox1.TabIndex = 15;
          // 
          // btnRegenerate
          // 
-         this.btnRegenerate.Location = new System.Drawing.Point(12, 152);
+         this.btnRegenerate.Location = new System.Drawing.Point(12, 193);
          this.btnRegenerate.Name = "btnRegenerate";
          this.btnRegenerate.Size = new System.Drawing.Size(144, 23);
          this.btnRegenerate.TabIndex = 14;

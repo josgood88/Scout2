@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Scout2.WeeklyReport {
+namespace Scout2.IndividualReport {
    public class PreviousReport {
 
       public static void From(string path, List<string> summary, List<string> position) {

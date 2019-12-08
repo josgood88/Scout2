@@ -5,29 +5,29 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
-using Scout2.WeeklyReport;
+using Scout2.IndividualReport;
 
 namespace Scout2.Controllers {
    public class Regenerate : BaseController {
       public void Run(Form1 form1) {
+         const bool verbose = false, update = false;
          var start_time = DateTime.Now;
+         EnsureGlobalData();  // Ensure that database tables have been read into memory
          try {
             string bill = string.Empty;
             List<string> bills = new List<string>();
             if (bill == string.Empty) bills = RecognizeChangedBills();
             else bills.Add(bill);
             if (bills.Count > 0) {
-               //foreach (var item in bills) (new Report(verbose, update)).Run(item);
+               foreach (var item in bills) (new IndividualReport.IndividualReport(verbose, update)).Run(item);
             } else {
-               var no_bills = "BR found no bills to process.";
-               Console.WriteLine(no_bills);
-               LogThis(no_bills);
+               LogAndShow("BR found no bills to process.");
             }
          } catch (Exception ex) {
             LogAndThrow($"Regenerate.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         var message = $"Extraction complete. {elapsed.ToString("c")} ";
+         var message = $"Bill reports re-generation complete. {elapsed.ToString("c")} ";
          LogThis(message);
          form1.txtImportProgress.Text = message;
          form1.txtImportProgress.Update();
@@ -75,7 +75,7 @@ namespace Scout2.Controllers {
 
       private string Ensure4DigitNumber(string bill) {
          string house = "", number = "";
-         CreateReport.ExtractHouseNumber(bill, out house, out number);
+         CreateIndividualReport.ExtractHouseNumber(bill, out house, out number);
          while (number.Length < 4) number = $"0{number}";
          return $"{house}{number}";
       }

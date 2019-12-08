@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Library;
+using Scout2.Controllers;
 
 namespace Scout2.Report {
-   public class Report {
+   public class Report : BaseController {
       private readonly string output_folder;
       private readonly string path_log_file;
       private readonly string report_folder;
@@ -22,6 +25,7 @@ namespace Scout2.Report {
       }
 
       public void Generate() {
+         EnsureGlobalData();  // Ensure that database tables have been read into memory
          string weekly_report_path = ReportPath();
          var reports = new BillReportCollection(report_folder);
          var past_week = PastWeek();
@@ -31,9 +35,9 @@ namespace Scout2.Report {
             HighestPriority(sw);
             ChangesThisWeek(reports, past_week, sw);
             UpcomingCommitteeHearingsOfInterest(sw);
-            Oppose(sw);
-            Modify_Monitor(sw);
-            Chaptered(sw);
+            Oppose(sw, reports);
+            Modify_Monitor(sw, reports);
+            Chaptered(sw, reports);
             RemainingLegislativeSchedule(sw);
             Definitions(sw);
             End(sw);
@@ -110,18 +114,27 @@ namespace Scout2.Report {
          sw.WriteLine("   <br />");
       }
 
-      private void Oppose(StreamWriter sw) {
+      private void Oppose(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Oppose");
+         foreach (var report in reports) {
+            if (report.IsOppose()) ReportOneBill(sw, report);
+         }
          EndTable(sw);
       }
 
-      private void Modify_Monitor(StreamWriter sw) {
+      private void Modify_Monitor(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Modify/Monitor");
+         foreach (var report in reports) {
+            if (report.IsModifyOrMonitor()) ReportOneBill(sw, report);
+         }
          EndTable(sw);
       }
 
-      private void Chaptered(StreamWriter sw) {
+      private void Chaptered(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Chaptered");
+         foreach (var report in reports) {
+            if (report.IsChaptered()) ReportOneBill(sw, report);
+         }
          EndTable(sw);
       }
 

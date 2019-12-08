@@ -80,13 +80,13 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BillUpdates.cs" />
-    <Compile Include="WeeklyReport\CreateReport.cs" />
+    <Compile Include="IndividualReport\CreateIndividualReport.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LegSiteController.cs" />
     <Compile Include="Controllers\Regenerate.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="WeeklyReport\WeeklyPreviousReport.cs" />
-    <Compile Include="WeeklyReport\WeeklyReport.cs" />
+    <Compile Include="Controllers\WeeklyReport.cs" />
+    <Compile Include="IndividualReport\IndividualPreviousReport.cs" />
+    <Compile Include="IndividualReport\IndividualReport.cs" />
     <Compile Include="Controllers\ZipController.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

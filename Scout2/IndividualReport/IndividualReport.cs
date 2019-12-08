@@ -6,13 +6,13 @@ using Library;
 using Library.Database;
 using Scout2.Controllers;
 
-namespace Scout2.WeeklyReport {
-   public class Report {
+namespace Scout2.IndividualReport {
+   public class IndividualReport {
       //private string bill;
       private bool verbose;
       private bool update;
 
-      public Report(bool _verbose, bool _update) { verbose = _verbose; update = _update; }
+      public IndividualReport(bool _verbose, bool _update) { verbose = _verbose; update = _update; }
 
       public void Run(string _bill) {
          var path = FilePath(_bill);
@@ -21,7 +21,7 @@ namespace Scout2.WeeklyReport {
 
       private string Ensure4DigitNumber(string bill) {
          string house = "", number = "";
-         CreateReport.ExtractHouseNumber(bill,out house,out number);
+         CreateIndividualReport.ExtractHouseNumber(bill,out house,out number);
          while (number.Length < 4) number = $"0{number}";
          return $"{house}{number}";
       }
@@ -30,7 +30,7 @@ namespace Scout2.WeeklyReport {
 
       private void Create(string bill, string path) {
          BillRow row = BillRow.Row(Ensure4DigitNumber(bill));
-         List<string> contents = CreateReport.ReportContents(row,path);
+         List<string> contents = CreateIndividualReport.ReportContents(row,path);
          WriteTextFile(contents,path);
          var message = $"{row.Bill} has negative score {row.NegativeScore}";
          Console.WriteLine(message);
