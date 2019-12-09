@@ -96,7 +96,6 @@ namespace Scout2.Report {
       /// </summary>
       /// <returns></returns>
       public bool IsChaptered() {
-         if (IsPositionNone()) return false;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
@@ -104,16 +103,15 @@ namespace Scout2.Report {
          return (line != null) ? true : false;
       }
       /// <summary>
-      /// Answer whether a bill is chaptered by examining the bill's history.
-      /// Ignore all bills on which our position is "None".
+      /// Answer whether a bill is dead. Reviewer notes this by writing "This bill is dead" somewhere in the review.
+      /// Notation is usually made as the first line in the Summary block of lines.
       /// </summary>
       /// <returns></returns>
       public bool IsDead() {
-         if (IsPositionNone()) return false;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
-         var line = lines.Find(x => x.Contains("Chaptered by Secretary of State"));
+         var line = lines.Find(x => x.Contains("This bill is dead"));
          return (line != null) ? true : false;
       }
    }

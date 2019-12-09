@@ -117,6 +117,7 @@ namespace Scout2.Report {
       private void Oppose(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Oppose");
          foreach (var report in reports) {
+            if (report.IsDead()) continue;   // Don't bother reporting dead bills
             if (report.IsPositionOppose()) ReportOneBill(sw, report);
          }
          EndTable(sw);
@@ -125,6 +126,8 @@ namespace Scout2.Report {
       private void Modify_Monitor(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Modify/Monitor");
          foreach (var report in reports) {
+            if (report.IsDead()) continue;      // Don't bother reporting dead bills
+            if (report.IsChaptered()) continue; // Chaptered bills are reported elsewhere
             if (report.IsPositionModifyOrMonitor()) ReportOneBill(sw, report);
          }
          EndTable(sw);
@@ -133,6 +136,7 @@ namespace Scout2.Report {
       private void Chaptered(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Chaptered");
          foreach (var report in reports) {
+            if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
             if (report.IsChaptered()) ReportOneBill(sw, report);
          }
          EndTable(sw);
