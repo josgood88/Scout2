@@ -42,6 +42,12 @@ namespace Scout2.Report {
             index = line.IndexOf(':');                   // Position follows colon
             Position = line.Substring(index+1).Trim();   // At least one space before position
 
+            // Find summary statement
+            line = lines.Find(x => x.Contains("ShortSummary</b>:"));
+            if (line == null) throw new ApplicationException($"BillReport ctor: {file_path} contents has no summary statement.");
+            index = line.IndexOf(':');                   // Summary follows colon
+            OneLiner = line.Substring(index+1).Trim();   // At least one space before summary
+
             // Find Last Action
             line = lines.Find(x => x.Contains("Last Action:"));
             if (line == null) throw new ApplicationException($"BillReport ctor: {file_path} contents has no Last Action.");
@@ -66,24 +72,44 @@ namespace Scout2.Report {
       private string House(string measure) { return Regex.Match(measure, "^[A-Z]+").ToString();  }
       private string BillNumber(string measure) { return Regex.Replace(measure,@".*?(\d+)","$1").ToString(); }
       /// <summary>
+      /// Answer whether our position on a bill is None -- we have no position.
+      /// </summary>
+      /// <returns></returns>
+      public bool IsPositionNone() { return (Position == "None") ? true : false; }
+      /// <summary>
       /// Answer whether our position on a bill is Oppose
       /// </summary>
       /// <returns></returns>
-      public bool IsOppose() {
+      public bool IsPositionOppose() {
          return (Position == "Oppose") ? true : false;
       }
       /// <summary>
       /// Answer whether our position on a bill is Modify or Monitor
       /// </summary>
       /// <returns></returns>
-      public bool IsModifyOrMonitor() {
+      public bool IsPositionModifyOrMonitor() {
          return (Position == "Modify" || Position == "Monitor") ? true : false;
       }
       /// <summary>
-      /// Answer whether a bill is chaptered by examining the bill's history
+      /// Answer whether a bill is chaptered by examining the bill's history.
+      /// Ignore all bills on which our position is "None".
       /// </summary>
       /// <returns></returns>
       public bool IsChaptered() {
+         if (IsPositionNone()) return false;
+         var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
+         var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
+         var lines = File.ReadLines(location).ToList();
+         var line = lines.Find(x => x.Contains("Chaptered by Secretary of State"));
+         return (line != null) ? true : false;
+      }
+      /// <summary>
+      /// Answer whether a bill is chaptered by examining the bill's history.
+      /// Ignore all bills on which our position is "None".
+      /// </summary>
+      /// <returns></returns>
+      public bool IsDead() {
+         if (IsPositionNone()) return false;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();

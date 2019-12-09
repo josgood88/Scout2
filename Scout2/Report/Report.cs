@@ -117,7 +117,7 @@ namespace Scout2.Report {
       private void Oppose(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Oppose");
          foreach (var report in reports) {
-            if (report.IsOppose()) ReportOneBill(sw, report);
+            if (report.IsPositionOppose()) ReportOneBill(sw, report);
          }
          EndTable(sw);
       }
@@ -125,7 +125,7 @@ namespace Scout2.Report {
       private void Modify_Monitor(StreamWriter sw, BillReportCollection reports) {
          StartTable(sw, "Modify/Monitor");
          foreach (var report in reports) {
-            if (report.IsModifyOrMonitor()) ReportOneBill(sw, report);
+            if (report.IsPositionModifyOrMonitor()) ReportOneBill(sw, report);
          }
          EndTable(sw);
       }

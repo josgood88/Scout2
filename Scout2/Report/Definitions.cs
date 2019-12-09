@@ -75,12 +75,12 @@ namespace Scout2.Report {
          sb.Append("      <tr>");
          sb.Append("         <td>Consent Calendar</td>");
          sb.Append("         <td></td>");
-         sb.Append("         <td>A group of noncontroversial bills passed by a committee to another committee or the full Assembly or Senate. Bills may be placed upon the Consent Calendar if they are reported to the Floor with that recommendation and (1) have received no “no” votes in committee and(2) have had no opposition expressed by any person present at the hearing.</td>");
+         sb.Append("         <td>A group of noncontroversial bills passed by a committee to another committee or the full Assembly or Senate. Bills may be placed upon the Consent Calendar if they are reported to the Floor with that recommendation and (1) have received no \"no\" votes in committee and(2) have had no opposition expressed by any person present at the hearing.</td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
          sb.Append("         <td>Enrolled</td>");
          sb.Append("         <td></td>");
-         sb.Append("         <td>Once a bill has passed the legislature, it goes to the governor for signature.The “enrollment” process includes the notation of the exact date and time each bill is sent to the Governor to sign or veto, or he may allow it to become law without signing.</td>");
+         sb.Append("         <td>Once a bill has passed the legislature, it goes to the governor for signature.The \"enrollment\" process includes the notation of the exact date and time each bill is sent to the Governor to sign or veto, or he may allow it to become law without signing.</td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
          sb.Append("         <td>Expect</td>");
@@ -122,8 +122,8 @@ namespace Scout2.Report {
          sb.Append("         <td></td>");
          sb.Append("         <td>");
          sb.Append("           Bills introduced in the first year of the regular session and passed by the house of origin on or before the January 31st constitutional");
-         sb.Append("           deadline are “carryover bills.” Immediately after January 31, bills introduced in the fi rst year of the regular session that do not become");
-         sb.Append("            “carryover bills” shall be returned to the Chief Clerk of the Assembly or Secretary of the Senate, respectively.");
+         sb.Append("           deadline are \"carryover bills.\" Immediately after January 31, bills introduced in the fi rst year of the regular session that do not become");
+         sb.Append("            \"carryover bills\" shall be returned to the Chief Clerk of the Assembly or Secretary of the Senate, respectively.");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
          sb.Append("         <td>Likely</td>");
