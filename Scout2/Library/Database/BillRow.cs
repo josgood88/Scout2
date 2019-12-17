@@ -25,6 +25,10 @@ namespace Library.Database {
       public string CurrentHouse  { get; set; } // e.g. Assembly
       public string CurrentStatus { get; set; } // e.g. In Committee Process
 
+      public BillRow() {
+         // Just a temporary used for debugging
+      }
+
       public BillRow(SQLiteDataReader reader) {
          var offset = 0;
          Bill          = reader.GetString(offset++).Trim();

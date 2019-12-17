@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Library;
-using Scout2.Controllers;
+using Scout2.Sequence;
 
 namespace Scout2 {
    public partial class Form1 : Form {
@@ -68,7 +68,7 @@ namespace Scout2 {
       private void btnShowChanges_Click(object sender, EventArgs e) {
          try {
             var form = new UpdatedBillsForm();
-            new BillUpdates().Run(this, form);
+            new Changes().Run(this, form);
             btnRegenerate_Click(sender, e);        // Automatically regenerate outdated bill reports
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to show changes.");
@@ -115,12 +115,16 @@ namespace Scout2 {
          Log.Instance.Info(ex.Message);
          MessageBox.Show(ex.Message, "Terminated: Exception");
       }
-
       /// <summary>
       /// LegSiteController needs a way to update the progress bar.
       /// </summary>
       /// <param name="value"></param>
       public void UpdateProgressLegSite(int value) { this.progressLegSite.Value = value; }
+      /// <summary>
+      /// Regnerate needs a way to know whether the "Regenerate All" checkbox is checked.
+      /// </summary>
+      /// <returns></returns>
+      public bool IsRegenerateAll() { return chkRegenerateAll.Checked;  }
 
       private void helpToolStripMenuItem_Click(object sender, EventArgs e) {
          MessageBox.Show("Clicked", "Define Constants");

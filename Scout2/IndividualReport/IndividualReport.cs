@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Library;
 using Library.Database;
-using Scout2.Controllers;
+using Scout2.Sequence;
 
 namespace Scout2.IndividualReport {
    public class IndividualReport {
@@ -33,8 +33,7 @@ namespace Scout2.IndividualReport {
          List<string> contents = CreateIndividualReport.ReportContents(row,path);
          WriteTextFile(contents,path);
          var message = $"{row.Bill} has negative score {row.NegativeScore}";
-         Console.WriteLine(message);
-         BaseController.LogAndShow(message);
+         BaseController.LogThis(message);
       }
 
       private void WriteTextFile(List<string> contents, string path) {

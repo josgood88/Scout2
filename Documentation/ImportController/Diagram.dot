@@ -1,0 +1,30 @@
+#
+digraph diagram
+{
+   label="Import Controller"
+#  rankdir = LR;
+#  concentrate = true;
+#  edge[samehead=h1, sametail=t1];
+   edge[samehead=h1];
+
+subgraph cluster_Run {
+   "Run"         [label="Run (Start)",shape = ellipse,style = filled,color = gray]
+   "Done"        [label="Run Complete",shape = ellipse,style = filled,color = gray]
+}
+
+subgraph cluster_EnsureGlobalData {
+   "Ensure"      [label="EnsureGlobalData",shape = rectangle,style = filled,color = gray]
+   "BillRows"    [label="Read BillRows Table",shape = rectangle,style = filled,color = gray]
+   "BillHistory" [label="Read BillHistory Table",shape = rectangle,style = filled,color = gray]
+   "Version"     [label="Read BillVersion Table",shape = rectangle,style = filled,color = gray]
+   "Location"    [label="Read LocationCode Table",shape = rectangle,style = filled,color = gray]
+}
+
+
+"Run"         -> "Ensure"      [label="Call\nEnsureGlobalData"]
+"Ensure"      -> "BillRows"    [label="BillRows Table\nIn Memory"]
+"BillRows"    -> "BillHistory" [label="BillHistory Table\nIn Memory"]
+"BillHistory" -> "Version"     [label="BillVersion Table\nIn Memory"]
+"Version"     -> "Location"    [label="LocationCode Table\nIn Memory"]
+"Location"    -> "Done"        [label="Weekly Report\nhas been generated"]
+}

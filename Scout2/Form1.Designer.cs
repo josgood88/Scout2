@@ -28,6 +28,8 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnShowChanges = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.textBox1 = new System.Windows.Forms.TextBox();
+         this.btnRegenerate = new System.Windows.Forms.Button();
          this.txtReportProgress = new System.Windows.Forms.TextBox();
          this.btnReport = new System.Windows.Forms.Button();
          this.txtLegSiteCompletion = new System.Windows.Forms.TextBox();
@@ -51,8 +53,7 @@
          this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.textBox1 = new System.Windows.Forms.TextBox();
-         this.btnRegenerate = new System.Windows.Forms.Button();
+         this.chkRegenerateAll = new System.Windows.Forms.CheckBox();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -100,6 +101,7 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.chkRegenerateAll);
          this.groupBox1.Controls.Add(this.textBox1);
          this.groupBox1.Controls.Add(this.btnRegenerate);
          this.groupBox1.Controls.Add(this.txtReportProgress);
@@ -115,10 +117,28 @@
          this.groupBox1.Controls.Add(this.btnLegSite);
          this.groupBox1.Location = new System.Drawing.Point(38, 34);
          this.groupBox1.Name = "groupBox1";
-         this.groupBox1.Size = new System.Drawing.Size(550, 263);
+         this.groupBox1.Size = new System.Drawing.Size(633, 263);
          this.groupBox1.TabIndex = 4;
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
+         // 
+         // textBox1
+         // 
+         this.textBox1.AccessibleName = "txtReportProgress";
+         this.textBox1.Location = new System.Drawing.Point(162, 196);
+         this.textBox1.Name = "textBox1";
+         this.textBox1.Size = new System.Drawing.Size(347, 20);
+         this.textBox1.TabIndex = 15;
+         // 
+         // btnRegenerate
+         // 
+         this.btnRegenerate.Location = new System.Drawing.Point(12, 193);
+         this.btnRegenerate.Name = "btnRegenerate";
+         this.btnRegenerate.Size = new System.Drawing.Size(144, 23);
+         this.btnRegenerate.TabIndex = 14;
+         this.btnRegenerate.Text = "Regenerate Bill Reports";
+         this.btnRegenerate.UseVisualStyleBackColor = true;
+         this.btnRegenerate.Click += new System.EventHandler(this.btnRegenerate_Click);
          // 
          // txtReportProgress
          // 
@@ -279,7 +299,7 @@
             this.updateFoldersFileToolStripMenuItem});
          this.menuStrip1.Location = new System.Drawing.Point(0, 0);
          this.menuStrip1.Name = "menuStrip1";
-         this.menuStrip1.Size = new System.Drawing.Size(600, 24);
+         this.menuStrip1.Size = new System.Drawing.Size(708, 24);
          this.menuStrip1.TabIndex = 6;
          this.menuStrip1.Text = "menuStrip1";
          // 
@@ -313,29 +333,21 @@
          this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
          this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
          // 
-         // textBox1
+         // chkRegenerateAll
          // 
-         this.textBox1.AccessibleName = "txtReportProgress";
-         this.textBox1.Location = new System.Drawing.Point(162, 196);
-         this.textBox1.Name = "textBox1";
-         this.textBox1.Size = new System.Drawing.Size(347, 20);
-         this.textBox1.TabIndex = 15;
-         // 
-         // btnRegenerate
-         // 
-         this.btnRegenerate.Location = new System.Drawing.Point(12, 193);
-         this.btnRegenerate.Name = "btnRegenerate";
-         this.btnRegenerate.Size = new System.Drawing.Size(144, 23);
-         this.btnRegenerate.TabIndex = 14;
-         this.btnRegenerate.Text = "Regenerate Bill Reports";
-         this.btnRegenerate.UseVisualStyleBackColor = true;
-         this.btnRegenerate.Click += new System.EventHandler(this.btnRegenerate_Click);
+         this.chkRegenerateAll.AutoSize = true;
+         this.chkRegenerateAll.Location = new System.Drawing.Point(527, 195);
+         this.chkRegenerateAll.Name = "chkRegenerateAll";
+         this.chkRegenerateAll.Size = new System.Drawing.Size(96, 17);
+         this.chkRegenerateAll.TabIndex = 16;
+         this.chkRegenerateAll.Text = "Regenerate All";
+         this.chkRegenerateAll.UseVisualStyleBackColor = true;
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(600, 520);
+         this.ClientSize = new System.Drawing.Size(708, 520);
          this.Controls.Add(this.groupBox2);
          this.Controls.Add(this.groupBox1);
          this.Controls.Add(this.menuStrip1);
@@ -386,6 +398,7 @@
       private System.Windows.Forms.Button btnReport;
       public System.Windows.Forms.TextBox textBox1;
       private System.Windows.Forms.Button btnRegenerate;
+      private System.Windows.Forms.CheckBox chkRegenerateAll;
    }
 }
 

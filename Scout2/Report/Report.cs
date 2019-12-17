@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Library;
-using Scout2.Controllers;
+using Scout2.Sequence;
 
 namespace Scout2.Report {
    public class Report : BaseController {

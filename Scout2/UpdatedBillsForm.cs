@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Scout2.Controllers;
+using Scout2.Sequence;
 
 namespace Scout2 {
    /// This view shows which bills have been updated by the legislature in some way -- the bill text may have been
