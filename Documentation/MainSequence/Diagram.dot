@@ -7,18 +7,20 @@ digraph diagram
 #  edge[samehead=h1, sametail=t1];
    edge[samehead=h1];
 
-"Changes"  [label="Show Changes",shape = rectangle,style = filled,color = gray]
 "Done"     [label="Run Complete",shape = ellipse,style = filled,color = gray]
 "Import"   [label="Import into Database",shape = rectangle,style = filled,color = gray]
 "LegSite"  [label="Import from Leg Site",shape = rectangle,style = filled,color = gray]
+"New"      [label="Create New Bill Reports",shape = rectangle,style = filled,color = gray]
 "Regen"    [label="Regenerate Bill Reports",shape = rectangle,style = filled,color = gray]
 "Report"   [label="Generate Weekly Report",shape = rectangle,style = filled,color = gray]
+"Update"   [label="Update Existing Bill Reports",shape = rectangle,style = filled,color = gray]
 "ZipFile"  [label="Extract from Zip File",shape = rectangle,style = filled,color = gray]
 
 "LegSite"  -> "ZipFile" [label="Zip File Fetched\nFrom Leg Site"]
 "ZipFile"  -> "Import"  [label="Bills Exracted\nFrom Zip File"]
-"Import"   -> "Changes" [label="Bill File data\nImported to Database"]
-"Changes"  -> "Regen"   [label="New and Changed Bill Report\nFiles have been found"]
-"Regen"    -> "Report"  [label="Bill Report Files\nCreated (New) or\nUpdated (Existing)"]
+"Import"   -> "Regen"   [label="Bill File data\nImported to Database"]
+"Regen"    -> "Update"  [label="Bill Report Files\nCreated (New) or\nUpdated (Existing)"]
+"Update"   -> "New"     [label="Existing Reports\nUpdated"]
+"New"      -> "Report"  [label="New Bill Reports\nWritten"]
 "Report"   -> "Done"    [label="Weekly Report\nhas been generated"]
 }

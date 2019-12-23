@@ -21,12 +21,9 @@ namespace Scout2 {
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      private async void btnLegSite_Click(object sender, EventArgs e) {
+      private void btnLegSite_Click(object sender, EventArgs e) {
          try {
-            this.TopMost = true;                      // Don't let Selemium hide this program's form
-            await new LegSiteController().Run(this);  // Download the latest leginfo zip file
-            this.TopMost = false;
-            btnZipFile_Click(sender, e);              // Automatically go on to extracting zip file contents
+            SequenceControl.ImportFromLegSite(this);
          } catch (Exception ex) {
             this.TopMost = false;
             MessageBox.Show(ex.Message, "Unable to start downloading the most recent leginfo zip file.");
@@ -40,8 +37,7 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnZipFile_Click(object sender, EventArgs e) {
          try {
-            new ZipController().Run(this);   // Extract the contents of the downloaded zip file.
-            btnImport_Click(sender, e);      // Automatically go on to importing the bill files
+            SequenceControl.ExtractFromZip(this);  // Extract the contents of the downloaded zip file.
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to extract the contents of the downloaded zip file.");
          }
@@ -53,25 +49,9 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnImport_Click(object sender, EventArgs e) {
          try {
-            new ImportController().Run(this);
-            btnShowChanges_Click(sender, e);      // Automatically show which bills have changed
+            SequenceControl.ImportToDB(this);
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to import the bill files.");
-         }
-      }
-      /// <summary>
-      /// Show those bills that have changed in some way from the last time the bill reports were regenerated.
-      /// The most import change is a change in the bill's text.  Committee location is also important.
-      /// </summary>
-      /// <param name="sender"></param>
-      /// <param name="e"></param>
-      private void btnShowChanges_Click(object sender, EventArgs e) {
-         try {
-            var form = new UpdatedBillsForm();
-            new Changes().Run(this, form);
-            btnRegenerate_Click(sender, e);        // Automatically regenerate outdated bill reports
-         } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to show changes.");
          }
       }
       /// <summary>
@@ -81,10 +61,23 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnRegenerate_Click(object sender, EventArgs e) {
          try {
-            new Regenerate().Run(this);
-            btnReport_Click(sender, e);
+            SequenceControl.RegenBillReports(this);
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to regenerate at least one bill report.");
+         }
+      }
+      /// <summary>
+      /// Show those bills that have changed in some way from the last time the bill reports were regenerated.
+      /// The most import change is a change in the bill's text.  Committee location is also important.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnUpdateAndNew_Click(object sender, EventArgs e) {
+         try {
+            SequenceControl.UpdateBillReports(this);
+            //TODO SequenceControl.CreateBillReports(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to show changes.");
          }
       }
       /// <summary>
@@ -94,7 +87,7 @@ namespace Scout2 {
       /// <param name="e"></param>
       private void btnReport_Click(object sender, EventArgs e) {
          try {
-            new WeeklyReport().Run(this);
+            SequenceControl.WeeklyReport(this);
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Unable to generate the weekly report.");
          }

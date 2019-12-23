@@ -29,7 +29,8 @@ namespace Scout2.Sequence {
                      if (etr.Current.Text.Contains("pubinfo_daily")) {
                         found_zip = true;
                         Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
-                        await DownloadLegSiteFileAsync(etr.Current.Text, form1);
+                        //await DownloadLegSiteFileAsync(etr.Current.Text, form1);
+                        MessageBox.Show($"Please download {etr.Current.Text}");
                      }
                   }
                }
@@ -93,7 +94,7 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          using (var client = new HttpClientDownloadWithProgress(leg_site_path, output_path)) {
             client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
-               //LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
+               LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
                progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
             };
             await client.StartDownload();

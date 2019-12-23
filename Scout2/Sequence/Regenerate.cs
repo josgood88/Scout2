@@ -33,8 +33,8 @@ namespace Scout2.Sequence {
          var elapsed = DateTime.Now - start_time;
          var message = $"Bill reports re-generation complete. {elapsed.ToString("c")} ";
          LogThis(message);
-         form1.txtImportProgress.Text = message;
-         form1.txtImportProgress.Update();
+         form1.txtRegenProgress.Text = message;
+         form1.txtRegenProgress.Update();
       }
 
       private List<string> RecognizeChangedBills() {
