@@ -41,10 +41,7 @@ namespace Scout2.Sequence {
             CloseChrome();
             form1.TopMost = false;
             var elapsed = DateTime.Now - start_time;
-            var message = $"Latest zip file fetched. {elapsed.ToString("c")} ";
-            LogThis(message);
-            form1.txtLegSiteCompletion.Text = message;
-            form1.txtLegSiteCompletion.Update();
+            LogAndDisplay(form1.txtLegSiteCompletion, $"Latest zip file fetched. {elapsed.ToString("c")} ");
          }
          return 0;
       }

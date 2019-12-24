@@ -13,6 +13,22 @@ namespace Scout2.Sequence {
          Log.Instance.Info(message);
       }
       /// <summary>
+      /// Initialize before entering the main sequence.
+      /// </summary>
+      protected static void BeforeEnteringMainSequence(Form1 form) {
+         form.txtLegSiteCompletion.Text = string.Empty;
+         form.txtZipProgress.Text = string.Empty;
+         form.txtImportProgress.Text = string.Empty;
+         form.txtRegenProgress.Text = string.Empty;
+         form.txtBillUpdatesProgress.Text = string.Empty;
+         form.txtCreatesProgress.Text = string.Empty;
+         form.txtReportProgress.Text = string.Empty;
+         form.progressLegSite.Value = 0;
+         form.Update();
+
+         EnsureGlobalData();  // Ensure that database tables have been read into memory
+      }
+      /// <summary>
       /// The main sequence of processing contains multiple start points.
       /// Some need global data tables to be filled in.  This is the single point where that is done.
       /// It is called from each start point that needs one or more of these tables
@@ -41,6 +57,12 @@ namespace Scout2.Sequence {
       public static void LogAndThrow(string message) {
          LogThis(message);
          throw new ApplicationException(message);
+      }
+
+      public static void LogAndDisplay(TextBox textbox, string message) {
+         LogThis(message);
+         textbox.Text = message;
+         textbox.Update();
       }
    }
 }

@@ -28,6 +28,7 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnUpdateReports = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.txtRegenProgress = new System.Windows.Forms.TextBox();
          this.txtCreatesProgress = new System.Windows.Forms.TextBox();
          this.btnCreateReports = new System.Windows.Forms.Button();
          this.chkRegenerateAll = new System.Windows.Forms.CheckBox();
@@ -55,7 +56,6 @@
          this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.txtRegenProgress = new System.Windows.Forms.TextBox();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -126,6 +126,14 @@
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
          // 
+         // txtRegenProgress
+         // 
+         this.txtRegenProgress.AccessibleName = "txtReportProgress";
+         this.txtRegenProgress.Location = new System.Drawing.Point(162, 159);
+         this.txtRegenProgress.Name = "txtRegenProgress";
+         this.txtRegenProgress.Size = new System.Drawing.Size(346, 20);
+         this.txtRegenProgress.TabIndex = 19;
+         // 
          // txtCreatesProgress
          // 
          this.txtCreatesProgress.AccessibleName = "txtReportProgress";
@@ -142,6 +150,7 @@
          this.btnCreateReports.TabIndex = 17;
          this.btnCreateReports.Text = "Create New Reports";
          this.btnCreateReports.UseVisualStyleBackColor = true;
+         this.btnCreateReports.Click += new System.EventHandler(this.btnCreateReports_Click);
          // 
          // chkRegenerateAll
          // 
@@ -355,14 +364,6 @@
          this.updateFoldersFileToolStripMenuItem.Size = new System.Drawing.Size(113, 20);
          this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
          this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
-         // 
-         // txtRegenProgress
-         // 
-         this.txtRegenProgress.AccessibleName = "txtReportProgress";
-         this.txtRegenProgress.Location = new System.Drawing.Point(162, 159);
-         this.txtRegenProgress.Name = "txtRegenProgress";
-         this.txtRegenProgress.Size = new System.Drawing.Size(346, 20);
-         this.txtRegenProgress.TabIndex = 19;
          // 
          // Form1
          // 

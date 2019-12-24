@@ -28,9 +28,6 @@ namespace Scout2.Sequence {
       public void Run(Form1 form1, UpdatedBillsForm update_form) {
          var start_time = DateTime.Now;
          try {
-            // Read global data into memory from database
-            EnsureGlobalData();  // Ensure that database tables have been read into memory
-
             // Collect all bill history for the current biennium.
             // Collect all bill reports written for the current biennium.
             var history = BillHistoryRow.RowSet();
@@ -48,11 +45,11 @@ namespace Scout2.Sequence {
             //}
 
             // Collect those bills that have been updated since the last report written on that bill.
-            var updated_bills = new List<UpdateNeeded>();
+            var updated_bills = new List<BillForDisplay>();
             foreach (var bill in individual_bill_reports) {
                if (IsUpdated(bill, history, out string history_latest_action)) {
                   string last_action_date = ExtractLeadingDate(bill.LastAction);
-                  updated_bills.Add(new UpdateNeeded(bill.Measure, bill.Position, last_action_date, history_latest_action));
+                  updated_bills.Add(new BillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
                }
             }
             update_form.PrepareDataGridView();

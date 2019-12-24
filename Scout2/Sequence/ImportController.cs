@@ -10,28 +10,22 @@ namespace Scout2.Sequence {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
          try {
-            form1.txtImportProgress.Text = "Re-creating database tables.";
-            form1.txtImportProgress.Update();
+            LogAndDisplay(form1.txtImportProgress, "Re-creating database tables.");
 
-            // Read global data into memory from database
-            EnsureGlobalData();  // Ensure that in-memory copies of database tables are not null
-
-            form1.txtImportProgress.Text = "Writing Bill Version table.";
-            form1.txtImportProgress.Update();
+            LogAndDisplay(form1.txtImportProgress, "Writing Bill Version table.");
             BillVersionTable.ClearYourself(); 
             BillVersionRow.WriteRowset(GlobalData.VersionTable.Table);
-            form1.txtImportProgress.Text = "Writing Bill History table.";
-            form1.txtImportProgress.Update();
+
+            LogAndDisplay(form1.txtImportProgress, "Writing Bill History table.");
             BillHistoryTable.ClearYourself(); 
             BillHistoryRow.WriteRowset(GlobalData.HistoryTable.Table);
-            form1.txtImportProgress.Text = "Writing Bill Location table.";
-            form1.txtImportProgress.Update();
+
+            LogAndDisplay(form1.txtImportProgress, "Writing Bill Location table.");
             LocationCodeTable.ClearYourself(); 
             LocationCodeRow.WriteRowset(GlobalData.LocationTable.Table);
 
             // Determine most recent version of each Asm/Sen bill
-            form1.txtImportProgress.Text = "Determining most recent version of each bill.";
-            form1.txtImportProgress.Update();
+            LogAndDisplay(form1.txtImportProgress, "Determining most recent version of each bill.");
             EnsureMostRecentEachBill();
             GlobalData.Profiles = Profiles(GlobalData.MostRecentEachBill);  // Prepare for ranking the bills
             UpdateGlobalBillRows(out List<BillRow> new_bills);              // Update with GlobalData.Profiles data
@@ -39,10 +33,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"ZipController.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         var message = $"Extraction complete. {elapsed.ToString("c")} ";
-         LogThis(message);
-         form1.txtImportProgress.Text = message;
-         form1.txtImportProgress.Update();
+         LogAndDisplay(form1.txtImportProgress, $"Imports and most-recent-bill processing complete. {elapsed.ToString("c")} ");
       }
       /// <summary>
       /// Wrap Bill_Identifiers into BillProfiles, in preparation for ranking the bills

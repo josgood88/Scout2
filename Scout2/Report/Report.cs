@@ -25,7 +25,6 @@ namespace Scout2.Report {
       }
 
       public void Generate() {
-         EnsureGlobalData();  // Ensure that database tables have been read into memory
          string weekly_report_path = ReportPath();
          var reports = new BillReportCollection(report_folder);
          var past_week = PastWeek();

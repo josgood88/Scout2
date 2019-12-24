@@ -87,6 +87,7 @@
     <Compile Include="Sequence\Regenerate.cs" />
     <Compile Include="Sequence\SequenceControl.cs" />
     <Compile Include="Sequence\UpdateExistingReports.cs" />
+    <Compile Include="Sequence\BillForDisplay.cs" />
     <Compile Include="Sequence\WeeklyReport.cs" />
     <Compile Include="IndividualReport\IndividualPreviousReport.cs" />
     <Compile Include="IndividualReport\IndividualReport.cs" />

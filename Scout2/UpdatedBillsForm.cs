@@ -15,7 +15,7 @@ namespace Scout2 {
    /// a co-sponsor added.  Regardless the bill reviewer needs to take a look at the bill and update the bill's
    /// report if that is needed.
    public partial class UpdatedBillsForm : Form {
-      private static List<UpdateNeeded> contents_DataGridView = new List<UpdateNeeded>();
+      private static List<BillForDisplay> contents_DataGridView = new List<BillForDisplay>();
       public UpdatedBillsForm() { InitializeComponent(); }
       /// <summary>
       /// Update this view's DataGridView to have a grid appropriate to displaying which bills have been updated.
@@ -44,7 +44,7 @@ namespace Scout2 {
       /// This view's DataGridView is filled manually from the passed collection.
       /// </summary>
       /// <param name="collection">A list of UpdateNeeded which provides the information displayed in the DataGridView.</param>
-      public void AddRows(List<UpdateNeeded> collection) {
+      public void AddRows(List<BillForDisplay> collection) {
          contents_DataGridView = collection;
          Display();
       }
@@ -63,9 +63,9 @@ namespace Scout2 {
          ViewBillsRequiringUpdate.Refresh();
       }
 
-      private bool IsNotPositionNone(UpdateNeeded row) { return row.Position != "None"; }
+      private bool IsNotPositionNone(BillForDisplay row) { return row.Position != "None"; }
       private bool DisplayAll() { return this.chkNonNoneOnly.Checked == false; }
-      private void DisplayBillSummary(UpdateNeeded row) {
+      private void DisplayBillSummary(BillForDisplay row) {
          this.ViewBillsRequiringUpdate.Rows.Add(false, row.Measure, row.Position, row.BillLastAction, row.HistoryLastAction);
       }
    }

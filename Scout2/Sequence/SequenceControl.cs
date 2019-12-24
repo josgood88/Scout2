@@ -7,7 +7,7 @@ namespace Scout2.Sequence {
    /// This sequence is unchanging, but can be entered anywhere in the sequence.
    /// This class defines the sequence and its entry points.
    /// </summary>
-   public class SequenceControl {
+   public class SequenceControl : BaseController {
       public static void ImportFromLegSite (Form1 form) { Run(form, SeqPoint.importFromLegSite); }
       public static void ExtractFromZip    (Form1 form) { Run(form, SeqPoint.extractFromZip); }
       public static void ImportToDB        (Form1 form) { Run(form, SeqPoint.importToDB); }
@@ -40,6 +40,7 @@ namespace Scout2.Sequence {
       /// <param name="form">The form on which these controls are displayed</param>
       /// <param name="seq">Next step on the main sequence</param>
       private static void Run(Form1 form, SeqPoint seq) {
+         BeforeEnteringMainSequence(form);  // Initialize before entering the main sequence.
          var update_form = new UpdatedBillsForm();
          while (seq != SeqPoint.complete) {        // While the main sequence is not complete
             switch (seq) {                         // Perform the current step in the sequence

@@ -12,10 +12,7 @@ namespace Scout2.Sequence {
       public void Run(Form1 form1) {
          const bool verbose = false, update = false;
          var start_time = DateTime.Now;
-
-         // Read global data into memory from database
-         EnsureGlobalData();  // Ensure that database tables have been read into memory
-
+         LogAndDisplay(form1.txtRegenProgress, "Updating bill history on individual bill reports.");
          try {
             string bill = string.Empty;
             List<string> bills = new List<string>();
@@ -31,10 +28,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"Regenerate.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         var message = $"Bill reports re-generation complete. {elapsed.ToString("c")} ";
-         LogThis(message);
-         form1.txtRegenProgress.Text = message;
-         form1.txtRegenProgress.Update();
+         LogAndDisplay(form1.txtRegenProgress, $"Bill reports re-generation complete. {elapsed.ToString("c")} ");
       }
 
       private List<string> RecognizeChangedBills() {

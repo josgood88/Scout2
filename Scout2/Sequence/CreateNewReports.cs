@@ -7,18 +7,14 @@ namespace Scout2.Sequence {
       /// for those bills having the highest scores.
       public void Run(Form1 form1, UpdatedBillsForm update_form) {
          var start_time = DateTime.Now;
+         LogAndDisplay(form1.txtCreatesProgress, "Showing bills that may need new reports.");
          try {
-            // Read global data into memory from database
-            EnsureGlobalData();  // Ensure that database tables have been read into memory
             ShowNewBills(form1,update_form);
          } catch (Exception ex) {
             LogAndThrow($"CreateNewReports.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         var message = $"Through with bill report creation. {elapsed.ToString("c")} ";
-         LogThis(message);
-         form1.txtCreatesProgress.Text = message;
-         form1.txtCreatesProgress.Update();
+         LogAndDisplay(form1.txtCreatesProgress, $"Through with bill report creation. {elapsed.ToString("c")} ");
       }
 	  
 	  private void ShowNewBills(Form1 form1, UpdatedBillsForm update_form) {

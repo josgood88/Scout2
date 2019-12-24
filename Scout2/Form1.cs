@@ -75,9 +75,16 @@ namespace Scout2 {
       private void btnUpdateAndNew_Click(object sender, EventArgs e) {
          try {
             SequenceControl.UpdateBillReports(this);
-            //TODO SequenceControl.CreateBillReports(this);
          } catch (Exception ex) {
-            MessageBox.Show(ex.Message, "Unable to show changes.");
+            MessageBox.Show(ex.Message, "Unable to update bill reports.");
+         }
+      }
+
+      private void btnCreateReports_Click(object sender, EventArgs e) {
+         try {
+            SequenceControl.CreateBillReports(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to create bill report.");
          }
       }
       /// <summary>
