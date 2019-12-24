@@ -11,15 +11,15 @@ using Library.Database;
 using Scout2.Report;
 
 namespace Scout2.Sequence {
-   public class UpdateNeeded {
-      public string Measure { private set; get; }
-      public string Position { private set; get; }
-      public string BillLastAction { private set; get; }
-      public string HistoryLastAction { private set; get; }
-      public UpdateNeeded(string a, string b, string c, string d) {
-         Measure = a; Position = b; BillLastAction = c; HistoryLastAction = d;
-      }
-   }
+   //public class UpdateNeeded {
+   //   public string Measure { private set; get; }
+   //   public string Position { private set; get; }
+   //   public string BillLastAction { private set; get; }
+   //   public string HistoryLastAction { private set; get; }
+   //   public UpdateNeeded(string a, string b, string c, string d) {
+   //      Measure = a; Position = b; BillLastAction = c; HistoryLastAction = d;
+   //   }
+   //}
 
    public class Changes : BaseController {
       ///

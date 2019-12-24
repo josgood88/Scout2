@@ -10,7 +10,7 @@ namespace Scout2.Sequence {
          try {
             // Read global data into memory from database
             EnsureGlobalData();  // Ensure that database tables have been read into memory
-      
+            ShowNewBills(form1,update_form);
          } catch (Exception ex) {
             LogAndThrow($"CreateNewReports.Run: {ex.Message}.");
          }
@@ -20,5 +20,8 @@ namespace Scout2.Sequence {
          form1.txtCreatesProgress.Text = message;
          form1.txtCreatesProgress.Update();
       }
+	  
+	  private void ShowNewBills(Form1 form1, UpdatedBillsForm update_form) {
+	  }
    }
 }
