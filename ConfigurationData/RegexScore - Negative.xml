@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <Regex_Score>
-   <Pair>
-      mental;\smental\s;20
-   </Pair>
+   <!--40 Score -->
+   <Pair> convulsive;^convulsive;40 </Pair>
+   <Pair> ect;^ECT$;40              </Pair>
+   <!--20 Score -->
+   <Pair> mental;\smental\s;20 </Pair>
+   <Pair> mental;^mental;20    </Pair>
+   <!--10 Score -->
+   <Pair> psych;^psych;10    </Pair>
+   <Pair> screen;^screen$;10 </Pair>
+   <!--5 Score -->
+   <Pair> autis;^autis;5 </Pair>
+   <Pair> behav;^behav;5 </Pair>
 </Regex_Score>

@@ -55,6 +55,18 @@ namespace Scout2 {
          }
       }
       /// <summary>
+      /// Generate each bill's score
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnGenerateScore_Click(object sender, EventArgs e) {
+         try {
+            SequenceControl.UpdateScores(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to generate bill file scores.");
+         }
+      }
+      /// <summary>
       /// Regenerate the individual bill reports.  In particular, update the bill's history
       /// </summary>
       /// <param name="sender"></param>
@@ -142,5 +154,5 @@ namespace Scout2 {
          var form = new FormEditConstants();
          form.ShowDialog();
       }
-   }
+    }
 }

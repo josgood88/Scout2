@@ -10,6 +10,7 @@ using Scout2.IndividualReport;
 namespace Scout2.Sequence {
    public class Regenerate : BaseController {
       public void Run(Form1 form1) {
+         string completion_message = string.Empty;
          const bool verbose = false, update = false;
          var start_time = DateTime.Now;
          LogAndDisplay(form1.txtRegenProgress, "Updating bill history on individual bill reports.");
@@ -22,18 +23,20 @@ namespace Scout2.Sequence {
             if (bills.Count > 0) {
                foreach (var item in bills) (new IndividualReport.IndividualReport(verbose, update)).Run(item);
             } else {
-               LogAndShow("BR found no bills to process.");
+               completion_message = "Regenerate found no bills to process.";
             }
          } catch (Exception ex) {
-            LogAndThrow($"Regenerate.Run: {ex.Message}.");
+            completion_message = $"Regenerate.Run: {ex.Message}.";
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtRegenProgress, $"Bill reports re-generation complete. {elapsed.ToString("c")} ");
+         if (completion_message == string.Empty) completion_message = $"Bill reports re-generation complete. {elapsed.ToString("c")} ";
+         LogAndDisplay(form1.txtRegenProgress, completion_message);
       }
 
       private List<string> RecognizeChangedBills() {
          LogThis("Regenerating reports for those bills that have changed.");
          var result = new List<string>();
+         try { 
          List<string> folder_contents = Directory.EnumerateFiles(Config.Instance.HtmlFolder, "*.html").ToList();
          foreach (var path in folder_contents) {
             if (!path.Contains("Weekly")) {
@@ -47,6 +50,9 @@ namespace Scout2.Sequence {
                   LogThis(message);
                }
             }
+         }
+         } catch (Exception ex) {
+            LogThis($"Regenerate.RecognizeChangedBills: {ex.Message}.");
          }
          return result;
       }
@@ -75,12 +81,16 @@ namespace Scout2.Sequence {
 
       private DateTime DateFromHistoryTable(string path) {
          DateTime date_result = default(DateTime);
-         String bill = Path.GetFileNameWithoutExtension(path);
-         BillRow row = BillRow.Row(Ensure4DigitNumber(bill));
-         string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
-         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
-         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
-         DateTime.TryParse(history.First().ActionDate, out date_result);
+         try {
+            String bill = Path.GetFileNameWithoutExtension(path);
+            BillRow row = BillRow.Row(Ensure4DigitNumber(bill));
+            string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
+            BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
+            List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
+            DateTime.TryParse(history.First().ActionDate, out date_result);
+         } catch (Exception ex) {
+            LogAndThrow($"Regenerate.DateFromHistoryTable: {ex.Message}.");
+         }
          return date_result;
       }
 

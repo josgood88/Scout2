@@ -91,7 +91,7 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          using (var client = new HttpClientDownloadWithProgress(leg_site_path, output_path)) {
             client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
-               LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
+               //LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
                progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
             };
             await client.StartDownload();

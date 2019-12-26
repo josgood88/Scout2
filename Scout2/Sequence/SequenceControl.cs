@@ -11,6 +11,7 @@ namespace Scout2.Sequence {
       public static void ImportFromLegSite (Form1 form) { Run(form, SeqPoint.importFromLegSite); }
       public static void ExtractFromZip    (Form1 form) { Run(form, SeqPoint.extractFromZip); }
       public static void ImportToDB        (Form1 form) { Run(form, SeqPoint.importToDB); }
+      public static void UpdateScores      (Form1 form) { Run(form, SeqPoint.updateScore); }
       public static void UpdateBillReports (Form1 form) { Run(form, SeqPoint.updateBillReports); }
       public static void CreateBillReports (Form1 form) { Run(form, SeqPoint.createBillReports); }
       public static void RegenBillReports  (Form1 form) { Run(form, SeqPoint.regenBillReports); }
@@ -27,20 +28,20 @@ namespace Scout2.Sequence {
       /// This sequence should also be in sync with the Form1 display.
       /// Not required, but looks better.
       /// </summary>
-      private enum SeqPoint { importFromLegSite, extractFromZip, importToDB,
+      private enum SeqPoint { importFromLegSite, extractFromZip, importToDB, updateScore,
          regenBillReports, updateBillReports, createBillReports, weeklyReport,
          complete
       };
       /// <summary>
       /// Run the program through the main sequence.
       /// Note that each case simply increments the seq SeqPoint.
-      /// It is debateable whether this is the more readable way to write this.
+      /// It is debatable whether this is the more readable way to write this.
       /// I think it is.
       /// </summary>
       /// <param name="form">The form on which these controls are displayed</param>
       /// <param name="seq">Next step on the main sequence</param>
       private static void Run(Form1 form, SeqPoint seq) {
-         BeforeEnteringMainSequence(form);  // Initialize before entering the main sequence.
+         BeforeEnteringMainSequence(form);         // Initialize before entering the main sequence.
          var update_form = new UpdatedBillsForm();
          while (seq != SeqPoint.complete) {        // While the main sequence is not complete
             switch (seq) {                         // Perform the current step in the sequence
@@ -58,6 +59,10 @@ namespace Scout2.Sequence {
                   break;
                case SeqPoint.importToDB:  
                   new ImportController().Run(form);// Update the database with the latest data on the bill's text, status, committee location, etc.
+                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  break;
+               case SeqPoint.updateScore:
+                  new RescoreBills().Run(form);    // Update scores for bills
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
                case SeqPoint.regenBillReports:

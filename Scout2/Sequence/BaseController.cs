@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Library;
@@ -47,6 +48,15 @@ namespace Scout2.Sequence {
       protected static void EnsureMostRecentEachBill() {
          if (GlobalData.MostRecentEachBill == null)
             GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
+      }
+      /// <summary>
+      /// Update the database BillRows table from a list of BillProfile
+      /// </summary>
+      /// <param name="ranked">BillRows updated by the "ScoreTheBill" method.</param>
+      protected void UpdateBillRowsFromBillProfile(List<BillProfile> ranked) {
+         var bill_rows = new List<BillRow>();
+         foreach (var profile in ranked) bill_rows.Add(new BillRow(profile));
+         BillRow.WriteRowset(bill_rows);
       }
 
       public static void LogAndShow(string message) {

@@ -13,9 +13,10 @@ namespace Scout2.Sequence {
       /// Give the user an opportunity to update existing reports
       /// due to changes that have ocurred.
       public void Run(Form1 form1, UpdatedBillsForm update_form) {
+         string completion_message = string.Empty;
          var start_time = DateTime.Now;
+         LogAndDisplay(form1.txtBillUpdatesProgress, "Showing reports that need updating.");
          try {
-            LogAndDisplay(form1.txtBillUpdatesProgress, "Showing reports that need updating.");
             List<BillForDisplay> updated_bills = CollectUpdatedBills(form1,update_form);
             // Display those bills that have changed, or else a MessageBox saying nothing has changed
             if (updated_bills.Count > 0) {
@@ -23,13 +24,14 @@ namespace Scout2.Sequence {
                update_form.AddRows(updated_bills);
                update_form.ShowDialog();
             } else {
-               MessageBox.Show("No bills have changed.  There is nothing to update");
+               completion_message = "No bills have changed.  There is nothing to update";
             }
          } catch (Exception ex) {
-            LogAndThrow($"UpdateExistingReports.Run: {ex.Message}.");
+            completion_message = $"UpdateExistingReports.Run: {ex.Message}.";
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtBillUpdatesProgress, $"Through with updating bill reports. {elapsed.ToString("c")} ");
+		 if (completion_message == string.Empty) completion_message = $"Through with updating bill reports. {elapsed.ToString("c")} ";
+         LogAndDisplay(form1.txtBillUpdatesProgress, completion_message);
       }
 
       private List<BillForDisplay> CollectUpdatedBills(Form1 form1, UpdatedBillsForm update_form) {

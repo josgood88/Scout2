@@ -28,7 +28,7 @@ namespace Scout2.Sequence {
             LogAndDisplay(form1.txtImportProgress, "Determining most recent version of each bill.");
             EnsureMostRecentEachBill();
             GlobalData.Profiles = Profiles(GlobalData.MostRecentEachBill);  // Prepare for ranking the bills
-            UpdateGlobalBillRows(out List<BillRow> new_bills);              // Update with GlobalData.Profiles data
+            UpdateBillRowsFromBillProfile(GlobalData.Profiles);
          } catch (Exception ex) {   
             LogAndThrow($"ZipController.Run: {ex.Message}.");
          }
