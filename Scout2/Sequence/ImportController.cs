@@ -4,14 +4,13 @@ using System.IO;
 using System.Linq;
 using Library;
 using Library.Database;
+using OpenQA.Selenium.Support.UI;
 
 namespace Scout2.Sequence {
    public class ImportController : BaseController {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
          try {
-            LogAndDisplay(form1.txtImportProgress, "Re-creating database tables.");
-
             LogAndDisplay(form1.txtImportProgress, "Writing Bill Version table.");
             BillVersionTable.ClearYourself(); 
             BillVersionRow.WriteRowset(GlobalData.VersionTable.Table);
@@ -24,7 +23,7 @@ namespace Scout2.Sequence {
             LocationCodeTable.ClearYourself(); 
             LocationCodeRow.WriteRowset(GlobalData.LocationTable.Table);
 
-            // Determine most recent version of each Asm/Sen bill
+            // Determine most recent version of each Asm/Sen bill.
             LogAndDisplay(form1.txtImportProgress, "Determining most recent version of each bill.");
             EnsureMostRecentEachBill();
             GlobalData.Profiles = Profiles(GlobalData.MostRecentEachBill);  // Prepare for ranking the bills
@@ -71,6 +70,29 @@ namespace Scout2.Sequence {
                new_bills.Add(new BillRow(profile));
             }
          }
+      }
+      /// <summary>
+      /// When bill data was re-imported from the .lob files, the current positions were lost from the BillRows table.
+      /// Before bill data was re-imported, a copy of the BillRows table was made.
+      /// That data is passed here as preserved_positions.
+      /// This method restores position to the BillRows table.
+      /// </summary>
+      /// <param name="preserved_positions"></param>
+      private void RestorePositionData(List<BillRow> preserved_positions) {
+         // Not all BillRows entries have positions.  Select those that do.
+         var rows_with_position_data = 
+            from row in preserved_positions where row.Position.Length > 0 select row;
+         
+         // Update a local copy of the BillRows table
+         var bill_rows = BillRow.RowSet();   // Get a copy of the current BillRows table
+         foreach (var row in rows_with_position_data) {
+            var copy_row = bill_rows.Find(x => x.Bill == row.Bill);
+            if (copy_row == null) throw new ApplicationException($"ImportController.RestorePositionData: Bill {row.Bill} has disappeared.");
+            copy_row.Position = row.Position;
+         }
+
+         // Update BillRows in the database
+         BillRow.WriteRowset(bill_rows);
       }
    }
 }

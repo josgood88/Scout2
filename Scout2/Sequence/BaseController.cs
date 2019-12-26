@@ -51,6 +51,8 @@ namespace Scout2.Sequence {
       }
       /// <summary>
       /// Update the database BillRows table from a list of BillProfile
+      /// Position is added by BillRows(profile) constructor.
+      /// Obtains position by querying the current GlobalData.BillRows.
       /// </summary>
       /// <param name="ranked">BillRows updated by the "ScoreTheBill" method.</param>
       protected void UpdateBillRowsFromBillProfile(List<BillProfile> ranked) {

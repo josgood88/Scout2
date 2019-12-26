@@ -20,22 +20,17 @@ namespace Scout2.Sequence {
    public class RescoreBills : BaseController {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
-         LogAndDisplay(form1.txtUpdateScores, "Scoring bills.");
-
-         // Determine which bills to process
-         List<BillRow> process_these = BillRow.RowSet();
-         LogAndDisplay(form1.txtUpdateScores, $"There are {GlobalData.Profiles.Count} bills to score.");
-
-         if (process_these.Count > 0) {
-            List<BillProfile> ranked = Process(form1, process_these);
-            UpdateBillRowsFromBillProfile(ranked);
-         }
          try {
+            LogAndDisplay(form1.txtUpdateScores, $"There are {GlobalData.Profiles.Count} bills to score.");
+            if (GlobalData.BillRows.Count > 0) {
+               List<BillProfile> ranked = Process(form1, GlobalData.BillRows);
+               UpdateBillRowsFromBillProfile(ranked);
+            }
          } catch (Exception ex) {
             LogAndThrow($"CreateNewReports.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         if (process_these.Count > 0) {
+         if (GlobalData.BillRows.Count > 0) {
             LogAndDisplay(form1.txtUpdateScores, $"Through with bill scoring. {elapsed.ToString("c")} ");
          }
       }
