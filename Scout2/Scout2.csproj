@@ -78,6 +78,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewBillsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewBillsForm.Designer.cs">
+      <DependentUpon>NewBillsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sequence\BaseController.cs" />
     <Compile Include="Sequence\Changes.cs" />
     <Compile Include="IndividualReport\CreateIndividualReport.cs" />
@@ -143,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormEditConstants.resx">
       <DependentUpon>FormEditConstants.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewBillsForm.resx">
+      <DependentUpon>NewBillsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

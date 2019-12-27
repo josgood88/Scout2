@@ -43,6 +43,7 @@ namespace Scout2.Sequence {
       private static void Run(Form1 form, SeqPoint seq) {
          BeforeEnteringMainSequence(form);         // Initialize before entering the main sequence.
          var update_form = new UpdatedBillsForm();
+         var new_bill_form = new NewBillsForm();
          while (seq != SeqPoint.complete) {        // While the main sequence is not complete
             switch (seq) {                         // Perform the current step in the sequence
                case SeqPoint.importFromLegSite:
@@ -74,7 +75,7 @@ namespace Scout2.Sequence {
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
                case SeqPoint.createBillReports:
-                  new CreateNewReports().Run(form, update_form);// User creates reports for newly found bills of interest
+                  new CreateNewReports().Run(form, new_bill_form);// User creates reports for newly found bills of interest
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
                case SeqPoint.weeklyReport:
