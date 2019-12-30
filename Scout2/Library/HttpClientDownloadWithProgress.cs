@@ -18,8 +18,7 @@ namespace Library {
       }
 
       public async Task StartDownload() {
-         
-         _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) /*TimeSpan.FromDays(1)*/ };
+         _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
          using (var response = await _httpClient.GetAsync(_downloadUrl, HttpCompletionOption.ResponseHeadersRead))
             await DownloadFileFromHttpResponseMessage(response);
       }

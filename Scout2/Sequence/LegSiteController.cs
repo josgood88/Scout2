@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Library;
@@ -30,6 +31,7 @@ namespace Scout2.Sequence {
                         found_zip = true;
                         Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
                         //await DownloadLegSiteFileAsync(etr.Current.Text, form1);
+                        //await DownloadTheZipFile(etr.Current.Text, form1);
                         MessageBox.Show($"Please download {etr.Current.Text}");
                      }
                   }
@@ -83,21 +85,34 @@ namespace Scout2.Sequence {
       /// </summary>
       /// <param name="filename">Name of the file to be downloaded from the leg site.</param>
       /// <param name="form1">Need to update progressLegSite, so need the form.</param>
-      private async Task<TimeSpan> DownloadLegSiteFileAsync(string filename, Form1 form1) {
-         LogThis($"Downloading {filename}, which is the most recent zip file on the leg site.");
-         var leg_site_path = Path.Combine(Config.Instance.LegSite, filename);
-         var output_path = OutputPath(filename);   // Throw if output file cannot be created.
-         ProgressBar progress = form1.progressLegSite;
+      //private async Task<TimeSpan> DownloadLegSiteFileAsync(string filename, Form1 form1) {
+      //   LogThis($"Downloading {filename}, which is the most recent zip file on the leg site.");
+      //   var leg_site_path = Path.Combine(Config.Instance.LegSite, filename);
+      //   var output_path = OutputPath(filename);   // Throw if output file cannot be created.
+      //   ProgressBar progress = form1.progressLegSite;
+      //   var start_time = DateTime.Now;
+      //   using (var client = new HttpClientDownloadWithProgress(leg_site_path, output_path)) {
+      //      client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
+      //         //LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
+      //         progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
+      //      };
+      //      await client.StartDownload();
+      //   }
+      //   var interval = DateTime.Now-start_time;
+      //   return interval;
+      //}
+
+      private async Task<TimeSpan> DownloadTheZipFile(string filename, Form1 form1) {
+         LogAndDisplay(form1.txtLegSiteCompletion, $"Downloading {filename} as the most recent zip file");
          var start_time = DateTime.Now;
-         using (var client = new HttpClientDownloadWithProgress(leg_site_path, output_path)) {
-            client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
-               //LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
-               progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
-            };
-            await client.StartDownload();
+         var full_path = Path.Combine(Config.Instance.LegSite, filename);
+         var client = new HttpClient();
+         client.Timeout = TimeSpan.FromSeconds(3);
+         var contents = await client.GetStreamAsync(full_path);
+         using (var writer = new FileStream(Path.Combine(Config.Instance.DownloadsFolder, filename), FileMode.Create)) {
+            await contents.CopyToAsync(writer);
          }
-         var interval = DateTime.Now-start_time;
-         return interval;
+         return DateTime.Now-start_time;
       }
 
       /// <summary>
