@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Library;
+using Library.Database;
 using Scout2.Sequence;
 
 namespace Scout2.Report {
@@ -28,8 +28,6 @@ namespace Scout2.Report {
          string weekly_report_path = ReportPath();
          var reports = new BillReportCollection(report_folder);
          var past_week = PastWeek();
-         past_week.start = new DateTime(2019, 9, 2);
-         past_week.end = new DateTime(2019, 9, 16);
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
             NewThisWeek(reports, past_week,sw);
@@ -67,11 +65,14 @@ namespace Scout2.Report {
       /// <param name="sw">StreamWriter which will be written to the report file</param>
       private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw,"New This Week");
-         //foreach (var report in reports) {
-         //   if (IsLatestThisWeek(report, past_week)) {
-         //      ReportOneBill(sw, report);
-         //   }
-         //}
+         foreach (var report in reports) {
+            if (IsLatestThisWeek(report, past_week)) {
+               past_week.start = new DateTime(2019, 2, 2);
+               if (NoHistoryEarlierThanThisWeek(report, past_week)) {
+                  ReportOneBill(sw, report);
+               }
+            }
+         }
          EndTable(sw);
       }
 
@@ -229,6 +230,14 @@ namespace Scout2.Report {
 
       private bool DateIsInPastWeek(DateTime dt, DateRange range) {
          return dt >= range.start && dt <= range.end;
+      }
+
+      private bool NoHistoryEarlierThanThisWeek(BillReport report, DateRange past_week) {
+         string bill = Regex.Replace(report.Measure,@"(\w{2})-(\d{1,4})","$1$2");
+         List<BillHistoryRow> history_list = GlobalData.HistoryTable.RowSetEndsWith(bill);
+         if (!DateTime.TryParse(history_list.First().ActionDate, out DateTime earliest_action_date))
+            throw new ApplicationException($"Report.NoHistoryEarlierThanThisWeek: Unable to parse earliest history date for {report.Measure}");
+         return earliest_action_date >= past_week.start;
       }
    }
 }

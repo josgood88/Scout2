@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq.SqlClient;
 using System.IO;
 using System.Linq;
 
@@ -53,7 +54,23 @@ namespace Library.Database {
       }
 
       public List<BillHistoryRow> RowSet(string bill_id) {
-         var result = (from item in Table where (item.BillID == bill_id) orderby item.ActionDate descending select item).ToList();
+         var result = 
+            (from item in Table 
+             where (item.BillID == bill_id) 
+             orderby item.ActionDate descending select item).ToList();
+         return result;
+      }
+      /// <summary>
+      /// Select a subset of the BillHistoryTable where BillID ends in a ChamberNumber such as AB1599.
+      /// Result is orderby by ActionDate ascending.
+      /// </summary>
+      /// <param name="bill_id">e.g., "AB1599"</param>
+      /// <returns></returns>
+      public List<BillHistoryRow> RowSetEndsWith(string bill_id) {
+         var result = 
+            (from item in Table 
+            where item.BillID.EndsWith(bill_id) 
+            orderby item.ActionDate select item).ToList();
          return result;
       }
    }
