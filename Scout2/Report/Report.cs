@@ -28,6 +28,8 @@ namespace Scout2.Report {
          string weekly_report_path = ReportPath();
          var reports = new BillReportCollection(report_folder);
          var past_week = PastWeek();
+         past_week.start = new DateTime(2019, 9, 2);
+         past_week.end = new DateTime(2019, 9, 16);
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
             NewThisWeek(reports, past_week,sw);
@@ -66,15 +68,21 @@ namespace Scout2.Report {
       private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw,"New This Week");
          //foreach (var report in reports) {
-         //   var dt = DateFromLastAction(report);
-         //   if (DateIsInPastWeek(dt, past_week)) { }
-         //   ReportOneBill(sw, report);
+         //   if (IsLatestThisWeek(report, past_week)) {
+         //      ReportOneBill(sw, report);
+         //   }
          //}
          EndTable(sw);
       }
 
       private void HighestPriority(StreamWriter sw) {
          StartTable(sw, "Highest Priority Bills");
+         List<String> highest_priority = new List<string> { "SB12" };
+         foreach (var bill in highest_priority) {
+            string file_path = Path.Combine(report_folder, $"{bill}.html");
+            BillReport report = new BillReport(file_path);
+            ReportOneBill(sw, report);
+         }
          EndTable(sw);
       }
       /// <summary>
@@ -86,8 +94,7 @@ namespace Scout2.Report {
       private void ChangesThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw, "Changes This Week");
          foreach (var report in reports) {
-            var dt = DateFromLastAction(report);
-            if (DateIsInPastWeek(dt, past_week)) {
+            if (IsLatestThisWeek(report, past_week)) {
                ReportOneBill(sw, report);
             }
          }
@@ -165,6 +172,11 @@ namespace Scout2.Report {
          sw.WriteLine("</tr>");
       }
 
+      private bool IsLatestThisWeek(BillReport report, DateRange past_week) {
+         var dt = DateFromLastAction(report);
+         return DateIsInPastWeek(dt, past_week);
+      }
+
       /// <summary>
       /// Report date is always the Monday following today
       /// </summary>
@@ -209,9 +221,9 @@ namespace Scout2.Report {
       }
 
       private DateTime DateFromLastAction(BillReport report) {
-         DateTime result = DateTime.MinValue;
-         var text_date = Regex.Match(report.LastAction, @"^\w+.\s+\w+.\s+\w+").ToString();
-         DateTime.TryParse(text_date, out result);
+         var text_date = Regex.Replace(report.LastAction, @"(\w+ \d{1,2} \d{4}).*", "$1");
+         if (!DateTime.TryParse(text_date, out DateTime result))
+            throw new ApplicationException($"Invalid date in bill {report.Measure} Last Action {report.LastAction}");
          return result;
       }
 

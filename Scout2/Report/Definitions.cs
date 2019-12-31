@@ -75,7 +75,7 @@ namespace Scout2.Report {
          sb.Append("      <tr>");
          sb.Append("         <td>Consent Calendar</td>");
          sb.Append("         <td></td>");
-         sb.Append("         <td>A group of noncontroversial bills passed by a committee to another committee or the full Assembly or Senate. Bills may be placed upon the Consent Calendar if they are reported to the Floor with that recommendation and (1) have received no \"no\" votes in committee and(2) have had no opposition expressed by any person present at the hearing.</td>");
+         sb.Append("         <td>A group of noncontroversial bills passed by a committee to another committee or the full Assembly or Senate. Bills may be placed upon the Consent Calendar if they are reported to the Floor with that recommendation and (1) have received no \"no\" votes in committee and (2) have had no opposition expressed by any person present at the hearing.</td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
          sb.Append("         <td>Enrolled</td>");
@@ -114,7 +114,7 @@ namespace Scout2.Report {
          sb.Append("         <td>");
          sb.Append("           The portion of the Daily File containing legislation that is ready for floor consideration, but, for a variety of reasons, is dormant.");
          sb.Append("           An author may move a bill to the inactive file if he or she wishes to take it up at a later date.");
-         sb.Append("           Once a bill is on the inactive file, one day’s public notice is needed to place it back on the agenda.");
+         sb.Append("           Once a bill is on the inactive file, one day's public notice is needed to place it back on the agenda.");
          sb.Append("        </td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");

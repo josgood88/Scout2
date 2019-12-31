@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Scout2.Report {
    public class LegislativeEvent {
@@ -17,9 +18,11 @@ namespace Scout2.Report {
          new LegislativeEvent(false, "Jan. 10, 2020", "Budget must be submitted by Governor(Art.IV, Sec. 12(a)). "),
          new LegislativeEvent(false, "Jan. 17, 2020", "Last day for policy committees to hear and report to fiscal committees fiscal bills introduced in their house in the odd-numbered year(J.R. 61(b)(1))."),
          new LegislativeEvent(false, "Jan. 20, 2020", "Martin Luther King, Jr.Day.Jan. 24 Last day for any committee to hear and report to the floor bills introduced in that house in the odd-numbered year(J.R. 61(b)(2)).Last day to submit bill requests to the Office of Legislative Counsel."),
-         new LegislativeEvent(false, "Jan. 31, 2020", "Last day for each house to pass bills introduced in that house in the odd-numbered year(Art.IV, Sec. 10(c)), (J.R. 61(b)(3)).Feb. 17 Presidents’ Day.Feb. 21 Last day for bills to be introduced(J.R. 61(b)(4)), (J.R. 54(a))."),
+         // Replaced apostrophe
+         new LegislativeEvent(false, "Jan. 31, 2020", "Last day for each house to pass bills introduced in that house in the odd-numbered year(Art.IV, Sec. 10(c)), (J.R. 61(b)(3)).Feb. 17 Presidents' Day.Feb. 21 Last day for bills to be introduced(J.R. 61(b)(4)), (J.R. 54(a))."),
          new LegislativeEvent(false, "Mar. 27, 2020", "Cesar Chavez Day observed"),
-         new LegislativeEvent(false, "Apr. 2, 2020",  "Spring Recess begins upon adjournment of this day’s session(J.R. 51(b)(1)). "),
+         // Replaced apostrophe
+         new LegislativeEvent(false, "Apr. 2, 2020",  "Spring Recess begins upon adjournment of this day's session(J.R. 51(b)(1)). "),
          new LegislativeEvent(false, "Apr. 13, 2020", "Legislature reconvenes from Spring Recess (J.R. 51(b)(1)). "),
          new LegislativeEvent(false, "Apr. 24, 2020", "Last day for policy committees to hear and report to fiscal committees fiscal bills introduced in their house(J.R. 61(b)(5))."),
          new LegislativeEvent(false, "May 1, 2020",   "Last day for policy committees to hear and report to the floor nonfiscal bills introduced in their house(J.R. 61(b)(6))."),
@@ -35,10 +38,12 @@ namespace Scout2.Report {
          new LegislativeEvent(false, "July 3, 2020",  "Independence Day observed."),
          new LegislativeEvent(false, "Aug. 3, 2020",  "Legislature reconvenes from Summer Recess (J.R. 51(b)(2))."),
          new LegislativeEvent(false, "Aug. 14, 2020", "Last day for fiscal committees to meet and report bills(J.R. 61(b)(15))."),
-         new LegislativeEvent(true,  "Aug. 17 – 31, 2020", "Floor Session only.No committees, other than conference and Rules committees, may meet for any purpose (J.R. 61(b)(16)). "),
+         // Had to type the dash -- from the website the dash is unicode
+         new LegislativeEvent(true,  "Aug. 17 - 31, 2020", "Floor Session only.No committees, other than conference and Rules committees, may meet for any purpose (J.R. 61(b)(16)). "),
          new LegislativeEvent(false, "Aug. 21, 2020", "Last day to amend bills on the Floor(J.R. 61(b)(17))."),
          new LegislativeEvent(false, "Aug. 31, 2020", "Last day for each house to pass bills(Art.IV, Sec. 10(c),"),
-         new LegislativeEvent(false, "Sept. 30, 2020","Last day for Governor to sign or veto bills passed by the Legislature before Sept. 1 and in the Governor’s possession on or after Sept. 1(Art.IV, Sec. 10(b)(2))."),
+         // Replaced apostrophe
+         new LegislativeEvent(false, "Sept. 30, 2020","Last day for Governor to sign or veto bills passed by the Legislature before Sept. 1 and in the Governor's possession on or after Sept. 1(Art.IV, Sec. 10(b)(2))."),
          new LegislativeEvent(false, "Nov. 3, 2020",  "General Election "),
          new LegislativeEvent(false, "Nov. 30, 2020", "Adjournment Sine Die at midnight(Art.IV, Sec. 3(a))."),
          new LegislativeEvent(false, "Dec. 7, 2020",  "12 pm. convening of 2021-22 Regular Session(Art.IV, Sec. 3(a)). "),
@@ -60,7 +65,11 @@ namespace Scout2.Report {
 
          DateTime starting_date = StartingDate();     // This report starts on the previous Monday
          foreach (var row in events) {
-            if (!row.IsRange) {
+            if (row.IsRange) {
+               // Append an event that occurs over a range of dates
+               DateRange(row, out DateTime range_start_date, out DateTime range_end_date);
+               sb.Append($"      <tr><td>{row.EventDate}</td><td>{row.EventWhat}</td></tr>");
+            } else {
                // Append an event that occurs on a single date
                if (DateOf(row) >= starting_date) {
                   sb.Append($"      <tr><td>{row.EventDate}</td><td>{row.EventWhat}</td></tr>");
@@ -110,17 +119,56 @@ namespace Scout2.Report {
          return now.AddDays(adjustment);
       }
       /// <summary>
+      /// Ensure event date is canonical in that "Sept" is replaced by "Seep"
+      /// </summary>
+      /// <param name="row"></param>
+      private static string CanonicalDate(string event_date) {
+         string parse_this = event_date;
+         // Legislature uses "Sept", DateTime parser recognizes "Sep"
+         if (parse_this.Contains("Sept")) parse_this = parse_this.Replace("Sept", "Sep");
+         return parse_this;
+      }
+      /// <summary>
       /// Answer the date of the passed legislative event
       /// </summary>
       /// <param name="row"></param>
       private static DateTime DateOf(LegislativeEvent row) {
-         string parse_this = row.EventDate;
-         // Legislature uses "Sept", DateTime parser recognizes "Sep"
-         if (row.EventDate.Contains("Sept")) parse_this = parse_this.Replace("Sept", "Sep");
-         if (DateTime.TryParse(parse_this, out DateTime result)) {
+         if (DateTime.TryParse(CanonicalDate(row.EventDate), out DateTime result)) {
             return result;
          } else {
             throw new ApplicationException($"RemainingSchedule.DateOf: {row.EventDate} is not a valid date.");
+         }
+      }
+      /// <summary>
+      /// Answer the starting and ending dates of the passed legislative event when that event occurs over
+      /// a range of dates.
+      /// </summary>
+      /// <param name="row">The LegislativeEvent row defining the event</param>
+      /// <param name="lhs_start">The starting date of the event's range of dates</param>
+      /// <param name="rhs_end">The ending date of the event's range of dates</param>
+      private static void DateRange(LegislativeEvent row, out DateTime lhs_start, out DateTime rhs_end) {
+         // Example event date with range: "Aug. 17 – 31, 2020";
+         // Extract the year from the input string and then trim it from the input string.
+         string s0 = row.EventDate;
+         string year = Regex.Replace(s0, @".*?(\d+)$", "$1");
+         if (!Regex.Match(year, @"\d{4}").Success) 
+            throw new ApplicationException($"RemainingSchedule.DateRange: {row.EventDate} has invalid date.");
+         string s1 = Regex.Replace(s0, "(.*?),.*", "$1");
+
+         // Extract the last day from the input string and then trim it from the input string.
+         string last_day = Regex.Replace(s1, @".*?(\d+)$", "$1");
+         if (!Regex.Match(last_day, @"\d{2}").Success)
+            throw new ApplicationException($"RemainingSchedule.DateRange: {row.EventDate} has invalid ending day.");
+         string s2 = s1.Substring(0, s1.Length-last_day.Length-2); // 2 is for dash and preceding blank
+
+         // Starting date
+         if (DateTime.TryParse(s2, out DateTime lhs_month_day)) {
+            lhs_start = new DateTime(Convert.ToInt16(year), lhs_month_day.Month, lhs_month_day.Day);
+            // Ending date
+            // TODO Code assumes start and end days are the same month and year
+            rhs_end = new DateTime(Convert.ToInt16(year), lhs_month_day.Month, Convert.ToInt16(last_day));
+         } else {
+            throw new ApplicationException($"RemainingSchedule.DateRange: start of {row.EventDate} is not a valid date.");
          }
       }
    }
