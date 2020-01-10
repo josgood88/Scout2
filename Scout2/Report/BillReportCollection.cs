@@ -123,6 +123,9 @@ namespace Scout2.Report {
    public class BillReportCollection : IEnumerable<BillReport> {
       private string report_folder { get; set; }
       private readonly List<BillReport> reports;
+
+      public BillReportCollection() { }
+
       /// <summary>
       /// Create a collection of bill reports by iterating over the contents of the passed folder path.
       /// Ignore the file named WeeklyNewsMonitoredBills.html, as it is the weekly report.
@@ -138,6 +141,12 @@ namespace Scout2.Report {
          }
          reports.Sort((a, b) => a.CompareByMeasure(b));
       }
+
+      public void Add(string report_folder, string bill) {
+         List<string> files = Directory.GetFiles(report_folder, "{bill}.html").ToList();
+         if (files.Count > 0) reports.Add(new BillReport(files.First()));
+      }
+
       /// <summary>
       /// IEnumerable of T requires an implementation of GetEnumerator().
       /// </summary>

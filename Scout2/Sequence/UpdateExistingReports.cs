@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -12,14 +13,14 @@ namespace Scout2.Sequence {
       ///
       /// Give the user an opportunity to update existing reports
       /// due to changes that have ocurred.
-      public void Run(Form1 form1, UpdatedBillsForm update_form) {
+      public void Run(Form1 form1, UpdatedBillsForm update_form, List<BillLastUpdate> whenLastUpdated) {
          string completion_message = string.Empty;
          var start_time = DateTime.Now;
          LogAndDisplay(form1.txtBillUpdatesProgress, "Showing reports that need updating.");
          try {
-            List<BillForDisplay> updated_bills = CollectUpdatedBills(form1,update_form);
+            List<BillForDisplay> updated_bills = CollectUpdatedBills(whenLastUpdated);
             // Display those bills that have changed, or else a MessageBox saying nothing has changed
-            if (updated_bills.Count > 0) {
+            if (whenLastUpdated.Count > 0) {
                update_form.PrepareDataGridView();
                update_form.AddRows(updated_bills);
                update_form.ShowDialog();
@@ -34,21 +35,16 @@ namespace Scout2.Sequence {
          LogAndDisplay(form1.txtBillUpdatesProgress, completion_message);
       }
 
-      private List<BillForDisplay> CollectUpdatedBills(Form1 form1, UpdatedBillsForm update_form) {
-         // Collect all bill history for the current biennium.
-         // Collect all bill reports written for the current biennium.
+      private List<BillForDisplay> CollectUpdatedBills(List<BillLastUpdate> whenLastUpdated) {
+         var result = new List<BillForDisplay>();
          var history = BillHistoryRow.RowSet();
-         var individual_bill_reports = new BillReportCollection(Config.Instance.HtmlFolder);
-
-         // Collect those bills that have been updated since the last report written on that bill.
-         var updated_bills = new List<BillForDisplay>();
-         foreach (var bill in individual_bill_reports) {
-            if (IsUpdated(bill, history, out string history_latest_action)) {
-               string last_action_date = ExtractLeadingDate(bill.LastAction);
-               updated_bills.Add(new BillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
-            }
+         var individual_bill_reports = new BillReportCollection();
+         foreach (var item in whenLastUpdated) {
+            var report = new BillReport(Path.Combine(Config.Instance.HtmlFolder, $"{item.bill}.html"));
+            string last_action_date = ExtractLeadingDate(report.LastAction);
+            result.Add(new BillForDisplay(report.Measure, report.Position, last_action_date, item.last_updated));
          }
-         return updated_bills;
+         return result;
       }
 
       private bool IsUpdated(BillReport bill, List<BillHistoryRow> history, out string history_last_action) {

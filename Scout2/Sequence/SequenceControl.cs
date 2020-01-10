@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Scout2.Sequence {
@@ -14,6 +15,7 @@ namespace Scout2.Sequence {
       public static void UpdateScores      (Form1 form) { Run(form, SeqPoint.updateScore); }
       public static void UpdateBillReports (Form1 form) { Run(form, SeqPoint.updateBillReports); }
       public static void CreateBillReports (Form1 form) { Run(form, SeqPoint.createBillReports); }
+      public static void RecordLastDate    (Form1 form) { Run(form, SeqPoint.recordLastDate); }
       public static void RegenBillReports  (Form1 form) { Run(form, SeqPoint.regenBillReports); }
       public static void WeeklyReport      (Form1 form) { Run(form, SeqPoint.weeklyReport); }
       /// <summary>
@@ -29,7 +31,7 @@ namespace Scout2.Sequence {
       /// Not required, but looks better.
       /// </summary>
       private enum SeqPoint { importFromLegSite, extractFromZip, importToDB, updateScore,
-         regenBillReports, updateBillReports, createBillReports, weeklyReport,
+         recordLastDate, regenBillReports, updateBillReports, createBillReports, weeklyReport,
          complete
       };
       /// <summary>
@@ -44,6 +46,8 @@ namespace Scout2.Sequence {
          BeforeEnteringMainSequence(form);         // Initialize before entering the main sequence.
          var update_form = new UpdatedBillsForm();
          var new_bill_form = new NewBillsForm();
+         var regenerate = new Regenerate();        // Report list preserved between recordLastDate and regenBillReports
+         var lastUpdates = new List<BillLastUpdate>();
          while (seq != SeqPoint.complete) {        // While the main sequence is not complete
             switch (seq) {                         // Perform the current step in the sequence
                case SeqPoint.importFromLegSite:
@@ -66,12 +70,16 @@ namespace Scout2.Sequence {
                   new RescoreBills().Run(form);    // Update scores for bills
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
+               case SeqPoint.recordLastDate:
+                  new RecordLastDate().Run(form, ref lastUpdates); // Record current "Last Action Date" from bill reports
+                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  break;
                case SeqPoint.regenBillReports:
-                  new Regenerate().Run(form);      // Regenerate the individual bill reports.  In particular, update the bill's history
+                  regenerate.Run(form, lastUpdates); // Regenerate the individual bill reports.  In particular, update the bill's history
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
                case SeqPoint.updateBillReports:
-                  new UpdateExistingReports().Run(form, update_form);// User updates existing bill reports
+                  new UpdateExistingReports().Run(form, update_form, lastUpdates);// User updates existing bill reports
                   seq++;                           // << Increment assumes SeqPoint enum order is correct
                   break;
                case SeqPoint.createBillReports:

@@ -68,8 +68,10 @@ namespace Scout2.Report {
          foreach (var report in reports) {
             if (IsLatestThisWeek(report, past_week)) {
                past_week.start = new DateTime(2019, 2, 2);
-               if (NoHistoryEarlierThanThisWeek(report, past_week)) {
-                  ReportOneBill(sw, report);
+               if (report.Position != "None") {
+                  if (NoHistoryEarlierThanThisWeek(report, past_week)) {
+                     ReportOneBill(sw, report);
+                  }
                }
             }
          }
@@ -95,8 +97,10 @@ namespace Scout2.Report {
       private void ChangesThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw, "Changes This Week");
          foreach (var report in reports) {
-            if (IsLatestThisWeek(report, past_week)) {
-               ReportOneBill(sw, report);
+            if (report.Position != "None") {
+               if (IsLatestThisWeek(report, past_week)) {
+                  ReportOneBill(sw, report);
+               }
             }
          }
          EndTable(sw);

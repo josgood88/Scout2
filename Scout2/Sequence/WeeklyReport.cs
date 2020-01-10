@@ -8,7 +8,7 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          try {
             LogAndDisplay(form1.txtReportProgress, "Generating Weekly Report.");
-            var output_folder = "D:/Scratch";
+            var output_folder = Config.Instance.HtmlFolder;
             var path_log_file = "D:/Scratch/Scout.log";
             new Scout2.Report.Report(output_folder, path_log_file, Config.Instance.HtmlFolder).Generate();
          } catch (Exception ex) {

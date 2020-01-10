@@ -67,6 +67,19 @@ namespace Scout2 {
          }
       }
       /// <summary>
+      /// Record date of each bill's last report update.  When compared to the date that bill was last updated
+      /// on the leg site, this shows whether the bill report requires update.
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
+      private void btnRecordReportDates_Click(object sender, EventArgs e) {
+         try {
+            SequenceControl.RecordLastDate(this);
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "Unable to complete recording date of each bill's last report update.");
+         }
+      }
+      /// <summary>
       /// Regenerate the individual bill reports.  In particular, update the bill's history
       /// </summary>
       /// <param name="sender"></param>
@@ -154,5 +167,5 @@ namespace Scout2 {
          var form = new FormEditConstants();
          form.ShowDialog();
       }
-    }
+   }
 }

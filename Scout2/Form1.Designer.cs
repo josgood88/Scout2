@@ -28,6 +28,9 @@
          this.btnImport = new System.Windows.Forms.Button();
          this.btnUpdateReports = new System.Windows.Forms.Button();
          this.groupBox1 = new System.Windows.Forms.GroupBox();
+         this.txtUpdateScores = new System.Windows.Forms.TextBox();
+         this.ProgressScore = new System.Windows.Forms.ProgressBar();
+         this.btnGenerateScore = new System.Windows.Forms.Button();
          this.txtRegenProgress = new System.Windows.Forms.TextBox();
          this.txtCreatesProgress = new System.Windows.Forms.TextBox();
          this.btnCreateReports = new System.Windows.Forms.Button();
@@ -38,6 +41,7 @@
          this.txtLegSiteCompletion = new System.Windows.Forms.TextBox();
          this.txtBillUpdatesProgress = new System.Windows.Forms.TextBox();
          this.txtImportProgress = new System.Windows.Forms.TextBox();
+         this.textBox1 = new System.Windows.Forms.TextBox();
          this.txtZipProgress = new System.Windows.Forms.TextBox();
          this.progressLegSite = new System.Windows.Forms.ProgressBar();
          this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -56,10 +60,8 @@
          this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
          this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.updateFoldersFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.ProgressScore = new System.Windows.Forms.ProgressBar();
-         this.btnGenerateScore = new System.Windows.Forms.Button();
-         this.textBox1 = new System.Windows.Forms.TextBox();
-         this.txtUpdateScores = new System.Windows.Forms.TextBox();
+         this.txtRecordReportDates = new System.Windows.Forms.TextBox();
+         this.btnRecordReportDates = new System.Windows.Forms.Button();
          this.groupBox1.SuspendLayout();
          this.groupBox2.SuspendLayout();
          this.menuStrip1.SuspendLayout();
@@ -77,7 +79,7 @@
          // 
          // btnZipFile
          // 
-         this.btnZipFile.Location = new System.Drawing.Point(12, 88);
+         this.btnZipFile.Location = new System.Drawing.Point(12, 87);
          this.btnZipFile.Name = "btnZipFile";
          this.btnZipFile.Size = new System.Drawing.Size(144, 23);
          this.btnZipFile.TabIndex = 1;
@@ -87,7 +89,7 @@
          // 
          // btnImport
          // 
-         this.btnImport.Location = new System.Drawing.Point(12, 123);
+         this.btnImport.Location = new System.Drawing.Point(12, 121);
          this.btnImport.Name = "btnImport";
          this.btnImport.Size = new System.Drawing.Size(144, 23);
          this.btnImport.TabIndex = 2;
@@ -97,7 +99,7 @@
          // 
          // btnUpdateReports
          // 
-         this.btnUpdateReports.Location = new System.Drawing.Point(12, 266);
+         this.btnUpdateReports.Location = new System.Drawing.Point(12, 294);
          this.btnUpdateReports.Name = "btnUpdateReports";
          this.btnUpdateReports.Size = new System.Drawing.Size(144, 23);
          this.btnUpdateReports.TabIndex = 3;
@@ -107,6 +109,8 @@
          // 
          // groupBox1
          // 
+         this.groupBox1.Controls.Add(this.txtRecordReportDates);
+         this.groupBox1.Controls.Add(this.btnRecordReportDates);
          this.groupBox1.Controls.Add(this.txtUpdateScores);
          this.groupBox1.Controls.Add(this.ProgressScore);
          this.groupBox1.Controls.Add(this.btnGenerateScore);
@@ -129,15 +133,40 @@
          this.groupBox1.Controls.Add(this.btnLegSite);
          this.groupBox1.Location = new System.Drawing.Point(38, 34);
          this.groupBox1.Name = "groupBox1";
-         this.groupBox1.Size = new System.Drawing.Size(633, 379);
+         this.groupBox1.Size = new System.Drawing.Size(633, 399);
          this.groupBox1.TabIndex = 4;
          this.groupBox1.TabStop = false;
          this.groupBox1.Text = "Scout Starting Points";
          // 
+         // txtUpdateScores
+         // 
+         this.txtUpdateScores.AccessibleName = "txtZipProgress";
+         this.txtUpdateScores.Location = new System.Drawing.Point(162, 192);
+         this.txtUpdateScores.Name = "txtUpdateScores";
+         this.txtUpdateScores.Size = new System.Drawing.Size(461, 20);
+         this.txtUpdateScores.TabIndex = 23;
+         // 
+         // ProgressScore
+         // 
+         this.ProgressScore.Location = new System.Drawing.Point(162, 155);
+         this.ProgressScore.Name = "ProgressScore";
+         this.ProgressScore.Size = new System.Drawing.Size(461, 23);
+         this.ProgressScore.TabIndex = 21;
+         // 
+         // btnGenerateScore
+         // 
+         this.btnGenerateScore.Location = new System.Drawing.Point(12, 155);
+         this.btnGenerateScore.Name = "btnGenerateScore";
+         this.btnGenerateScore.Size = new System.Drawing.Size(144, 23);
+         this.btnGenerateScore.TabIndex = 20;
+         this.btnGenerateScore.Text = "Generate Bill Scores";
+         this.btnGenerateScore.UseVisualStyleBackColor = true;
+         this.btnGenerateScore.Click += new System.EventHandler(this.btnGenerateScore_Click);
+         // 
          // txtRegenProgress
          // 
          this.txtRegenProgress.AccessibleName = "txtReportProgress";
-         this.txtRegenProgress.Location = new System.Drawing.Point(162, 232);
+         this.txtRegenProgress.Location = new System.Drawing.Point(162, 261);
          this.txtRegenProgress.Name = "txtRegenProgress";
          this.txtRegenProgress.Size = new System.Drawing.Size(346, 20);
          this.txtRegenProgress.TabIndex = 19;
@@ -145,14 +174,14 @@
          // txtCreatesProgress
          // 
          this.txtCreatesProgress.AccessibleName = "txtReportProgress";
-         this.txtCreatesProgress.Location = new System.Drawing.Point(162, 302);
+         this.txtCreatesProgress.Location = new System.Drawing.Point(162, 329);
          this.txtCreatesProgress.Name = "txtCreatesProgress";
          this.txtCreatesProgress.Size = new System.Drawing.Size(460, 20);
          this.txtCreatesProgress.TabIndex = 18;
          // 
          // btnCreateReports
          // 
-         this.btnCreateReports.Location = new System.Drawing.Point(12, 301);
+         this.btnCreateReports.Location = new System.Drawing.Point(12, 328);
          this.btnCreateReports.Name = "btnCreateReports";
          this.btnCreateReports.Size = new System.Drawing.Size(144, 23);
          this.btnCreateReports.TabIndex = 17;
@@ -163,7 +192,7 @@
          // chkRegenerateAll
          // 
          this.chkRegenerateAll.AutoSize = true;
-         this.chkRegenerateAll.Location = new System.Drawing.Point(527, 234);
+         this.chkRegenerateAll.Location = new System.Drawing.Point(527, 228);
          this.chkRegenerateAll.Name = "chkRegenerateAll";
          this.chkRegenerateAll.Size = new System.Drawing.Size(96, 17);
          this.chkRegenerateAll.TabIndex = 16;
@@ -172,7 +201,7 @@
          // 
          // btnRegenerate
          // 
-         this.btnRegenerate.Location = new System.Drawing.Point(12, 231);
+         this.btnRegenerate.Location = new System.Drawing.Point(12, 260);
          this.btnRegenerate.Name = "btnRegenerate";
          this.btnRegenerate.Size = new System.Drawing.Size(144, 23);
          this.btnRegenerate.TabIndex = 14;
@@ -183,14 +212,14 @@
          // txtReportProgress
          // 
          this.txtReportProgress.AccessibleName = "txtReportProgress";
-         this.txtReportProgress.Location = new System.Drawing.Point(162, 337);
+         this.txtReportProgress.Location = new System.Drawing.Point(162, 363);
          this.txtReportProgress.Name = "txtReportProgress";
          this.txtReportProgress.Size = new System.Drawing.Size(461, 20);
          this.txtReportProgress.TabIndex = 13;
          // 
          // btnReport
          // 
-         this.btnReport.Location = new System.Drawing.Point(12, 336);
+         this.btnReport.Location = new System.Drawing.Point(12, 362);
          this.btnReport.Name = "btnReport";
          this.btnReport.Size = new System.Drawing.Size(144, 23);
          this.btnReport.TabIndex = 12;
@@ -201,7 +230,7 @@
          // txtLegSiteCompletion
          // 
          this.txtLegSiteCompletion.AccessibleName = "txtZipProgress";
-         this.txtLegSiteCompletion.Location = new System.Drawing.Point(162, 54);
+         this.txtLegSiteCompletion.Location = new System.Drawing.Point(162, 53);
          this.txtLegSiteCompletion.Name = "txtLegSiteCompletion";
          this.txtLegSiteCompletion.Size = new System.Drawing.Size(461, 20);
          this.txtLegSiteCompletion.TabIndex = 11;
@@ -209,23 +238,31 @@
          // txtBillUpdatesProgress
          // 
          this.txtBillUpdatesProgress.AccessibleName = "txtReportProgress";
-         this.txtBillUpdatesProgress.Location = new System.Drawing.Point(162, 267);
+         this.txtBillUpdatesProgress.Location = new System.Drawing.Point(162, 295);
          this.txtBillUpdatesProgress.Name = "txtBillUpdatesProgress";
-         this.txtBillUpdatesProgress.Size = new System.Drawing.Size(461, 20);
+         this.txtBillUpdatesProgress.Size = new System.Drawing.Size(346, 20);
          this.txtBillUpdatesProgress.TabIndex = 10;
          // 
          // txtImportProgress
          // 
          this.txtImportProgress.AccessibleName = "txtImportProgress";
-         this.txtImportProgress.Location = new System.Drawing.Point(162, 124);
+         this.txtImportProgress.Location = new System.Drawing.Point(162, 122);
          this.txtImportProgress.Name = "txtImportProgress";
          this.txtImportProgress.Size = new System.Drawing.Size(461, 20);
          this.txtImportProgress.TabIndex = 9;
          // 
+         // textBox1
+         // 
+         this.textBox1.AccessibleName = "txtZipProgress";
+         this.textBox1.Location = new System.Drawing.Point(162, 124);
+         this.textBox1.Name = "textBox1";
+         this.textBox1.Size = new System.Drawing.Size(461, 20);
+         this.textBox1.TabIndex = 8;
+         // 
          // txtZipProgress
          // 
          this.txtZipProgress.AccessibleName = "txtZipProgress";
-         this.txtZipProgress.Location = new System.Drawing.Point(162, 89);
+         this.txtZipProgress.Location = new System.Drawing.Point(162, 88);
          this.txtZipProgress.Name = "txtZipProgress";
          this.txtZipProgress.Size = new System.Drawing.Size(461, 20);
          this.txtZipProgress.TabIndex = 8;
@@ -248,7 +285,7 @@
          this.groupBox2.Controls.Add(this.label1);
          this.groupBox2.Controls.Add(this.txt2ndWord);
          this.groupBox2.Controls.Add(this.txt1stWord);
-         this.groupBox2.Location = new System.Drawing.Point(38, 433);
+         this.groupBox2.Location = new System.Drawing.Point(38, 448);
          this.groupBox2.Name = "groupBox2";
          this.groupBox2.Size = new System.Drawing.Size(509, 162);
          this.groupBox2.TabIndex = 5;
@@ -373,44 +410,29 @@
          this.updateFoldersFileToolStripMenuItem.Text = "Update Constants";
          this.updateFoldersFileToolStripMenuItem.Click += new System.EventHandler(this.updateFoldersFileToolStripMenuItem_Click);
          // 
-         // ProgressScore
+         // txtRecordReportDates
          // 
-         this.ProgressScore.Location = new System.Drawing.Point(162, 159);
-         this.ProgressScore.Name = "ProgressScore";
-         this.ProgressScore.Size = new System.Drawing.Size(461, 23);
-         this.ProgressScore.TabIndex = 21;
+         this.txtRecordReportDates.AccessibleName = "txtReportProgress";
+         this.txtRecordReportDates.Location = new System.Drawing.Point(161, 228);
+         this.txtRecordReportDates.Name = "txtRecordReportDates";
+         this.txtRecordReportDates.Size = new System.Drawing.Size(346, 20);
+         this.txtRecordReportDates.TabIndex = 25;
          // 
-         // btnGenerateScore
+         // btnRecordReportDates
          // 
-         this.btnGenerateScore.Location = new System.Drawing.Point(12, 159);
-         this.btnGenerateScore.Name = "btnGenerateScore";
-         this.btnGenerateScore.Size = new System.Drawing.Size(144, 23);
-         this.btnGenerateScore.TabIndex = 20;
-         this.btnGenerateScore.Text = "Generate Bill Scores";
-         this.btnGenerateScore.UseVisualStyleBackColor = true;
-         this.btnGenerateScore.Click += new System.EventHandler(this.btnGenerateScore_Click);
-         // 
-         // textBox1
-         // 
-         this.textBox1.AccessibleName = "txtZipProgress";
-         this.textBox1.Location = new System.Drawing.Point(162, 124);
-         this.textBox1.Name = "textBox1";
-         this.textBox1.Size = new System.Drawing.Size(461, 20);
-         this.textBox1.TabIndex = 8;
-         // 
-         // txtUpdateScores
-         // 
-         this.txtUpdateScores.AccessibleName = "txtZipProgress";
-         this.txtUpdateScores.Location = new System.Drawing.Point(162, 197);
-         this.txtUpdateScores.Name = "txtUpdateScores";
-         this.txtUpdateScores.Size = new System.Drawing.Size(461, 20);
-         this.txtUpdateScores.TabIndex = 23;
+         this.btnRecordReportDates.Location = new System.Drawing.Point(11, 226);
+         this.btnRecordReportDates.Name = "btnRecordReportDates";
+         this.btnRecordReportDates.Size = new System.Drawing.Size(144, 23);
+         this.btnRecordReportDates.TabIndex = 24;
+         this.btnRecordReportDates.Text = "Record Report Dates";
+         this.btnRecordReportDates.UseVisualStyleBackColor = true;
+         this.btnRecordReportDates.Click += new System.EventHandler(this.btnRecordReportDates_Click);
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(708, 633);
+         this.ClientSize = new System.Drawing.Size(708, 624);
          this.Controls.Add(this.groupBox2);
          this.Controls.Add(this.groupBox1);
          this.Controls.Add(this.menuStrip1);
@@ -468,6 +490,8 @@
         public System.Windows.Forms.ProgressBar ProgressScore;
         private System.Windows.Forms.Button btnGenerateScore;
         public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox txtRecordReportDates;
+        private System.Windows.Forms.Button btnRecordReportDates;
     }
 }
 

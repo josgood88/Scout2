@@ -20,6 +20,8 @@ namespace Scout2.Sequence {
          form.txtLegSiteCompletion.Text = string.Empty;
          form.txtZipProgress.Text = string.Empty;
          form.txtImportProgress.Text = string.Empty;
+         form.txtUpdateScores.Text = string.Empty;
+         form.txtRecordReportDates.Text = string.Empty;
          form.txtRegenProgress.Text = string.Empty;
          form.txtBillUpdatesProgress.Text = string.Empty;
          form.txtCreatesProgress.Text = string.Empty;
