@@ -131,6 +131,12 @@
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UnreportedBillsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnreportedBillsForm.Designer.cs">
+      <DependentUpon>UnreportedBillsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UpdatedBillsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UnreportedBillsForm.resx">
+      <DependentUpon>UnreportedBillsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UpdatedBillsForm.resx">
       <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -16,9 +16,9 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          try {
             LogAndDisplay(form1.txtBillUpdatesProgress, "Showing reports that need updating.");
-            List<BillForDisplay> updated_bills = CollectUpdatedBills(form1,update_form);
+            List<ChangedBillForDisplay> updated_bills = CollectUpdatedBills(form1,update_form);
             // Display those bills that have changed, or else a MessageBox saying nothing has changed
-            if (updated_bills.Count > 0) {
+            if (updated_bills.Any()) {
                update_form.PrepareDataGridView();
                update_form.AddRows(updated_bills);
                update_form.ShowDialog();
@@ -32,18 +32,18 @@ namespace Scout2.Sequence {
          LogAndDisplay(form1.txtBillUpdatesProgress, $"Through with updating bill reports. {elapsed.ToString("c")} ");
       }
 
-      private List<BillForDisplay> CollectUpdatedBills(Form1 form1, UpdatedBillsForm update_form) {
+      private List<ChangedBillForDisplay> CollectUpdatedBills(Form1 form1, UpdatedBillsForm update_form) {
          // Collect all bill history for the current biennium.
          // Collect all bill reports written for the current biennium.
          var history = BillHistoryRow.RowSet();
          var individual_bill_reports = new BillReportCollection(Config.Instance.HtmlFolder);
 
          // Collect those bills that have been updated since the last report written on that bill.
-         var updated_bills = new List<BillForDisplay>();
+         var updated_bills = new List<ChangedBillForDisplay>();
          foreach (var bill in individual_bill_reports) {
             if (IsUpdated(bill, history, out string history_latest_action)) {
                string last_action_date = ExtractLeadingDate(bill.LastAction);
-               updated_bills.Add(new BillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
+               updated_bills.Add(new ChangedBillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
             }
          }
          return updated_bills;

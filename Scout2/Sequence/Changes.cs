@@ -45,11 +45,11 @@ namespace Scout2.Sequence {
             //}
 
             // Collect those bills that have been updated since the last report written on that bill.
-            var updated_bills = new List<BillForDisplay>();
+            var updated_bills = new List<ChangedBillForDisplay>();
             foreach (var bill in individual_bill_reports) {
                if (IsUpdated(bill, history, out string history_latest_action)) {
                   string last_action_date = ExtractLeadingDate(bill.LastAction);
-                  updated_bills.Add(new BillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
+                  updated_bills.Add(new ChangedBillForDisplay(bill.Measure, bill.Position, last_action_date, history_latest_action));
                }
             }
             update_form.PrepareDataGridView();
