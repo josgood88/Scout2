@@ -10,7 +10,7 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          try {
             var latest = FindLatestZipFile(Config.Instance.DownloadsFolder);  // Zip downloaded from leg site
-            var di = new DirectoryInfo(Config.Instance.BillsFolder);          // BillsFolder contains leg site files
+            var di = new DirectoryInfo(Config.Instance.BillsFolder);    // BillsFolder contains leg site files
             LogAndDisplay(form1.txtZipProgress, $"Clearing contents of {Config.Instance.BillsFolder}.");
             if (di.Exists) di.Delete(true);                             // Clear out the target folder
             var latest_zip_file = Path.Combine(Config.Instance.DownloadsFolder,latest);

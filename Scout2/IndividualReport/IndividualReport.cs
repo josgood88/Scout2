@@ -32,7 +32,7 @@ namespace Scout2.IndividualReport {
          BillRow row = BillRow.Row(Ensure4DigitNumber(bill));
          List<string> contents = CreateIndividualReport.ReportContents(row,path);
          WriteTextFile(contents,path);
-         var message = $"{row.Bill} has negative score {row.NegativeScore}";
+         var message = $"Regenerated {row.Bill} report.";
          BaseController.LogThis(message);
       }
 

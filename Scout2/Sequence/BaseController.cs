@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Library;
@@ -34,6 +35,7 @@ namespace Scout2.Sequence {
       /// It is called from each start point that needs one or more of these tables
       /// </summary>
       protected static void EnsureGlobalData() {
+         GlobalData.Profiles = new List<BillProfile>();
          if (GlobalData.BillRows == null)
             GlobalData.BillRows = BillRow.RowSet();
          if (GlobalData.HistoryTable == null)
@@ -42,6 +44,7 @@ namespace Scout2.Sequence {
             GlobalData.VersionTable  = new BillVersionTable(Path.Combine(Config.Instance.BillsFolder, "BILL_VERSION_TBL.dat"));
          if (GlobalData.LocationTable == null)
             GlobalData.LocationTable = new LocationCodeTable(Path.Combine(Config.Instance.BillsFolder, "LOCATION_CODE_TBL.dat"));
+         GlobalData.MostRecentEachBill = new List<Bill_Identifier>();
       }
       // Long running method, needed by ImportController
       protected static void EnsureMostRecentEachBill() {

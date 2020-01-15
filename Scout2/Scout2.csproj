@@ -84,6 +84,8 @@
     <Compile Include="Sequence\CreateNewReports.cs" />
     <Compile Include="Sequence\ImportController.cs" />
     <Compile Include="Sequence\LegSiteController.cs" />
+    <Compile Include="Sequence\PositionFromReport.cs" />
+    <Compile Include="Sequence\PreviousReport.cs" />
     <Compile Include="Sequence\Regenerate.cs" />
     <Compile Include="Sequence\SequenceControl.cs" />
     <Compile Include="Sequence\UpdateExistingReports.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="UpdatedBillsForm.Designer.cs">
       <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\BillUtils.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

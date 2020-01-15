@@ -51,31 +51,31 @@ namespace Scout2.Sequence {
                   form.TopMost = false;            // For now.  Remove once download actually working
                   import.Wait();                   // Wait for the download to complete
                   form.TopMost = false;            // Selenium dialog is gone, so don't need topmost any more
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.extractFromZip:
                   new ZipController().Run(form);   // Extract the contents of the downloaded zip file.
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.importToDB:  
                   new ImportController().Run(form);// Update the database with the latest data on the bill's text, status, committee location, etc.
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.regenBillReports:
                   new Regenerate().Run(form);      // Regenerate the individual bill reports.  In particular, update the bill's history
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.updateBillReports:
                   new UpdateExistingReports().Run(form, update_form);// User updates existing bill reports
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.createBillReports:
                   new CreateNewReports().Run(form, unreported_form);// User creates reports for newly found bills of interest
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                case SeqPoint.weeklyReport:
                   new WeeklyReport().Run(form);    // Generate the weekly report
-                  seq++;                           // << Increment assumes SeqPoint enum order is correct
+                  seq++;
                   break;
                default:
                   throw new ApplicationException($"SequenceControl.Run: Invalid sequence point {seq} encountered.");

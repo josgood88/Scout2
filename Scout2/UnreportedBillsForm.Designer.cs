@@ -49,6 +49,7 @@
          this.ViewUnreportedBills.Name = "ViewUnreportedBills";
          this.ViewUnreportedBills.Size = new System.Drawing.Size(776, 392);
          this.ViewUnreportedBills.TabIndex = 1;
+         this.ViewUnreportedBills.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellClick);
          // 
          // UnreportedBillsForm
          // 

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 using Scout2.IndividualReport;
+using Scout2.Report;
 
 namespace Scout2.Sequence {
    public class Regenerate : BaseController {
@@ -20,7 +21,9 @@ namespace Scout2.Sequence {
                bills = form1.IsRegenerateAll() ? SelectAllBills () : RecognizeChangedBills();
             else bills.Add(bill);
             if (bills.Count > 0) {
-               foreach (var item in bills) (new IndividualReport.IndividualReport(verbose, update)).Run(item);
+               foreach (var item in bills) {
+                  (new IndividualReport.IndividualReport(verbose, update)).Run(item);
+               }
             } else {
                LogAndShow("BR found no bills to process.");
             }
@@ -84,9 +87,9 @@ namespace Scout2.Sequence {
          return date_result;
       }
 
+      //todo Condense multiple copies
       private string Ensure4DigitNumber(string bill) {
-         string house = "", number = "";
-         CreateIndividualReport.ExtractHouseNumber(bill, out house, out number);
+         CreateIndividualReport.ExtractHouseNumber(bill, out string house, out string number);
          while (number.Length < 4) number = $"0{number}";
          return $"{house}{number}";
       }

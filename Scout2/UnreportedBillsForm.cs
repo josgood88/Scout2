@@ -57,5 +57,14 @@ namespace Scout2 {
       private void DisplayBillSummary(UnreportedBillForDisplay row) {
          this.ViewUnreportedBills.Rows.Add(false, row.Measure, row.NegativeScore, row.Title, row.Author);
       }
+
+        private void OnCellClick(object sender, DataGridViewCellEventArgs e) {
+         DataGridViewRow row = ViewUnreportedBills.Rows[e.RowIndex];
+         var measure = row.Cells[1].Value.ToString();
+         var score = row.Cells[2].Value.ToString();
+         var title = row.Cells[3].Value.ToString();
+         var author = row.Cells[4].Value.ToString();
+         CreateNewReports.GenerateCanonicalReport(measure);
+      }
    }
 }
