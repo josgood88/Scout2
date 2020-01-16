@@ -8,7 +8,6 @@ namespace Library {
       public static BillHistoryTable  HistoryTable  { get; set; }
       public static BillVersionTable  VersionTable  { get; set; }
       public static LocationCodeTable LocationTable { get; set; }
-      public static DB db = null;
       public static List<Bill_Identifier> MostRecentEachBill { get; set; }
    }
 }

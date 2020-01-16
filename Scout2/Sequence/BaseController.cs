@@ -48,7 +48,7 @@ namespace Scout2.Sequence {
       }
       // Long running method, needed by ImportController
       protected static void EnsureMostRecentEachBill() {
-         if (GlobalData.MostRecentEachBill == null)
+         if (GlobalData.MostRecentEachBill.Count == 0)
             GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
       }
 

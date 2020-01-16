@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using Library;
 using Library.Database;
+using Scout2.Report;
 
 namespace Scout2.Sequence {
    public class ImportController : BaseController {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
          try {
-            LogAndDisplay(form1.txtImportProgress, "Re-creating database tables.");
+            LogAndDisplay(form1.txtImportProgress, "Update BillRows position fields.");
+            CapturePositions();  // Update BillRows position fields to match individual bill reports
 
             LogAndDisplay(form1.txtImportProgress, "Writing Bill Version table.");
             BillVersionTable.ClearYourself(); 
@@ -34,6 +37,20 @@ namespace Scout2.Sequence {
          }
          var elapsed = DateTime.Now - start_time;
          LogAndDisplay(form1.txtImportProgress, $"Imports and most-recent-bill processing complete. {elapsed.ToString("c")} ");
+      }
+
+      private void CapturePositions() {
+         var report_collection = new BillReportCollection(Config.Instance.HtmlFolder);
+         var r1058 = (from item in GlobalData.BillRows where (item.Bill == "AB1058") select item).FirstOrDefault();
+         var m1058 = (from item in report_collection where (item.Measure.Contains("1058")) select item).FirstOrDefault();
+         foreach (var report in report_collection) {
+            var measure = Utility.BillUtils.Ensure4DigitNumber(report.Measure);
+            measure = Utility.BillUtils.NoDash(measure);
+            var billrow_position = (from item in GlobalData.BillRows where (item.Bill == measure) select item.Position).FirstOrDefault();
+            if (report.Position != billrow_position) {
+               BillRow.UpdatePosition(measure, report.Position);
+            }
+         }
       }
       /// <summary>
       /// Wrap Bill_Identifiers into BillProfiles, in preparation for ranking the bills

@@ -78,6 +78,11 @@ namespace Scout2.IndividualReport {
             result.Add("</p>");
          }
 
+         // Short Summary
+         result.Add("<p>");
+         result.Add("   <b>ShortSummary</b>: ");
+         result.Add("</p>");
+
          // Status, Location, etc
          if (position.Count == 0) result.Add("<p>");
          result.Add("<b>Status</b>:");

@@ -214,5 +214,10 @@ namespace Library.Database {
          }
          return true;
       }
+
+      public static void UpdatePosition(string Measure, string new_position) {
+         var nonQuery = $"Update BillRows Set Position = '{new_position}' Where BillID = '{Measure}';";
+         DB.NonQuery(nonQuery, "BillRow:UpdateYourPosition");
+      }
    }
 }

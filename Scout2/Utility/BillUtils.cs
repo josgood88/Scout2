@@ -2,6 +2,14 @@
 namespace Scout2.Utility {
    public class BillUtils {
       /// <summary>
+      /// Remove any dashes from the passed string.
+      /// </summary>
+      /// <param name="str"></param>
+      /// <returns></returns>
+      public static string NoDash(string str) {
+         return Regex.Replace(str, "-", string.Empty);
+      }
+      /// <summary>
       /// Ensure the Measure/BillID has a 4-digt number, e.g. AB0123
       /// </summary>
       /// <param name="bill"></param>
