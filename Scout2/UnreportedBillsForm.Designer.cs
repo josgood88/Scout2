@@ -32,7 +32,7 @@
          // 
          this.label1.AutoSize = true;
          this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-         this.label1.Location = new System.Drawing.Point(215, 23);
+         this.label1.Location = new System.Drawing.Point(233, 14);
          this.label1.Name = "label1";
          this.label1.Size = new System.Drawing.Size(250, 20);
          this.label1.TabIndex = 0;
@@ -40,14 +40,17 @@
          // 
          // ViewUnreportedBills
          // 
+         this.ViewUnreportedBills.AllowUserToAddRows = false;
+         this.ViewUnreportedBills.AllowUserToDeleteRows = false;
          this.ViewUnreportedBills.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.ViewUnreportedBills.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+         this.ViewUnreportedBills.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
          this.ViewUnreportedBills.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
          this.ViewUnreportedBills.Location = new System.Drawing.Point(12, 46);
          this.ViewUnreportedBills.Name = "ViewUnreportedBills";
-         this.ViewUnreportedBills.Size = new System.Drawing.Size(776, 392);
+         this.ViewUnreportedBills.Size = new System.Drawing.Size(766, 392);
          this.ViewUnreportedBills.TabIndex = 1;
          this.ViewUnreportedBills.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellClick);
          // 
@@ -55,6 +58,8 @@
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+         this.AutoScroll = true;
+         this.AutoSize = true;
          this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
          this.ClientSize = new System.Drawing.Size(800, 450);
          this.Controls.Add(this.ViewUnreportedBills);

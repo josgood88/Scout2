@@ -43,7 +43,7 @@ namespace Scout2.Report {
          }
       }
 
-      private string ReportPath() { return Path.Combine(output_folder,"WeeklyNewsMonitoredBills.html"); }
+      private string ReportPath() { return Path.Combine(Config.Instance.HtmlFolder,"WeeklyNewsMonitoredBills.html"); }
 
       private void Header(StreamWriter sw) {
          string date = ReportDate(); // e.g., "16 Sep 2019";

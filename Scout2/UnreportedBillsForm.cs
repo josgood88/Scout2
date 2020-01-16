@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Scout2.Sequence;
 
@@ -18,23 +11,20 @@ namespace Scout2 {
       /// An updated bill is whose review is now out of date because the legislature has updated the bill in some way.
       /// </summary>
       public void PrepareDataGridView() {
-         DataGridViewTextBoxColumn dgv_measure = new DataGridViewTextBoxColumn();
+         var dgv_measure = new DataGridViewTextBoxColumn();
+         var dgv_score = new DataGridViewTextBoxColumn();
+         var dgv_title = new DataGridViewTextBoxColumn();
+         var dgv_author = new DataGridViewTextBoxColumn();
+
          dgv_measure.HeaderText = "Measure";
-         DataGridViewTextBoxColumn dgv_score = new DataGridViewTextBoxColumn();
          dgv_score.HeaderText = "Score";
-         DataGridViewTextBoxColumn dgv_title = new DataGridViewTextBoxColumn();
          dgv_title.HeaderText = "Title";
-         DataGridViewTextBoxColumn dgv_author = new DataGridViewTextBoxColumn();
          dgv_author.HeaderText = "Author";
 
-         DataGridViewCheckBoxColumn dgv_checkbox = new DataGridViewCheckBoxColumn();
-         dgv_checkbox.HeaderText = "Select";
-
-         this.ViewUnreportedBills.Columns.Add(dgv_checkbox);
-         this.ViewUnreportedBills.Columns.Add(dgv_measure);
-         this.ViewUnreportedBills.Columns.Add(dgv_score);
-         this.ViewUnreportedBills.Columns.Add(dgv_title);
-         this.ViewUnreportedBills.Columns.Add(dgv_author);
+         ViewUnreportedBills.Columns.Add(dgv_measure);
+         ViewUnreportedBills.Columns.Add(dgv_score);
+         ViewUnreportedBills.Columns.Add(dgv_title);
+         ViewUnreportedBills.Columns.Add(dgv_author);
       }
       /// <summary>
       /// This view's DataGridView is filled manually from the passed collection.
@@ -55,16 +45,24 @@ namespace Scout2 {
          ViewUnreportedBills.Refresh();
       }
       private void DisplayBillSummary(UnreportedBillForDisplay row) {
-         this.ViewUnreportedBills.Rows.Add(false, row.Measure, row.NegativeScore, row.Title, row.Author);
-      }
-
-        private void OnCellClick(object sender, DataGridViewCellEventArgs e) {
-         DataGridViewRow row = ViewUnreportedBills.Rows[e.RowIndex];
-         var measure = row.Cells[1].Value.ToString();
-         var score = row.Cells[2].Value.ToString();
-         var title = row.Cells[3].Value.ToString();
-         var author = row.Cells[4].Value.ToString();
-         CreateNewReports.GenerateCanonicalReport(measure);
+         this.ViewUnreportedBills.Rows.Add(row.Measure, row.NegativeScore, row.Title, row.Author);
+      } 
+      
+      private void OnCellClick(object sender, DataGridViewCellEventArgs e) {
+         if (e.RowIndex >= 0) {
+            DataGridViewRow row = ViewUnreportedBills.Rows[e.RowIndex];
+            int i = 0;
+            var measure = row.Cells[i++].Value.ToString();
+            var score = row.Cells[i++].Value.ToString();
+            var title = row.Cells[i++].Value.ToString();
+            var author = row.Cells[i++].Value.ToString();
+            var result = MessageBox.Show($"Create Report for {measure}?","",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if (result == DialogResult.Yes) {
+               CreateNewReports.GenerateCanonicalReport(measure);
+            }
+         } else {
+            // Mouse clicked on column title, so DataGridView will be sorted on that column
+         }
       }
    }
 }

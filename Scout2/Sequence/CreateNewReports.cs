@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -61,6 +62,10 @@ namespace Scout2.Sequence {
          var path = $"{Path.Combine(Config.Instance.HtmlFolder, measure)}.html";
          List<string> contents = ReportContents(row, path);
          WriteTextFile(contents, path);
+         var process = Process.Start("notepad.exe", path);
+         if (process != null) process.WaitForExit();
+         else LogAndShow($"CreateNewReports.GenerateCanonicalReport: Failed to start Notepad for {path}.");
+         LogAndShow($"Completed {path}");
       }
 
       private static void WriteTextFile(List<string> contents, string path) {
@@ -118,6 +123,11 @@ namespace Scout2.Sequence {
             result.Add("   <br /> This is my review");
             result.Add("</p>");
          }
+
+         // Short Summary
+         result.Add("<p>");
+         result.Add("   <b>ShortSummary</b>: ");
+         result.Add("</p>");
 
          // Position
          if (position.Count > 0) {
