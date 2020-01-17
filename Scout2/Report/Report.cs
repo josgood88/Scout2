@@ -80,6 +80,10 @@ namespace Scout2.Report {
 
       private void HighestPriority(StreamWriter sw) {
          StartTable(sw, "Highest Priority Bills");
+         foreach (string bill in Config.Instance.HighestPriority) {
+            string path = $"{Path.Combine(Config.Instance.HtmlFolder, bill)}.html";
+            ReportOneBill(sw, new BillReport(path));
+         }
          EndTable(sw);
       }
       /// <summary>

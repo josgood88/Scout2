@@ -10,16 +10,31 @@ namespace Scout2.Utility {
          return Regex.Replace(str, "-", string.Empty);
       }
       /// <summary>
-      /// Ensure the Measure/BillID has a 4-digt number, e.g. AB0123
+      /// Ensure the Measure/BillID has a 4-digt number, e.g. AB0123.
+      /// In the database BillRow table, BillID uses a 4-digit number so that when sorted by BillID, the sorting
+      /// comes out as expected -- AB0003 preceeds AB0010.
       /// </summary>
-      /// <param name="bill"></param>
-      /// <returns></returns>
+      /// <param name="bill">Bill house & measure, e.g. AB123</param>
+      /// <returns>Bill house & measure, 4-digit measure ensured</returns>
       public static string Ensure4DigitNumber(string bill) {
          ExtractHouseNumber(bill, out string house, out string number);
          while (number.Length < 4) number = $"0{number}";
          return $"{house}{number}";
       }
-      // Extract house and number from bill id, returning house and number through argument references
+      /// <summary>
+      /// Ensure the Measure/BillID has no leading zeroes, e.g. AB123 instead of AB0123.
+      /// Report names are given as AB123.html, not AB0123.html
+      /// </summary>
+      /// <param name="bill">Bill house & measure, e.g. AB123</param>
+      /// <returns>Bill house & measure, no-leading-zeros measure ensured</returns>
+      public static string EnsureNoLeadingZerosBill(string bill) { return Regex.Replace(bill, "B0+", "B"); }
+      /// <summary>
+      /// Extract house and number from bill id, returning house and number through argument references
+      /// </summary>
+      /// <param name="bill">Bill house & measure</param>
+      /// <param name="house">just the house, ma'am</param>
+      /// <param name="number">just the number, ma'am</param>
+      /// <returns></returns>
       private static bool ExtractHouseNumber(string bill, out string house, out string number) {
          house = number = string.Empty;
          house  = Regex.Match(bill, @"\D*").Value;

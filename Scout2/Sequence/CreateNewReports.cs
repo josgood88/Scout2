@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Library;
 using Library.Database;
@@ -57,14 +58,30 @@ namespace Scout2.Sequence {
          }
          return result;
       }
+      /// <summary>
+      /// When the initial report on a bill is generated, it is in so-called "canonical" form, meaning that
+      /// no position is taken, there is no meaningful summary, and so on.  In essence, a blank form is generated.
+      /// The user is then given the opportunity to edit the blank form, turning it into an actual report on the bill.
+      /// Once that editing is complete, the database BillRow table is updated with the position given in the
+      /// edited bill report.
+      /// </summary>
+      /// <param name="measure"></param>
       public static void GenerateCanonicalReport(string measure) {
+         // Generate the canonical bill
          BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(measure));
-         var path = $"{Path.Combine(Config.Instance.HtmlFolder, measure)}.html";
-         List<string> contents = ReportContents(row, path);
+         List<string> contents = ReportContents(row, string.Empty);
+         string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(measure))}.html";
          WriteTextFile(contents, path);
+         // Let the user edit the canonical bill
          var process = Process.Start("notepad.exe", path);
          if (process != null) process.WaitForExit();
          else LogAndShow($"CreateNewReports.GenerateCanonicalReport: Failed to start Notepad for {path}.");
+         // Update the database position
+         BillRow.UpdatePosition(BillUtils.Ensure4DigitNumber(measure), "");
+         GetPositionAndSummary(path, out List<string> summary, out List<string> position_list);
+         string first_line = position_list.FirstOrDefault();
+         string position = first_line != null ? Regex.Replace(first_line, ".*?:(.*)", "$1") : "None Specified";
+         BillRow.UpdatePosition(measure, position.Trim());
          LogAndShow($"Completed {path}");
       }
 
@@ -96,10 +113,9 @@ namespace Scout2.Sequence {
          string vers_id = row.BillVersionID;
          string vote = bv_row.VoteRequired;
 
-         // These data come from the previous version of the bill report
-         var summary = new List<string>();
-         var position = new List<string>();
-         PreviousReport.From(path, summary, position);
+         // Position and Summary data come from the previous version of the bill report
+         // If the passed path is null or empty, then this method was called when no previous report exists.
+         GetPositionAndSummary(path, out List<string> summary, out List<string> position);
 
          // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
          result.Add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
@@ -172,6 +188,23 @@ namespace Scout2.Sequence {
          else
             result = "(invalid date)";
          return result;
+      }
+      /// <summary>
+      /// Obtain the position and summary information from the specified bill report.
+      /// </summary>
+      /// <param name="path">Path to the bill report</param>
+      /// <param name="summary">Return summary information here</param>
+      /// <param name="position">Return position information here</param>
+      private static void GetPositionAndSummary(string path, out List<string> summary, out List<string> position) {
+         summary = new List<string>();
+         position = new List<string>();
+         // Position and Summary data come from the previous version of the bill report
+         // If the passed path is null or empty, then this method was called when no previous report exists.
+         if (string.IsNullOrEmpty(path)) {
+            // Do nothing
+         } else {
+            PreviousReport.From(path, summary, position);
+         }
       }
    }
 }

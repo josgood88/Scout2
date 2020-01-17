@@ -41,8 +41,6 @@ namespace Scout2.Sequence {
 
       private void CapturePositions() {
          var report_collection = new BillReportCollection(Config.Instance.HtmlFolder);
-         var r1058 = (from item in GlobalData.BillRows where (item.Bill == "AB1058") select item).FirstOrDefault();
-         var m1058 = (from item in report_collection where (item.Measure.Contains("1058")) select item).FirstOrDefault();
          foreach (var report in report_collection) {
             var measure = Utility.BillUtils.Ensure4DigitNumber(report.Measure);
             measure = Utility.BillUtils.NoDash(measure);
