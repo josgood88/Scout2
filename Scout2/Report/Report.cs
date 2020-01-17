@@ -30,7 +30,7 @@ namespace Scout2.Report {
          var past_week = PastWeek();
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
-            NewThisWeek(reports, past_week,sw);
+            NewThisWeek(past_week,sw);
             HighestPriority(sw);
             ChangesThisWeek(reports, past_week, sw);
             UpcomingCommitteeHearingsOfInterest(sw);
@@ -59,17 +59,22 @@ namespace Scout2.Report {
       }
       /// <summary>
       /// Report any bill that is new this week.
+      /// A bill is new if it was initially reviewed during the past week.
       /// </summary>
-      /// <param name="reports">Collected bill reports</param>
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
-      private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
+      private void NewThisWeek(DateRange past_week, StreamWriter sw) {
          StartTable(sw,"New This Week");
-         //foreach (var report in reports) {
-         //   var dt = DateFromLastAction(report);
-         //   if (DateIsInPastWeek(dt, past_week)) { }
-         //   ReportOneBill(sw, report);
-         //}
+         List<string> file_paths = Directory.GetFiles(report_folder, "*.html").ToList();
+         foreach (var file_path in file_paths) {
+            if (!file_path.Contains("WeeklyNewsMonitoredBills")) {   // Skip the weekly report file
+               string contents = File.ReadAllText(file_path);
+               DateTime dt = DateOfInitialReview(contents);
+               if (DateIsInPastWeek(dt, past_week)) {
+                  ReportOneBill(sw, new BillReport(file_path));
+               }
+            }
+         }
          EndTable(sw);
       }
 
@@ -209,9 +214,15 @@ namespace Scout2.Report {
       }
 
       private DateTime DateFromLastAction(BillReport report) {
-         DateTime result = DateTime.MinValue;
          var text_date = Regex.Match(report.LastAction, @"^\w+.\s+\w+.\s+\w+").ToString();
-         DateTime.TryParse(text_date, out result);
+         DateTime.TryParse(text_date, out DateTime result);
+         return result;
+      }
+
+      private DateTime DateOfInitialReview(string report) {
+         string s1 = Regex.Match(report, @"\(Reviewed.*\)").ToString();
+         string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)","$1");
+         DateTime.TryParse(text_date, out DateTime result);
          return result;
       }
 
