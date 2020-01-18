@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Library;
+using Library.Database;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2 {
    /// This view shows which bills have been updated by the legislature in some way -- the bill text may have been
@@ -31,10 +37,6 @@ namespace Scout2 {
          DataGridViewTextBoxColumn dgv_la_hist = new DataGridViewTextBoxColumn();
          dgv_la_hist.HeaderText = "History Last Action";
 
-         DataGridViewCheckBoxColumn dgv_checkbox = new DataGridViewCheckBoxColumn();
-         dgv_checkbox.HeaderText = "Select";
-
-         this.ViewBillsRequiringUpdate.Columns.Add(dgv_checkbox);
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_measure);
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_position);
          this.ViewBillsRequiringUpdate.Columns.Add(dgv_la_bill);
@@ -66,7 +68,42 @@ namespace Scout2 {
       private bool IsNotPositionNone(ChangedBillForDisplay row) { return row.Position != "None"; }
       private bool DisplayAll() { return this.chkNonNoneOnly.Checked == false; }
       private void DisplayBillSummary(ChangedBillForDisplay row) {
-         this.ViewBillsRequiringUpdate.Rows.Add(false, row.Measure, row.Position, row.BillLastAction, row.HistoryLastAction);
+         this.ViewBillsRequiringUpdate.Rows.Add(row.Measure, row.Position, row.BillLastAction, row.HistoryLastAction);
+      }
+
+      private void OnCellClick(object sender, DataGridViewCellEventArgs e) {
+         if (e.RowIndex >= 0) {
+            DataGridViewRow row = ViewBillsRequiringUpdate.Rows[e.RowIndex];
+            int i = 0;
+            var measure = row.Cells[i++].Value.ToString();
+            var score = row.Cells[i++].Value.ToString();
+            var title = row.Cells[i++].Value.ToString();
+            var author = row.Cells[i++].Value.ToString();
+            var result = MessageBox.Show($"Update Report for {measure}?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes) {
+               UpdateReport(measure);
+            }
+         } else {
+            // Mouse clicked on column title, so DataGridView will be sorted on that column
+         }
+      }
+      /// <summary>
+      /// Allow the user to update the current bill report.
+      /// If the position is changed, the database BillRow table is updated with the new position.
+      /// </summary>
+      /// <param name="measure"></param>
+      private void UpdateReport(string measure) {
+         string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(measure))}.html";
+         var process = Process.Start("notepad.exe", path);
+         if (process != null) process.WaitForExit();
+         else BaseController.LogAndShow($"CreateNewReports.GenerateCanonicalReport: Failed to start Notepad for {path}.");
+         // Update the database position
+         BillRow.UpdatePosition(BillUtils.Ensure4DigitNumber(measure), "");
+         //GetPositionAndSummary(path, out List<string> summary, out List<string> position_list);
+         //string first_line = position_list.FirstOrDefault();
+         //string position = first_line != null ? Regex.Replace(first_line, ".*?:(.*)", "$1") : "None Specified";
+         //BillRow.UpdatePosition(measure, position.Trim());
+         BaseController.LogAndShow($"Update for {path} is complete.");
       }
    }
 }

@@ -7,16 +7,14 @@ using Library.Database;
 
 namespace Scout2.Sequence {
    public class BaseController {
-
-      public static void LogThis(string message) {
-         string output = $"{DateTime.Now.ToLocalTime()} {message}";
-         Console.WriteLine(message);
-         Log.Instance.Info(message);
-      }
       /// <summary>
       /// Initialize before entering the main sequence.
+      /// Prepares text areas on the main form.
+      /// Sets contents of some database tables, using data from table files contained in the zipped download.
       /// </summary>
-      protected static void BeforeEnteringMainSequence(Form1 form) {
+      /// <param name="form"></param>
+      /// <returns>True if all is well, False if unable to access table files expected to be present</returns>
+      protected static bool BeforeEnteringMainSequence(Form1 form) {
          form.txtLegSiteCompletion.Text = string.Empty;
          form.txtZipProgress.Text = string.Empty;
          form.txtImportProgress.Text = string.Empty;
@@ -27,29 +25,46 @@ namespace Scout2.Sequence {
          form.progressLegSite.Value = 0;
          form.Update();
 
-         EnsureGlobalData();  // Ensure that database tables have been read into memory
+         return EnsureGlobalData();  // Ensure that database tables have been read into memory
       }
       /// <summary>
-      /// The main sequence of processing contains multiple start points.
-      /// Some need global data tables to be filled in.  This is the single point where that is done.
-      /// It is called from each start point that needs one or more of these tables
+      /// Sets contents of some database tables, using data from table files contained in the zipped download.
       /// </summary>
-      protected static void EnsureGlobalData() {
+      /// <returns>True if all is well, False if unable to access table files expected to be present</returns>
+      private static bool EnsureGlobalData() {
+         bool result = true;
          GlobalData.Profiles = new List<BillProfile>();
          if (GlobalData.BillRows == null)
             GlobalData.BillRows = BillRow.RowSet();
-         if (GlobalData.HistoryTable == null)
-            GlobalData.HistoryTable  = new BillHistoryTable(Path.Combine(Config.Instance.BillsFolder, "BILL_HISTORY_TBL.dat"));
-         if (GlobalData.VersionTable == null)
-            GlobalData.VersionTable  = new BillVersionTable(Path.Combine(Config.Instance.BillsFolder, "BILL_VERSION_TBL.dat"));
-         if (GlobalData.LocationTable == null)
-            GlobalData.LocationTable = new LocationCodeTable(Path.Combine(Config.Instance.BillsFolder, "LOCATION_CODE_TBL.dat"));
+         if (GlobalData.HistoryTable == null) {
+            string path = Path.Combine(Config.Instance.BillsFolder, "BILL_HISTORY_TBL.dat");
+            if (File.Exists(path)) GlobalData.HistoryTable  = new BillHistoryTable(path);
+            else result = false;
+         }
+         if (GlobalData.VersionTable == null) {
+            string path = Path.Combine(Config.Instance.BillsFolder, "BILL_VERSION_TBL.dat");
+            if (File.Exists(path)) GlobalData.VersionTable  = new BillVersionTable(path);
+            else result = false;
+         }
+         if (GlobalData.LocationTable == null) {
+            string path = Path.Combine(Config.Instance.BillsFolder, "LOCATION_CODE_TBL.dat");
+            if (File.Exists(path)) GlobalData.LocationTable = new LocationCodeTable(path);
+            else result = false;
+         }
          GlobalData.MostRecentEachBill = new List<Bill_Identifier>();
+         return result;
       }
+
       // Long running method, needed by ImportController
       protected static void EnsureMostRecentEachBill() {
          if (GlobalData.MostRecentEachBill.Count == 0)
             GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
+      }
+
+      public static void LogThis(string message) {
+         string output = $"{DateTime.Now.ToLocalTime()} {message}";
+         Console.WriteLine(message);
+         Log.Instance.Info(message);
       }
 
       public static void LogAndShow(string message) {

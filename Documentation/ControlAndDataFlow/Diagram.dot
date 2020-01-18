@@ -59,21 +59,22 @@ subgraph cluster_LocationCode {
 }
 subgraph cluster_MostRecent {
    label = "Most Recent"
-   "DBRecent"  [label="DB\nMost Recent",shape = rectangle,style = filled,color = gray]
    "TRecent"   [label="Global\nMost Recent",shape = rectangle,style = filled,color = gray]
 }
 
-"Done"     [label="Run Complete",shape = ellipse,style = filled,color = gray]
-"Import"   [label="Import into Database",shape = rectangle,style = filled,color = gray]
-"LegSite"  [label="Import from Leg Site",shape = rectangle,style = filled,color = gray]
-"New"      [label="Create New Bill Reports",shape = rectangle,style = filled,color = gray]
-"Regen"    [label="Regenerate Bill Reports",shape = rectangle,style = filled,color = gray]
-"Report"   [label="Generate Weekly Report",shape = rectangle,style = filled,color = gray]
-"Sequence" [label="Sequence Control",shape = rectangle,style = filled,color = gray]
-"Start"    [label="Start Run",shape = ellipse,style = filled,color = gray]
-"Update"   [label="Update Existing Bill Reports",shape = rectangle,style = filled,color = gray]
-"ZipFile"  [label="Extract from Zip File",shape = rectangle,style = filled,color = gray]
-
+"Done"     [label="Run Complete",shape = ellipse,style = filled,color = cyan]
+"Import"   [label="Import into Database",shape = rectangle,style = filled,color = cyan]
+"LegSite"  [label="Import from Leg Site",shape = rectangle,style = filled,color = cyan]
+"New"      [label="Create New Bill Reports",shape = rectangle,style = filled,color = cyan]
+"Regen"    [label="Regenerate Bill Reports",shape = rectangle,style = filled,color = cyan]
+"Report"   [label="Generate Weekly Report",shape = rectangle,style = filled,color = cyan]
+"Sequence" [label="Sequence Control",shape = rectangle,style = filled,color = cyan]
+"Start"    [label="Start Run",shape = ellipse,style = filled,color = cyan]
+"Update"   [label="Update Existing Bill Reports",shape = rectangle,style = filled,color = cyan]
+"ZipFile"  [label="Extract from Zip File",shape = rectangle,style = filled,color = cyan]
+//
+// Control Flow
+//
 "Start"    -> "Sequence" [label="Start",color=black]
 "Sequence" -> "LegSite"  [label="Start\nSequence",color=black]
 "LegSite"  -> "ZipFile"  [label="Zip File Fetched\nFrom Leg Site",color=black]
@@ -83,21 +84,35 @@ subgraph cluster_MostRecent {
 "Update"   -> "New"      [label="Existing Reports\nUpdated",color=black]
 "New"      -> "Report"   [label="New Bill Reports\nWritten",color=black]
 "Report"   -> "Done"     [label="Weekly Report\nhas been generated",color=black]
-
-"DBBillRow"  -> "TBillRow"  [label="Read",color = green]
-"DBHistory"  -> "THistory"  [label="Read",color = green]
-"DBLocation" -> "TLocation" [label="Global\nLocationCode",color = green]
-"DBVersion"  -> "TVersion"  [label="Global\nBillVersion",color = green]
-"LSZip"      -> "LLZip"     [label="Download",color=green]
-"LLZip"      -> "LLTxt"     [label="Extract",color=green]
-"LLZip"      -> "LLTbl"     [label="Extract",color=green]
-
-"LegSite"  -> "LLZip"     [color=maroon]
-"Sequence" -> "TBillRow"  [color=maroon]
-"Sequence" -> "THistory"  [color=maroon]
-"Sequence" -> "TLocation" [color=maroon]
-"Sequence" -> "TVersion"  [color=maroon]
-"ZipFile"  -> "LLTxt"     [color=maroon]
-"ZipFile"  -> "LLTbl"     [color=maroon]
-"N4"       -> "LegSite"   [style=invis]                 // Position colors subgraph over sequence start
+//
+// Data Flow
+//
+"DBBillRow"  -> "TBillRow"   [label="Read",color = green]
+"DBHistory"  -> "THistory"   [label="Read",color = green]
+"DBLocation" -> "TLocation"  [label="Global\nLocationCode",color = green]
+"DBVersion"  -> "TVersion"   [label="Global\nBillVersion",color = green]
+"LLTbl"      -> "DBHistory"  [label="Bill\nHistory",color = green]
+"LLTbl"      -> "DBLocation" [label="Bill\nLocation",color = green]
+"LLTbl"      -> "DBVersion"  [label="Bill\nVersion",color = green]
+"LLTxt"      -> "TBillRow"   [label="Update\nPositions",color = green]
+"LLTxt"      -> "TRecent"    [label="Most\nRecent",color = green]
+"LLZip"      -> "LLTxt"      [label="Extract",color=green]
+"LLZip"      -> "LLTbl"      [label="Extract",color=green]
+"LSZip"      -> "LLZip"      [label="Download",color=green]
+//
+// Cause Data Flow
+//
+"Import"   -> "TBillRow"   [label="Update\nPositions",color=maroon]
+"Import"   -> "TRecent"    [label="Most\nRecent",color=maroon]
+"LegSite"  -> "LLZip"      [color=maroon]
+"Sequence" -> "TBillRow"   [color=maroon]
+"Sequence" -> "THistory"   [color=maroon]
+"Sequence" -> "TLocation"  [color=maroon]
+"Sequence" -> "TVersion"   [color=maroon]
+"Start"    -> "DBLocation" [label="From\nTable\nFile",color=maroon]
+"Start"    -> "DBHistory"  [label="From\nTable\nFile",color=maroon]
+"Start"    -> "DBVersion"  [label="From\nTable\nFile",color=maroon]
+"ZipFile"  -> "LLTxt"      [color=maroon]
+"ZipFile"  -> "LLTbl"      [color=maroon]
+"N4"       -> "LegSite"    [style=invis]                 // Position colors subgraph over sequence start
 }

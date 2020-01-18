@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Scout2.Sequence {
    /// <summary>
@@ -40,46 +41,57 @@ namespace Scout2.Sequence {
       /// <param name="form">The form on which these controls are displayed</param>
       /// <param name="seq">Next step on the main sequence</param>
       private static void Run(Form1 form, SeqPoint seq) {
-         BeforeEnteringMainSequence(form);  // Initialize before entering the main sequence.
-         var update_form = new UpdatedBillsForm();
-         var unreported_form = new UnreportedBillsForm();
-         while (seq != SeqPoint.complete) {        // While the main sequence is not complete
-            switch (seq) {                         // Perform the current step in the sequence
-               case SeqPoint.importFromLegSite:
-                  form.TopMost = true;             // Don't let Selenium hide this program's form
-                  Task<int> import = new LegSiteController().Run(form);  // Download the latest leginfo zip file, which is a zipped file.
-                  form.TopMost = false;            // For now.  Remove once download actually working
-                  import.Wait();                   // Wait for the download to complete
-                  form.TopMost = false;            // Selenium dialog is gone, so don't need topmost any more
-                  seq++;
-                  break;
-               case SeqPoint.extractFromZip:
-                  new ZipController().Run(form);   // Extract the contents of the downloaded zip file.
-                  seq++;
-                  break;
-               case SeqPoint.importToDB:  
-                  new ImportController().Run(form);// Update the database with the latest data on the bill's text, status, committee location, etc.
-                  seq++;
-                  break;
-               case SeqPoint.regenBillReports:
-                  new Regenerate().Run(form);      // Regenerate the individual bill reports.  In particular, update the bill's history
-                  seq++;
-                  break;
-               case SeqPoint.updateBillReports:
-                  new UpdateExistingReports().Run(form, update_form);// User updates existing bill reports
-                  seq++;
-                  break;
-               case SeqPoint.createBillReports:
-                  new CreateNewReports().Run(form, unreported_form);// User creates reports for newly found bills of interest
-                  seq++;
-                  break;
-               case SeqPoint.weeklyReport:
-                  new WeeklyReport().Run(form);    // Generate the weekly report
-                  seq++;
-                  break;
-               default:
-                  throw new ApplicationException($"SequenceControl.Run: Invalid sequence point {seq} encountered.");
+         bool are_table_files_present = BeforeEnteringMainSequence(form);  // Initialize before entering the main sequence.
+         if (are_table_files_present || seq <= SeqPoint.extractFromZip) {
+            var update_form = new UpdatedBillsForm();
+            var unreported_form = new UnreportedBillsForm();
+            while (seq != SeqPoint.complete) {        // While the main sequence is not complete
+               switch (seq) {                         // Perform the current step in the sequence
+                  case SeqPoint.importFromLegSite:
+                     form.TopMost = true;             // Don't let Selenium hide this program's form
+                     Task<int> import = new LegSiteController().Run(form);  // Download the latest leginfo zip file, which is a zipped file.
+                     form.TopMost = false;            // For now.  Remove once download actually working
+                     import.Wait();                   // Wait for the download to complete
+                     form.TopMost = false;            // Selenium dialog is gone, so don't need topmost any more
+                     seq++;
+                     break;
+                  case SeqPoint.extractFromZip:
+                     new ZipController().Run(form);   // Extract the contents of the downloaded zip file.
+                     if (!are_table_files_present) {  // If could not fill database from unzipped table files
+                        if (!BeforeEnteringMainSequence(form)) {
+                           throw new ApplicationException($"SequenceController.Run: Table files missing, cannot initialize database.");
+                        }
+                     }
+                     seq++;
+                     break;
+                  case SeqPoint.importToDB:
+                     new ImportController().Run(form);// Update the database with the latest data on the bill's text, status, committee location, etc.
+                     seq++;
+                     break;
+                  case SeqPoint.regenBillReports:
+                     new Regenerate().Run(form);      // Regenerate the individual bill reports.  In particular, update the bill's history
+                     seq++;
+                     break;
+                  case SeqPoint.updateBillReports:
+                     new UpdateExistingReports().Run(form, update_form);// User updates existing bill reports
+                     seq++;
+                     break;
+                  case SeqPoint.createBillReports:
+                     new CreateNewReports().Run(form, unreported_form);// User creates reports for newly found bills of interest
+                     seq++;
+                     break;
+                  case SeqPoint.weeklyReport:
+                     new WeeklyReport().Run(form);    // Generate the weekly report
+                     seq++;
+                     break;
+                  default:
+                     throw new ApplicationException($"SequenceControl.Run: Invalid sequence point {seq} encountered.");
+               }
             }
+         } else {
+            string msg = "At least one of BILL_HISTORY_TBL.dat, BILL_VERSION_TBL.dat, LOCATION_CODE_TBL.dat are not present.";
+            LogAndShow(msg);
+            throw new ApplicationException($"SequenceControl.Run: {msg}");
          }
       }
    }

@@ -41,12 +41,18 @@
          // 
          // ViewBillsRequiringUpdate
          // 
+         this.ViewBillsRequiringUpdate.AllowUserToAddRows = false;
+         this.ViewBillsRequiringUpdate.AllowUserToDeleteRows = false;
+         this.ViewBillsRequiringUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
          this.ViewBillsRequiringUpdate.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
          this.ViewBillsRequiringUpdate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
          this.ViewBillsRequiringUpdate.Location = new System.Drawing.Point(40, 92);
          this.ViewBillsRequiringUpdate.Name = "ViewBillsRequiringUpdate";
          this.ViewBillsRequiringUpdate.Size = new System.Drawing.Size(624, 309);
          this.ViewBillsRequiringUpdate.TabIndex = 1;
+         this.ViewBillsRequiringUpdate.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellClick);
          // 
          // chkNonNoneOnly
          // 

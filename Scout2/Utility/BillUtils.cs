@@ -17,7 +17,7 @@ namespace Scout2.Utility {
       /// <param name="bill">Bill house & measure, e.g. AB123</param>
       /// <returns>Bill house & measure, 4-digit measure ensured</returns>
       public static string Ensure4DigitNumber(string bill) {
-         ExtractHouseNumber(bill, out string house, out string number);
+         ExtractHouseNumber(NoDash(bill), out string house, out string number);
          while (number.Length < 4) number = $"0{number}";
          return $"{house}{number}";
       }
@@ -27,7 +27,7 @@ namespace Scout2.Utility {
       /// </summary>
       /// <param name="bill">Bill house & measure, e.g. AB123</param>
       /// <returns>Bill house & measure, no-leading-zeros measure ensured</returns>
-      public static string EnsureNoLeadingZerosBill(string bill) { return Regex.Replace(bill, "B0+", "B"); }
+      public static string EnsureNoLeadingZerosBill(string bill) { return Regex.Replace(NoDash(bill), "B0+", "B"); }
       /// <summary>
       /// Extract house and number from bill id, returning house and number through argument references
       /// </summary>

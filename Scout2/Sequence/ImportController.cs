@@ -12,9 +12,6 @@ namespace Scout2.Sequence {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
          try {
-            LogAndDisplay(form1.txtImportProgress, "Update BillRows position fields.");
-            CapturePositions();  // Update BillRows position fields to match individual bill reports
-
             LogAndDisplay(form1.txtImportProgress, "Writing Bill Version table.");
             BillVersionTable.ClearYourself(); 
             BillVersionRow.WriteRowset(GlobalData.VersionTable.Table);
@@ -26,6 +23,9 @@ namespace Scout2.Sequence {
             LogAndDisplay(form1.txtImportProgress, "Writing Bill Location table.");
             LocationCodeTable.ClearYourself(); 
             LocationCodeRow.WriteRowset(GlobalData.LocationTable.Table);
+
+            LogAndDisplay(form1.txtImportProgress, "Update BillRows position fields.");
+            CapturePositions();  // Update BillRows position fields to match individual bill reports
 
             // Determine most recent version of each Asm/Sen bill
             LogAndDisplay(form1.txtImportProgress, "Determining most recent version of each bill.");
