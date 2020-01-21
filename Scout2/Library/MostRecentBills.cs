@@ -36,7 +36,6 @@ namespace Library {
          var senate_recent_bills = MostRecent(senate_all_bills,"SB");
          Log.Instance.Info($"...There are {senate_recent_bills.Count} distinct Senate bills.");
 
-         //InsertMostRecent(assembly_recent_bills,senate_recent_bills);
          return assembly_recent_bills.Concat(senate_recent_bills);
       }
 

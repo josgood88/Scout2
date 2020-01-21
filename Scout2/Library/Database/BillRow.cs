@@ -6,6 +6,8 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Scout2.Utility;
 
 namespace Library.Database {
    public class BillRow {
@@ -29,7 +31,36 @@ namespace Library.Database {
          // Just a temporary used for debugging
       }
 
-      public BillRow(SQLiteDataReader reader) {
+      enum field_offsets {
+         bill_id, session_year, session_num, measure_type, measure_num, measure_state,
+         chapter_year, chapter_type, chapter_session_num, chapter_num, latest_bill_version_id,
+         active_flg, trans_uid, trans_update, current_location, current_secondary_loc,
+         current_house, current_status, days_31st_in_print
+      };
+
+      public BillRow(string bill_tbl_row, List<BillProfile> profiles) {
+         var x = GlobalData.MostRecentEachBill;
+         var fields = Regex.Split(bill_tbl_row, @"\t");
+         MeasureType = fields[(int)field_offsets.measure_type];
+         MeasureNum  = fields[(int)field_offsets.measure_num];
+         var measure_num_4 = BillUtils.Ensure4DigitNumber(MeasureNum);
+         var profile = GlobalData.MostRecentEachBill.Where
+            (item => (item.Type == MeasureType) && (item.Number == measure_num_4)).ToList();
+         Bill = BillUtils.Ensure4DigitNumber($"{MeasureType}{MeasureNum}");
+         //Lob 
+         //NegativeScore 
+         //PositiveScore 
+         //Position 
+         //BillVersionID 
+         //Author 
+         //Title 
+         Location = fields[(int)field_offsets.current_location];
+         //Location2nd 
+         //MeasureState 
+         //CurrentHouse  
+         CurrentStatus = fields[(int)field_offsets.measure_state];
+   }
+   public BillRow(SQLiteDataReader reader) {
          var offset = 0;
          Bill          = reader.GetString(offset++).Trim();
          MeasureType   = reader.GetString(offset++).Trim();
@@ -111,31 +142,31 @@ namespace Library.Database {
          return result;
       }
 
-      public static List<BillRow> UpdateGlobalBillRows(IEnumerable<BillProfile> input) {
-         var result = GlobalData.BillRows;
-         foreach (var item in input) {
-            // Do we need to add a new row or update an existing one?
-            var index_existing_row = result.FindIndex(x => x.Bill == item.Identifier.BillID);
-            if (index_existing_row == -1) result.Add(new BillRow(item));
-            else Update(result,index_existing_row);
-         }
-         return result;
-      }
+      //public static List<BillRow> UpdateGlobalBillRows(IEnumerable<BillProfile> input) {
+      //   var result = GlobalData.BillRows;
+      //   foreach (var item in input) {
+      //      // Do we need to add a new row or update an existing one?
+      //      var index_existing_row = result.FindIndex(x => x.Bill == item.Identifier.BillID);
+      //      if (index_existing_row == -1) result.Add(new BillRow(item));
+      //      else Update(result,index_existing_row);
+      //   }
+      //   return result;
+      //}
 
-      private static void Update(List<BillRow> result, int index) {
-         string name_ext = Path.GetFileName(result[index].Lob);           // BillVersionTable bill_xml is unique
-         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
-         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
-         var location_code = history.First().TernaryLocation;
-         var location_code_row = GlobalData.LocationTable.Scalar(location_code);
+      //private static void Update(List<BillRow> result, int index) {
+      //   string name_ext = Path.GetFileName(result[index].Lob);           // BillVersionTable bill_xml is unique
+      //   BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
+      //   List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
+      //   var location_code = history.First().TernaryLocation;
+      //   var location_code_row = GlobalData.LocationTable.Scalar(location_code);
          
-         result[index].Location = history.First().PrimaryLocation;
-         result[index].Location2nd = location_code_row?.LongDescription;
-         if (result[index].Location2nd == null) result[index].Location2nd = location_code;   // e.g. "Third Reading"
-         result[index].MeasureState = "m state";
-         result[index].CurrentHouse = history.First().PrimaryLocation;
-         result[index].CurrentStatus = history.First().EndStatus;
-      }
+      //   result[index].Location = history.First().PrimaryLocation;
+      //   result[index].Location2nd = location_code_row?.LongDescription;
+      //   if (result[index].Location2nd == null) result[index].Location2nd = location_code;   // e.g. "Third Reading"
+      //   result[index].MeasureState = "m state";
+      //   result[index].CurrentHouse = history.First().PrimaryLocation;
+      //   result[index].CurrentStatus = history.First().EndStatus;
+      //}
 
       public static List<BillRow> RowSet() {
          var result = new List<BillRow>();
@@ -153,6 +184,26 @@ namespace Library.Database {
             }
          } catch (Exception ex) {
             Log.Instance.Info($"BillRow.RowSet: {ex.Message}");
+            throw;
+         }
+         return result;
+      }
+
+      public static List<BillRow> RowsetByQuery(string query) {
+         var result = new List<BillRow>();
+         try {
+            using (SQLiteConnection con = DB.Connect()) {      // Obtain SQLiteConnection
+               con.Open();                                     // Open the connection to the database
+               using (SQLiteCommand cmd = new SQLiteCommand(query, con)) {
+                  using (SQLiteDataReader reader = cmd.ExecuteReader()) {
+                     while (reader.Read()) {
+                        result.Add(new BillRow(reader));
+                     }
+                  }
+               }
+            }
+         } catch (Exception ex) {
+            Log.Instance.Info($"BillRow.RowsetWithQuery({query}): {ex.Message}");
             throw;
          }
          return result;

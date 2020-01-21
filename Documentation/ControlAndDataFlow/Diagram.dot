@@ -34,8 +34,12 @@ subgraph cluster_local {
 
 subgraph cluster_BillProfile {
    label = "Bill Profile"
-   "DBProfile" [label="DB\nBillProfile",shape = rectangle,style = filled,color = gray]
    "TProfile"  [label="Global\nBillProfile",shape = rectangle,style = filled,color = gray]
+}
+
+subgraph cluster_BillReports {
+   label = "Bill Reports"
+   "TReports"  [label="Bill Reports",shape = rectangle,style = filled,color = gray]
 }
 subgraph cluster_BillRow {
    label = "Bill Row"
@@ -87,22 +91,25 @@ subgraph cluster_MostRecent {
 //
 // Data Flow
 //
-"DBBillRow"  -> "TBillRow"   [label="Read",color = green]
 "DBHistory"  -> "THistory"   [label="Read",color = green]
 "DBLocation" -> "TLocation"  [label="Global\nLocationCode",color = green]
 "DBVersion"  -> "TVersion"   [label="Global\nBillVersion",color = green]
 "LLTbl"      -> "DBHistory"  [label="Bill\nHistory",color = green]
 "LLTbl"      -> "DBLocation" [label="Bill\nLocation",color = green]
 "LLTbl"      -> "DBVersion"  [label="Bill\nVersion",color = green]
-"LLTxt"      -> "TBillRow"   [label="Update\nPositions",color = green]
+"LLTbl"      -> "TBillRow"   [label="Bill_TBL\n.dat",color = green]
+"TReports"   -> "TBillRow"   [label="Update\nPositions",color = green]
 "LLTxt"      -> "TRecent"    [label="Most\nRecent",color = green]
 "LLZip"      -> "LLTxt"      [label="Extract",color=green]
 "LLZip"      -> "LLTbl"      [label="Extract",color=green]
 "LSZip"      -> "LLZip"      [label="Download",color=green]
+"TBillRow"   -> "DBBillRow"  [label="Write",color = green]
+"TProfile"   -> "TBillRow"   [label="Author\nTitle\nScores",color = green]
 //
 // Cause Data Flow
 //
-"Import"   -> "TBillRow"   [label="Update\nPositions",color=maroon]
+"Import"   -> "DBBillRow"  [label="Update\nFrom\nGlobal",color=maroon]
+"Import"   -> "TBillRow"   [label="Create\nTable",color=maroon]
 "Import"   -> "TRecent"    [label="Most\nRecent",color=maroon]
 "LegSite"  -> "LLZip"      [color=maroon]
 "Sequence" -> "TBillRow"   [color=maroon]

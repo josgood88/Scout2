@@ -78,11 +78,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Library\BillRanker.cs" />
+    <Compile Include="Library\Bill_Tbl_Wrapper.cs" />
     <Compile Include="Sequence\BaseController.cs" />
     <Compile Include="Sequence\Changes.cs" />
     <Compile Include="IndividualReport\CreateIndividualReport.cs" />
     <Compile Include="Sequence\CreateNewReports.cs" />
     <Compile Include="Sequence\ImportController.cs" />
+    <Compile Include="Sequence\InitializeBillRows.cs" />
     <Compile Include="Sequence\LegSiteController.cs" />
     <Compile Include="Sequence\PositionFromReport.cs" />
     <Compile Include="Sequence\PreviousReport.cs" />

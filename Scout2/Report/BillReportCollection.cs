@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
+using Scout2.Sequence;
 
 namespace Scout2.Report {
    public class BillReport {
@@ -54,7 +55,7 @@ namespace Scout2.Report {
             index = line.IndexOf(':');                   // Last Action follows colon
             LastAction = line.Substring(index+1).Trim(); // At least one space before Last Action
          } catch (Exception ex) {
-            Console.WriteLine(ex.Message);
+            BaseController.LogAndShow(ex.Message);
             throw;
          }
       }

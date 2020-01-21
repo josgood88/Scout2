@@ -1,4 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Library;
 namespace Scout2.Utility {
    public class BillUtils {
       /// <summary>
@@ -41,6 +45,9 @@ namespace Scout2.Utility {
          number = bill.Substring(house.Length);
          bool correct = house != string.Empty && house != bill && number != string.Empty && number != bill;
          return correct;
+      }
+      public static List<string> HtmlFolderContents() {
+         return Directory.EnumerateFiles(Config.Instance.HtmlFolder, "*.html").ToList();
       }
    }
 }
