@@ -1,5 +1,5 @@
-﻿
-using Scout2.IndividualReport;
+﻿using Scout2.Utility;
+
 namespace Scout2.Sequence {
    public class ChangedBillForDisplay {
       public string Measure { protected set; get; }
@@ -21,12 +21,7 @@ namespace Scout2.Sequence {
       public string Title { protected set; get; }
       public string Author { protected set; get; }
       public UnreportedBillForDisplay(string a, string b, string c, string d) {
-         Measure = a; NegativeScore = Ensure4DigitNumber(b); Title = c; Author = d;
-      }
-
-      private string Ensure4DigitNumber(string number) {
-         while (number.Length < 4) number = $"0{number}";
-         return number;
+         Measure = a; NegativeScore = BillUtils.Ensure4DigitNumber(b); Title = c; Author = d;
       }
    }
 }

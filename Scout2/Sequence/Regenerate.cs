@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
-using Scout2.IndividualReport;
-using Scout2.Report;
+using Scout2.Utility;
 
 namespace Scout2.Sequence {
    public class Regenerate : BaseController {
@@ -77,21 +76,13 @@ namespace Scout2.Sequence {
       }
 
       private DateTime DateFromHistoryTable(string path) {
-         DateTime date_result = default(DateTime);
          String bill = Path.GetFileNameWithoutExtension(path);
-         BillRow row = BillRow.Row(Ensure4DigitNumber(bill));
+         BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(bill));
          string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
          BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
          List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
-         DateTime.TryParse(history.First().ActionDate, out date_result);
+         DateTime.TryParse(history.First().ActionDate, out DateTime date_result);
          return date_result;
-      }
-
-      //todo Condense multiple copies
-      private string Ensure4DigitNumber(string bill) {
-         CreateIndividualReport.ExtractHouseNumber(bill, out string house, out string number);
-         while (number.Length < 4) number = $"0{number}";
-         return $"{house}{number}";
       }
    }
 }
