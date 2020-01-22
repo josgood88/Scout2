@@ -2,21 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 
 namespace Scout2.IndividualReport {
    public class CreateIndividualReport {
-      // Extract house and number from bill id, returning house and number through argument references
-      public static bool ExtractHouseNumber(string bill, out string house, out string number) {
-         house = number = string.Empty;
-         house  = Regex.Match(bill,@"\D*").Value;
-         number = bill.Substring(house.Length);
-         bool correct = house != string.Empty && house != bill && number != string.Empty && number != bill;
-         return correct;
-      }
-
       // Create a Bill Report, given a bill identifier such as AB12
       public static List<string> ReportContents(BillRow row, string path) {
          List<string> result = new List<string>();

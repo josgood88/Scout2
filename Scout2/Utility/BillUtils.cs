@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
+
 namespace Scout2.Utility {
    public class BillUtils {
       /// <summary>
@@ -39,7 +40,7 @@ namespace Scout2.Utility {
       /// <param name="house">just the house, ma'am</param>
       /// <param name="number">just the number, ma'am</param>
       /// <returns></returns>
-      private static bool ExtractHouseNumber(string bill, out string house, out string number) {
+      public static bool ExtractHouseNumber(string bill, out string house, out string number) {
          house = number = string.Empty;
          house  = Regex.Match(bill, @"\D*").Value;
          number = bill.Substring(house.Length);

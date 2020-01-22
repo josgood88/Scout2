@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Scout2.IndividualReport;
+using Scout2.Utility;
 
 namespace Scout2.Sequence {
    public struct PositionFromReport {
@@ -13,7 +13,7 @@ namespace Scout2.Sequence {
             MeasureNoDash = Regex.Replace(Measure, "-", string.Empty);
          } else {
             MeasureNoDash = a;
-            CreateIndividualReport.ExtractHouseNumber(MeasureNoDash, out string house, out string number);
+            BillUtils.ExtractHouseNumber(MeasureNoDash, out string house, out string number);
             Measure = $"{house}-{number}";
          }
       }
