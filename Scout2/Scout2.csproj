@@ -149,6 +149,7 @@
       <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\BillUtils.cs" />
+    <Compile Include="Utility\MiscUtils.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

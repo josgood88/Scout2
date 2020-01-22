@@ -18,14 +18,14 @@ namespace Scout2.Sequence {
             LogAndDisplay(form1.txtImportProgress, "Determining most recent version of each bill.");
             // Need to know which lob file describes the most recent version of each bill
             GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
+
             // Need to copy GlobalData.Profiles to a temporary, update the temporary, then copy the temporary back.
             // BillRanker.Compute(ref GlobalData.Profiles) results in  
             //    A property or indexer may not be passed as an out or ref parameter.
             //    Property "Profiles" access returns temporary value.
             //    "ref" argument must be an assignable value, field or array element.
-            List<BillProfile> mr_profiles = Profiles(GlobalData.MostRecentEachBill);  // Prepare for ranking the bills
-
             LogAndDisplay(form1.txtImportProgress, "Computing positive and negative scores for all bills.");
+            List<BillProfile> mr_profiles = Profiles(GlobalData.MostRecentEachBill);  // Prepare for ranking the bills
             BillRanker.Compute(ref mr_profiles);
             GlobalData.Profiles = mr_profiles;
 
@@ -74,7 +74,13 @@ namespace Scout2.Sequence {
 
          // Re-create GlobalData.BillRows, using data from bill_table_wrapper and elsewhere.
          GlobalData.BillRows.Clear();
+         List<string> SkipIf = new List<String>() 
+            { "Chaptered", "Died", "Enrolled", "Failed", "Failed Passage in Committee", "Vetoed"};
          foreach (var item in bill_table_wrapper) {
+            // Don't process bills that will not progress further in the legislature.
+            //string result = SkipIf.FirstOrDefault(s => s == item.Current_status);
+            //if (result != null) continue;
+
             // Use data from bill_table_wrapper.  Some fields are left blank.
             var bill_row = new BillRow();
             bill_row.MeasureType   = item.Measure_type; // e.g. AB
@@ -113,7 +119,8 @@ namespace Scout2.Sequence {
             if (pos != null) bill_row.Position = pos.Position;
             //    2.  If that table hasn't been updated, in the actual report
             // If the two are in conflict, the bill report wins.
-            var report_file = (from x in reports where x.Contains($"{bill_row.Bill}.html") select x).FirstOrDefault();
+            var short_id = BillUtils.EnsureNoLeadingZerosBill(bill_row.Bill);
+            var report_file = (from x in reports where x.Contains($"{short_id}.html") select x).FirstOrDefault();
             if (report_file != null) {
                var report = new BillReport(report_file);
                bill_row.Position = report.Position;
@@ -121,6 +128,8 @@ namespace Scout2.Sequence {
             // Add this row to GlobalData.BillRows
             GlobalData.BillRows.Add(bill_row);
          }
+         
+         // Sort the table before returning it.  Ordered by bill ID, e.g. AB0001, communicates well
          GlobalData.BillRows = GlobalData.BillRows.OrderBy(a => a.Bill).ToList();
       }
       /// <summary>

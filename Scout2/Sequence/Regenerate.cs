@@ -25,7 +25,7 @@ namespace Scout2.Sequence {
                   (new IndividualReport.IndividualReport(verbose, update)).Run(item);
                }
             } else {
-               LogAndShow("BR found no bills to process.");
+               LogAndDisplay(form1.txtRegenProgress, "No bill history updates were necessary.");
             }
          } catch (Exception ex) {
             LogAndThrow($"Regenerate.Run: {ex.Message}.");

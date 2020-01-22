@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Library;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2.Report {
    public class Report : BaseController {
@@ -30,7 +30,7 @@ namespace Scout2.Report {
          var past_week = PastWeek();
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
-            NewThisWeek(past_week,sw);
+            NewThisWeek(reports, past_week, sw);
             HighestPriority(sw);
             ChangesThisWeek(reports, past_week, sw);
             UpcomingCommitteeHearingsOfInterest(sw);
@@ -61,18 +61,20 @@ namespace Scout2.Report {
       /// Report any bill that is new this week.
       /// A bill is new if it was initially reviewed during the past week.
       /// </summary>
+      /// <param name="reports">Collected bill reports</param>
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
-      private void NewThisWeek(DateRange past_week, StreamWriter sw) {
+      private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw,"New This Week");
-         List<string> file_paths = Directory.GetFiles(report_folder, "*.html").ToList();
-         foreach (var file_path in file_paths) {
-            if (!file_path.Contains("WeeklyNewsMonitoredBills")) {   // Skip the weekly report file
-               string contents = File.ReadAllText(file_path);
-               DateTime dt = DateOfInitialReview(contents);
-               if (DateIsInPastWeek(dt, past_week)) {
-                  ReportOneBill(sw, new BillReport(file_path));
-               }
+         foreach (var report in reports) {
+            string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
+            string contents = File.ReadAllText(path);
+            DateTime dt = DateOfInitialReview(contents);
+            if (DateIsInPastWeek(dt, past_week)) {
+               if (report.IsDead()) continue;            // Don't bother reporting dead bills
+               if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+               if (report.IsChaptered()) continue;       // Don't bother reporting chaptered bills
+               ReportOneBill(sw, report);
             }
          }
          EndTable(sw);
@@ -95,6 +97,7 @@ namespace Scout2.Report {
       private void ChangesThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
          StartTable(sw, "Changes This Week");
          foreach (var report in reports) {
+            if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
             var dt = DateFromLastAction(report);
             if (DateIsInPastWeek(dt, past_week)) {
                ReportOneBill(sw, report);
@@ -179,15 +182,7 @@ namespace Scout2.Report {
       /// </summary>
       /// <returns></returns>
       private string ReportDate() {
-         Dictionary<int, int> incrementTodayToReportDate = new Dictionary<int, int>() {
-         // Sun    Mon    Tue    Wed    Thu    Fri    Sat
-            {0,1}, {1,0}, {2,6}, {3,5}, {4,4}, {5,3}, {6,2} };
-         var now = DateTime.Now;
-         int dayOfWeek = (int)now.DayOfWeek; // 0 = Sunday
-         int increment_by = incrementTodayToReportDate[dayOfWeek];
-         var report_date = now.AddDays(increment_by);
-         var result = report_date.ToString("dd MMM yyyy");
-         return result;
+         return MiscUtils.NextMonday().ToString("dd MMM yyyy");
       }
 
       private void StartTable(StreamWriter sw, string title) {
@@ -212,22 +207,20 @@ namespace Scout2.Report {
 
       private DateRange PastWeek() {
          DateRange result = new DateRange();
-         result.end = DateTime.Now;
+         result.end = MiscUtils.NextMonday();
          result.start = result.end - TimeSpan.FromDays(7);
          return result;
       }
 
       private DateTime DateFromLastAction(BillReport report) {
          var text_date = Regex.Match(report.LastAction, @"^\w+.\s+\w+.\s+\w+").ToString();
-         DateTime.TryParse(text_date, out DateTime result);
-         return result;
+         return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
       }
 
       private DateTime DateOfInitialReview(string report) {
          string s1 = Regex.Match(report, @"\(Reviewed.*\)").ToString();
          string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)","$1");
-         DateTime.TryParse(text_date, out DateTime result);
-         return result;
+         return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
       }
 
       private bool DateIsInPastWeek(DateTime dt, DateRange range) {

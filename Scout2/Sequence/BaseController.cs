@@ -57,7 +57,6 @@ namespace Scout2.Sequence {
 
       public static void LogThis(string message) {
          string output = $"{DateTime.Now.ToLocalTime()} {message}";
-         Console.WriteLine(message);
          Log.Instance.Info(message);
       }
 
