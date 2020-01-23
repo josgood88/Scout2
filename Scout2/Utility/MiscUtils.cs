@@ -17,5 +17,23 @@ namespace Scout2.Utility {
          var next_monday = now.AddDays(increment_by);
          return next_monday;
       }
+      /// <summary>
+      /// Last Report date was the Monday preceeding today
+      /// </summary>
+      /// <returns></returns>
+      /// <summary>
+      /// Last Report date was the Monday preceeding today
+      /// </summary>
+      /// <returns></returns>
+      public static DateTime LastMonday() {
+         Dictionary<int, int> incrementTodayToReportDate = new Dictionary<int, int>() {
+         // Sun    Mon    Tue    Wed    Thu    Fri    Sat
+            {0,1}, {1,0}, {2,6}, {3,5}, {4,4}, {5,3}, {6,2} };
+         var now = DateTime.Now;
+         int dayOfWeek = (int)now.DayOfWeek; // 0 = Sunday
+         int increment_by = incrementTodayToReportDate[dayOfWeek] - 7;
+         var next_monday = now.AddDays(increment_by);
+         return next_monday;
+      }
    }
 }
