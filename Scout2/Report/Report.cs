@@ -13,7 +13,7 @@ namespace Scout2.Report {
       private readonly string path_log_file;
       private readonly string report_folder;
 
-      private class DateRange {
+      public class DateRange {
          public DateTime start { get; set; }
          public DateTime end { get; set; }
       }
@@ -69,8 +69,7 @@ namespace Scout2.Report {
          foreach (var report in reports) {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             string contents = File.ReadAllText(path);
-            DateTime dt = DateOfInitialReview(contents);
-            if (DateIsInPastWeek(dt, past_week)) {
+            if (BillUtils.IsNewThisWeek(report,contents,past_week)) {
                if (report.IsDead()) continue;            // Don't bother reporting dead bills
                if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
                if (report.IsChaptered()) continue;       // Don't bother reporting chaptered bills
@@ -98,8 +97,13 @@ namespace Scout2.Report {
          StartTable(sw, "Changes This Week");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+
+            string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
+            string contents = File.ReadAllText(path);
+            if (BillUtils.IsNewThisWeek(report, contents, past_week)) continue; // Don't report new bills.
+
             var dt = DateFromLastAction(report);
-            if (DateIsInPastWeek(dt, past_week)) {
+            if (BillUtils.DateIsInPastWeek(dt, past_week)) {
                ReportOneBill(sw, report);
             }
          }
@@ -170,7 +174,7 @@ namespace Scout2.Report {
          sw.WriteLine("<tr>");
          sw.WriteLine($"<td>{report.Measure} {report.Title}</td>");
          sw.WriteLine($"  <td>{report.WIC??"No"}</td>");
-         sw.WriteLine($"  <td>{report.FiveK??"No"}</td>");
+         sw.WriteLine($"  <td>{report.LPS??"No"}</td>");
          sw.WriteLine($"  <td>{report.Position??"Null"}</td>");
          sw.WriteLine($"  <td>{report.OneLiner}</td>");
          sw.WriteLine($"  <td>{report.LastAction}</td>");
@@ -191,8 +195,8 @@ namespace Scout2.Report {
          sw.WriteLine($"      <caption><b>{title}</b></caption>");
          sw.WriteLine("      <tr>");
          sw.WriteLine("         <th>Measure</th>");
-         sw.WriteLine("         <th>WIC</th>");
-         sw.WriteLine("         <th>5000</th>");
+         sw.WriteLine("         <th>WIC</th>");    // Welfare and Institutions Code
+         sw.WriteLine("         <th>LPS</th>");    // Lanterman-Petris-Short Act
          sw.WriteLine("         <th>Position</th>");
          sw.WriteLine("         <th>Summary</th>");
          sw.WriteLine("         <th>Last Change</th>");
@@ -215,16 +219,6 @@ namespace Scout2.Report {
       private DateTime DateFromLastAction(BillReport report) {
          var text_date = Regex.Match(report.LastAction, @"^\w+.\s+\w+.\s+\w+").ToString();
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
-      }
-
-      private DateTime DateOfInitialReview(string report) {
-         string s1 = Regex.Match(report, @"\(Reviewed.*\)").ToString();
-         string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)","$1");
-         return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
-      }
-
-      private bool DateIsInPastWeek(DateTime dt, DateRange range) {
-         return dt >= range.start && dt <= range.end;
       }
    }
 }

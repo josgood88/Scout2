@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
+using OpenQA.Selenium.Support.UI;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2.Report {
    public class BillReport {
       public string Author     { get; private set; }
       public string Measure    { get; private set; }
       public string WIC        { get; private set; }
-      public string FiveK      { get; private set; }
+      public string LPS        { get; private set; }
       public string Position   { get; private set; }
       public string OneLiner   { get; private set; } // One-line summation
       public string LastAction { get; private set; }
@@ -54,6 +57,28 @@ namespace Scout2.Report {
             if (line == null) throw new ApplicationException($"BillReport ctor: {file_path} contents has no Last Action.");
             index = line.IndexOf(':');                   // Last Action follows colon
             LastAction = line.Substring(index+1).Trim(); // At least one space before Last Action
+
+            // Find WIC (Welfare and Institutions Code) and LPS (Lanternman-Petris-Short Act)
+            var most_recent = GlobalData.MostRecentEachBill
+               .Where(row => row.BillID == BillUtils.Ensure4DigitNumber(Measure)).FirstOrDefault();
+            if (most_recent != null) {
+               var contents = File.ReadAllText(most_recent.LobPath);  // Need text without CRLF
+               var match_string = @"Section\s+\d+.*?Welfare\s+and\s+Institutions\s+Code";
+               MatchCollection matches = Regex.Matches(contents, match_string);
+               WIC = matches.Count > 0 ? "Yes" : "No";   // Is WIC if WIC referenced
+               LPS = "No";                               // LPS defaults to "No"
+               foreach (var match in matches) {
+                  var str = match.ToString();
+                  var section_number = Regex.Match(str, @"\d+").ToString();
+                  if (Int64.TryParse(section_number, out long numberResult)) {
+                     // If section is between 5000 and 6000, Lanternman-Petris_Short is referenced
+                     if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
+                  }
+               }
+            } else {
+               throw new ApplicationException($"BillReport.ctor({file_path}): {Measure} not in GlobalData.MostRecentEachBill");
+            }
+
          } catch (Exception ex) {
             BaseController.LogAndShow(ex.Message);
             throw;
