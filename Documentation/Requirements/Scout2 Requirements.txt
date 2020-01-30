@@ -1,0 +1,93 @@
+Background
+For the past decade or so, CCHR Sacramento has used software to evaluate bills that are before the California legislature.  There have been three versions of this software – Coyote, Circus and Scout.
+
+Coyote was designed for use by someone other than the developer.  Circus was not and the first version of Scout was not.
+
+Scout2 is intended to 
+* be usable by someone other than the developer, and
+* be extensible/repairable by someone other than the current developer.
+
+This bill-evaluation facility is being prepared for eventual hand-off.
+
+Goals & Objectives
+There are two roles with needs to be addressed.  Those roles are user and developer.
+
+User needs:
+* The software must be easily accessible.  This may mean that it is available on AWS or another platform.  It may mean that it is available for download or other distribution.  It may mean both.  That needs to be established.
+* The software should automate as much of the process as possible.
+* A user’s guide
+* A guide on evaluating legislative bills
+
+Developer needs:
+* These requirements
+* Design documentation
+* Test cases
+* Source code
+Business Case
+I won’t be here forever.
+Assumptions
+In Scope
+* Platform: Windows or AWS, depending on survey results
+* Language: C# because that’s what Scout1 is written in and because it is well known
+* Reports: On demand, creates canonical individual report for bill, allows editing
+* Reports: On demand, generates weekly report from database and individual bill reports
+Out of Scope
+* Platform: Linux, Azure, etc.
+* Language: C++, Rust, Python, etc.
+Constraints
+Constraints such as time, budget, resources, tools and environments
+
+
+Functional Requirements
+
+ID: F0001Last Edit: 26 Jan 2020Status: ProposedName: SequenceExtends:Scout implements a sequence of actions which are
+1. Download the appropriate data from the legislature site.
+2. Organize that data for processing
+3. Compute scores for each downloaded bill.
+4. Bring existing bill reports up to date, consistent with the downloaded data.
+5. Give the user an opportunity to update any bill reports that changed when bills were updated.
+6. Give the user an opportunity to create new bill reports
+7. Generate the weekly report.
+ID: NF0002Last Edit: 26 Jan 2020Status: ProposedName: Download zip fileExtends: NF0001Scout downloads the latest zip file from the legislative site http://leginfo.legislature.ca.gov/.
+ID: NF0003Last Edit: 26 Jan 2020Status: ProposedName: Organize for processingExtends: NF0001Scout some of the table data files and the latest text files from the downloaded zip file.
+ID: NF0004Last Edit: 26 Jan 2020Status: ProposedName: ScoresExtends: NF0001Scout computes scores for each downloaded bill.
+ID: NF0005Last Edit: 26 Jan 2020Status: ProposedName: Update Bill ReportsExtends: NF0001Scout brings existing bill reports up to date, consistent with the downloaded data.
+ID: NF0006Last Edit: 26 Jan 2020Status: ProposedName: User Update ReportsExtends: NF0001Scout gives the user an opportunity to update any bill reports that changed when bills were updated.
+ID: NF0007Last Edit: 26 Jan 2020Status: ProposedName: User Create ReportsExtends: NF0001Scout gives the user an opportunity to create new bill reports.
+ID: NF0008Last Edit: 26 Jan 2020Status: ProposedName: Weekly ReportsExtends: NF0001Scout generates the weekly report.
+
+
+Non-Functional Requirements
+
+ID: NF0001Last Edit: 26 Jan 2020Status: ProposedName: BillRowsExtends:Scout maintains a database table where each row describes a bill.
+ID: NF0002Last Edit: 26 Jan 2020Status: ProposedName: BillRows PersistenceExtends:The table described in NF0001 persists between Scout runs.
+
+
+
+
+Glossary of Terms
+
+
+
+
+https://simplicable.com/new/requirements
+Behavioral Requirements
+User Interfaces
+Business Requirements
+User Stories
+As a type-of-user, I want function so that goal.
+Business Rules
+If X happens then do Y
+Functional Requirements
+Consistent, cohesive, complete, atomic, verifiable
+Business Rules
+Calculations
+Process Flows
+Use Cases
+Non-Functional Requirements
+Qualities and characteristics
+Performance Requirements
+Operational Requirements
+
+0Scout2 Requirements0
+

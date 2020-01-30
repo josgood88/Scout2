@@ -1,6 +1,45 @@
 <?xml version="1.0"?>
 <Regex_Score>
+   <!--40-Value -->
    <Pair>
-      mental;\smental\s;20
+      convulsive;^convulsive;40
+   </Pair>
+   <Pair>
+      Lanterman;^Lanterman$;40
+   </Pair>
+   <Pair>
+      Lauras_Law;assisted\s+outpatient;40
+   </Pair>
+   <Pair>
+      mental;\smental\s;40
+   </Pair>
+   <Pair>
+      ect;^ECT$;40
+   </Pair>
+   <Pair>
+      epsdt;^EPSDT$;40
+   </Pair>
+
+   <!--20-Value -->
+   <Pair>
+      5150;^5150$;20
+   </Pair>
+   <Pair>
+      5152;^5152$;20
+   </Pair>
+   <Pair>
+      DSM;Diagnostic and Statistical Manual of Mental Disorders;20
+   </Pair>
+   <Pair>
+      DSM;DSM;20
+   </Pair>
+   <Pair>
+      EMHI;Mental\s+Health\s+Intervention;20
+   </Pair>
+   <Pair>
+      Lanterman;^Lanterman$;20
+   </Pair>
+   <Pair>
+      WIC;Welfare and Institutions Code;20
    </Pair>
 </Regex_Score>

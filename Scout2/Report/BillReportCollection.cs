@@ -5,6 +5,7 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Library;
 using OpenQA.Selenium.Support.UI;
 using Scout2.Sequence;
@@ -58,7 +59,7 @@ namespace Scout2.Report {
             index = line.IndexOf(':');                   // Last Action follows colon
             LastAction = line.Substring(index+1).Trim(); // At least one space before Last Action
 
-            // Find WIC (Welfare and Institutions Code) and LPS (Lanternman-Petris-Short Act)
+            // Find WIC (Welfare and Institutions Code) and LPS (Lanterman-Petris-Short Act)
             var most_recent = GlobalData.MostRecentEachBill
                .Where(row => row.BillID == BillUtils.Ensure4DigitNumber(Measure)).FirstOrDefault();
             if (most_recent != null) {
@@ -71,12 +72,12 @@ namespace Scout2.Report {
                   var str = match.ToString();
                   var section_number = Regex.Match(str, @"\d+").ToString();
                   if (Int64.TryParse(section_number, out long numberResult)) {
-                     // If section is between 5000 and 6000, Lanternman-Petris_Short is referenced
+                     // If section is between 5000 and 6000, Lanterman-Petris_Short is referenced
                      if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
                   }
                }
             } else {
-               throw new ApplicationException($"BillReport.ctor({file_path}): {Measure} not in GlobalData.MostRecentEachBill");
+               //throw new ApplicationException($"BillReport.ctor({file_path}): {Measure} not in GlobalData.MostRecentEachBill");
             }
 
          } catch (Exception ex) {
@@ -107,14 +108,14 @@ namespace Scout2.Report {
       /// </summary>
       /// <returns></returns>
       public bool IsPositionOppose() {
-         return (Position == "Oppose") ? true : false;
+         return Position.Contains("Oppose") ? true : false;
       }
       /// <summary>
       /// Answer whether our position on a bill is Modify or Monitor
       /// </summary>
       /// <returns></returns>
       public bool IsPositionModifyOrMonitor() {
-         return (Position == "Modify" || Position == "Monitor") ? true : false;
+         return Position.Contains("Modify") || Position.Contains("Monitor") ? true : false;
       }
       /// <summary>
       /// Answer whether a bill is chaptered by examining the bill's history.
@@ -122,6 +123,7 @@ namespace Scout2.Report {
       /// </summary>
       /// <returns></returns>
       public bool IsChaptered() {
+         if (Position.Contains("Chaptered")) return true;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
@@ -134,6 +136,7 @@ namespace Scout2.Report {
       /// </summary>
       /// <returns></returns>
       public bool IsDead() {
+         if (Position.Contains("Dead")) return true;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();

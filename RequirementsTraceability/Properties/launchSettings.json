@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RequirementsTraceability": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\CCHR\\Projects\\Scout2\\RequirementsTraceability\\Scout2 Requirements.txt\""
+    }
+  }
+}

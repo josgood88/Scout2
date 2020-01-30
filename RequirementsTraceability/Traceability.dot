@@ -1,0 +1,35 @@
+#
+digraph diagram
+{
+label="Requirements Graph"
+# rankdir = LR;
+# concentrate = true;
+# edge[samehead=h1, sametail=t1];
+  edge[samehead=h1];
+"NF0001" [label="Non-Functional Requirements", shape = ellipse, style = filled, color = gray]
+"" -> "NF0001"
+"SQ0001" [label="Sequence", shape = ellipse, style = filled, color = gray]
+"NF0001" -> "SQ0001"
+"SQ0002" [label="Download zip file", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0002"
+"SQ0003" [label="Download zip file", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0003"
+"SQ0004" [label="Organize for processing", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0004"
+"SQ0005" [label="Scores", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0005"
+"SQ0006" [label="Update Bill Reports", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0006"
+"SQ0007" [label="User Update Reports", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0007"
+"SQ0008" [label="User Create Reports", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0008"
+"SQ0007" [label="Weekly Reports", shape = ellipse, style = filled, color = gray]
+"SQ0001" -> "SQ0007"
+"NF0001" [label="Non-Functional Requirements", shape = ellipse, style = filled, color = gray]
+"NF0002" [label="BillRows", shape = ellipse, style = filled, color = gray]
+"NF0001" -> "NF0002"
+"NF0003" [label="BillRows Persistence", shape = ellipse, style = filled, color = gray]
+"NF0001" -> "NF0003"
+}
+
