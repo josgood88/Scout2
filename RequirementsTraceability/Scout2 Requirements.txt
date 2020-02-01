@@ -1,5 +1,5 @@
 Background
-For the past decade or so, CCHR Sacramento has used software to evaluate bills that are before the California legislature.  There have been three versions of this software – Coyote, Circus and Scout.
+For over a decade, CCHR Sacramento has used software to evaluate bills that are before the California legislature.  There have been three versions of this software – Coyote, Circus and Scout.
 
 Coyote was designed for use by someone other than the developer.  Circus was not and the first version of Scout was not.
 
@@ -7,7 +7,7 @@ Scout2 is intended to
 * be usable by someone other than the developer, and
 * be extensible/repairable by someone other than the current developer.
 
-This bill-evaluation facility is being prepared for eventual hand-off.
+Scout2 is being prepared for eventual hand-off.  As of this writing, hand-off is not imminent.
 
 Goals & Objectives
 There are two roles with needs to be addressed.  Those roles are user and developer.
@@ -40,8 +40,8 @@ Constraints such as time, budget, resources, tools and environments
 
 Functional Requirements
 
-ID: NF0001Last Edit: 29 Jan 2020Status: ProposedName: Non-Functional RequirementsExtends: 
-ID: SQ0001Last Edit: 29 Jan 2020Status: ProposedName: SequenceExtends: NF0001Scout implements a sequence of actions which are
+ID: F0001Last Edit: 29 Jan 2020Status: ProposedName: Functional RequirementsExtends: 
+ID: SQ0001Last Edit: 29 Jan 2020Status: ProposedName: SequenceExtends: F0001Scout implements a sequence of actions which are
 1. Download the appropriate data from the legislature site.
 2. Organize that data for processing
 3. Compute scores for each downloaded bill.
@@ -50,20 +50,46 @@ ID: SQ0001Last Edit: 29 Jan 2020Status: ProposedName: SequenceExtends: NF000
 6. Give the user an opportunity to create new bill reports
 7. Generate the weekly report.
 ID: SQ0002Last Edit: 29 Jan 2020Status: ProposedName: Download zip fileExtends: SQ0001Scout downloads the latest zip file from the legislative site http://leginfo.legislature.ca.gov/.
-ID: SQ0003Last Edit: 29 Jan 2020Status: ProposedName: Download zip fileExtends: SQ0001Scout downloads the latest zip file from the legislative site http://leginfo.legislature.ca.gov/.
-ID: SQ0004Last Edit: 29 Jan 2020Status: ProposedName: Organize for processingExtends: SQ0001Scout some of the table data files and the latest text files from the downloaded zip file.
-ID: SQ0005Last Edit: 29 Jan 2020Status: ProposedName: ScoresExtends: SQ0001Scout computes scores for each downloaded bill.
-ID: SQ0006Last Edit: 29 Jan 2020Status: ProposedName: Update Bill ReportsExtends: SQ0001Scout brings existing bill reports up to date, consistent with the downloaded data.
-ID: SQ0007Last Edit: 29 Jan 2020Status: ProposedName: User Update ReportsExtends: SQ0001Scout gives the user an opportunity to update any bill reports that changed when bills were updated.
-ID: SQ0008Last Edit: 29 Jan 2020Status: ProposedName: User Create ReportsExtends: SQ0001Scout gives the user an opportunity to create new bill reports.
-ID: SQ0007Last Edit: 29 Jan 2020Status: ProposedName: Weekly ReportsExtends: SQ0001Scout generates the weekly report.
+ID: SQ0003Last Edit: 29 Jan 2020Status: ProposedName: Organize for processingExtends: SQ0001Scout extracts some of the table data files and the latest text files from the downloaded zip file.
+ID: SQ0004Last Edit: 29 Jan 2020Status: ProposedName: ScoresExtends: OP0002Scout computes scores for the most recent version of each downloaded bill.
+ID: SQ0005Last Edit: 29 Jan 2020Status: ProposedName: Update Bill ReportsExtends: SQ0001Scout brings existing bill reports up to date, consistent with the downloaded data.
+ID: SQ0006Last Edit: 29 Jan 2020Status: ProposedName: User Update ReportsExtends: SQ0001Scout gives the user an opportunity to update any bill reports that changed when bills were updated.
+ID: SQ0007Last Edit: 29 Jan 2020Status: ProposedName: User Create ReportsExtends: SQ0001Scout gives the user an opportunity to create new bill reports.
+ID: SQ0009Last Edit: 29 Jan 2020Status: ProposedName: Weekly ReportsExtends: SQ0001Scout generates the weekly report.
+ID: DZ0001Last Edit: 30 Jan 2020Status: ProposedName: Correct Zip FileExtends: SQ0002Select the zip file with the latest date.
+ID: DZ0002Last Edit: 30 Jan 2020Status: ProposedName: Zip File DestinationExtends: SQ0002Specified at design time.
+ID: DZ0003Last Edit: 30 Jan 2020Status: ProposedName: On Starting DownloadExtends: SQ0002Show progress by indicating that the download has started.
+ID: DZ0004Last Edit: 30 Jan 2020Status: ProposedName: On Completing DownloadExtends: SQ0002Show progress by indicating that the download has comleted.
+ID: OP0001Last Edit: 30 Jan 2020Status: ProposedName: No Data Carry-OverExtends: SQ0003Expect each new Legislature data file to contain arbitrary changes in the data files.  (The files are accurate, but the same revision of a bill may be in a different .lob file).
+ID: OP0002Last Edit: 30 Jan 2020Status: ProposedName: Replace Text FilesExtends: OP0003Replace all bill text files with fresh content from downloaded zip file.
+ID: OP0003Last Edit: 31 Jan 2020Status: ProposedName: Select Most Recent Bill VersionsExtends: OP0001Replace all bill table file with fresh content from downloaded zip file.
+ID: OP0004Last Edit: 31 Jan 2020Status: ProposedName: Replace Table FilesExtends: OP0001Replace all bill table file with fresh content from downloaded zip file.
 
 
 Non-Functional Requirements
 
 ID: NF0001Last Edit: 29 Jan 2020Status: ProposedName: Non-Functional RequirementsExtends:
 ID: NF0002Last Edit: 29 Jan 2020Status: ProposedName: BillRowsExtends: NF0001Scout maintains a database table where each row describes a bill.
-ID: NF0003Last Edit: 29 Jan 2020Status: ProposedName: BillRows PersistenceExtends: NF0001The table described in “BillRows” persists between Scout runs.
+ID: NF0003Last Edit: 29 Jan 2020Status: ProposedName: BillRows PersistenceExtends: NF0002The table described in “BillRows” persists between Scout runs.
+ID: BR0001Last Edit: 30 Jan 2020Status: ProposedName: From BILL_TBL.datExtends: NF0002Bill_Tbl.dat (from zip file) contains several items (e.g., Measure, Version, Location, etc.) that are useful in generating or updating an individual bill report.
+ID: BR0002Last Edit: 30 Jan 2020Status: ProposedName: Position TakenExtends: NF0002When updating a bill, the position being taken on the bill is available from the extant bill report.
+ID: IR0001Last Edit: 31 Jan 2020Status: ProposedName: Reports on Individual BillsExtends: NF0001Reports are generated on some individual bills.  These requirements do not specify the criteria for generating a report – the decision is up to the person writing the report.
+ID: IR0002Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, TitleExtends: IR0001The report has a title giving the measure ID, e.g. AB-1,  authors(s) and bill title.
+ID: IR0003Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, SummaryExtends: IR0001The report has a section summarizing the bill and adding any observations that may improve the reader’s understanding of the bill and/or its context.
+ID: IR0004Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, Short SummaryExtends: IR0001The report has a short summary, preferably a single line, used to characterize the bill in Scout’s weekly report.
+ID: IR0005Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, PositionExtends: IR0001The report has a recommended position, along with a short explanation of why that position.
+ID: IR0006Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, StatusExtends: IR0001The report has a status section that gives the bill’s current location in the approval pipeline, the last action performed on the bill, the vote needed to pass (Majority, 2/3), whether the bill is an appropriation bill, whether the bill must pass a fiscal committee, and whether the bill mandates a local program.
+ID: IR0007Last Edit: 31 Jan 2020Status: ProposedName: Individual Report, HistoryExtends: IR0001The report shows the bill’s history, from the time it was introduced to the present time.
+ID: WR0001Last Edit: 31 Jan 2020Status: ProposedName: Weekly ReportsExtends: NF0001Scout generates a Weekly Report
+ID: WR0002Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, New This WeekExtends: WR0001The Weekly Report contains a section showing CCHR-of-interest bills that have appeared this week.
+ID: WR0003Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Highest PriorityExtends: WR0001The Weekly Report contains a section showing the current state of the highest priority CCHR-of-interest bills.
+ID: WR0004Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, changes This WeekExtends: WR0001The Weekly Report contains a section showing the CCHR-of-interest bills that have experienced change during the past week.
+ID: WR0005Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Upcoming Committee HearingsExtends: WR0001The Weekly Report contains a section showing those upcoming committee meetings which are of CCHR interest.
+ID: WR0006Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Bills OpposedExtends: WR0001The Weekly Report contains a section showing the bills currently being opposed.
+ID: WR0007Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Bills MonitoredExtends: WR0001The Weekly Report contains a section showing the bills currently being monitored.
+ID: WR0008Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Bills ChapteredExtends: WR0001The Weekly Report contains a section showing the CCHR-of-interest bills that have chaptered this biennium.
+ID: WR0009Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, Remaining Legislature ScheduleExtends: WR0001The Weekly Report shows the legislature schedule for the remainder of the year.
+ID: WR0010Last Edit: 31 Jan 2020Status: ProposedName: Weekly Reports, DefinitionsExtends: WR0001The Weekly Report contains a section defining various legislative (and related) terms.
 
 
 

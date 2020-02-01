@@ -8,6 +8,7 @@ namespace RequirementsTraceability {
          var sb = new StringBuilder();
          Prolog(ref sb);
          MainSection(ref sb, requirements);
+         SpecialLinks(ref sb);      // Ways of controlling the graph, fragil
          Epilog(ref sb);
 
          var directory = Path.GetDirectoryName(input_file_path);
@@ -23,10 +24,14 @@ namespace RequirementsTraceability {
          sb.AppendLine("digraph diagram");
          sb.AppendLine("{");
          sb.AppendLine("label=\"Requirements Graph\"");
-         sb.AppendLine("# rankdir = LR;");
+         sb.AppendLine("  rankdir = LR;");
          sb.AppendLine("# concentrate = true;");
          sb.AppendLine("# edge[samehead=h1, sametail=t1];");
          sb.AppendLine("  edge[samehead=h1];");
+      }
+
+      private static void SpecialLinks(ref StringBuilder sb) {
+         sb.AppendLine("\"F0001\" -> \"NF0001\" [style=invis]");
       }
 
       private static void Epilog(ref StringBuilder sb) {
@@ -35,9 +40,13 @@ namespace RequirementsTraceability {
 
       private static void MainSection(ref StringBuilder sb, List<Node> requirements) {
          foreach (var node in requirements) {
-            sb.AppendLine($"\"{node.ID.Trim()}\" [label=\"{node.Title.Trim()}\", shape = ellipse, style = filled, color = gray]");
+            sb.AppendLine($"\"{node.ID.Trim()}\" [label=\"{node.ID.Trim()}\n{node.Title.Trim()}\", shape = rectangle, style = filled, color = gray]");
             foreach (var link in node.Extends) {
-               sb.AppendLine($"\"{link.Parent.Trim()}\" -> \"{link.Child.Trim()}\"");
+               if (string.IsNullOrEmpty(link.Parent.Trim())) {
+                  // No edge because no parent
+               } else {
+                  sb.AppendLine($"\"{link.Parent.Trim()}\" -> \"{link.Child.Trim()}\"");
+               }
             }
          }
       }

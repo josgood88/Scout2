@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
+using OpenQA.Selenium.Support.UI;
 using Scout2.Sequence;
 using Scout2.Utility;
 
@@ -31,7 +32,7 @@ namespace Scout2.Report {
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
             NewThisWeek(reports, past_week, sw);
-            HighestPriority(sw);
+            HighestPriority(reports, sw);
             ChangesThisWeek(reports, past_week, sw);
             UpcomingCommitteeHearingsOfInterest(sw);
             Oppose(sw, reports);
@@ -79,11 +80,14 @@ namespace Scout2.Report {
          EndTable(sw);
       }
 
-      private void HighestPriority(StreamWriter sw) {
+      private void HighestPriority(BillReportCollection reports, StreamWriter sw) {
          StartTable(sw, "Highest Priority Bills");
          foreach (string bill in Config.Instance.HighestPriority) {
-            string path = $"{Path.Combine(Config.Instance.HtmlFolder, bill)}.html";
-            ReportOneBill(sw, new BillReport(path));
+            var measure = BillUtils.EnsureDashAndNoLeadingZeros(bill);
+            var report = (from item in reports where (item.Measure == measure) select item).FirstOrDefault();
+            if (report != null) {
+               ReportOneBill(sw, report);
+            }
          }
          EndTable(sw);
       }
@@ -173,8 +177,8 @@ namespace Scout2.Report {
       private void ReportOneBill(StreamWriter sw, BillReport report) {
          sw.WriteLine("<tr>");
          sw.WriteLine($"<td>{report.Measure} {report.Title}</td>");
-         sw.WriteLine($"  <td>{report.WIC??"No"}</td>");
-         sw.WriteLine($"  <td>{report.LPS??"No"}</td>");
+         sw.WriteLine($"  <td>{report.WIC}</td>");
+         sw.WriteLine($"  <td>{report.LPS}</td>");
          sw.WriteLine($"  <td>{report.Position??"Null"}</td>");
          sw.WriteLine($"  <td>{report.OneLiner}</td>");
          sw.WriteLine($"  <td>{report.LastAction}</td>");

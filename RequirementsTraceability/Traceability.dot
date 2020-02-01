@@ -2,34 +2,125 @@
 digraph diagram
 {
 label="Requirements Graph"
-# rankdir = LR;
+  rankdir = LR;
 # concentrate = true;
 # edge[samehead=h1, sametail=t1];
   edge[samehead=h1];
-"NF0001" [label="Non-Functional Requirements", shape = ellipse, style = filled, color = gray]
-"" -> "NF0001"
-"SQ0001" [label="Sequence", shape = ellipse, style = filled, color = gray]
-"NF0001" -> "SQ0001"
-"SQ0002" [label="Download zip file", shape = ellipse, style = filled, color = gray]
+"F0001" [label="F0001
+Functional Requirements", shape = rectangle, style = filled, color = gray]
+"SQ0001" [label="SQ0001
+Sequence", shape = rectangle, style = filled, color = gray]
+"F0001" -> "SQ0001"
+"SQ0002" [label="SQ0002
+Download zip file", shape = rectangle, style = filled, color = gray]
 "SQ0001" -> "SQ0002"
-"SQ0003" [label="Download zip file", shape = ellipse, style = filled, color = gray]
+"SQ0003" [label="SQ0003
+Organize for processing", shape = rectangle, style = filled, color = gray]
 "SQ0001" -> "SQ0003"
-"SQ0004" [label="Organize for processing", shape = ellipse, style = filled, color = gray]
-"SQ0001" -> "SQ0004"
-"SQ0005" [label="Scores", shape = ellipse, style = filled, color = gray]
+"SQ0004" [label="SQ0004
+Scores", shape = rectangle, style = filled, color = gray]
+"OP0002" -> "SQ0004"
+"SQ0005" [label="SQ0005
+Update Bill Reports", shape = rectangle, style = filled, color = gray]
 "SQ0001" -> "SQ0005"
-"SQ0006" [label="Update Bill Reports", shape = ellipse, style = filled, color = gray]
+"SQ0006" [label="SQ0006
+User Update Reports", shape = rectangle, style = filled, color = gray]
 "SQ0001" -> "SQ0006"
-"SQ0007" [label="User Update Reports", shape = ellipse, style = filled, color = gray]
+"SQ0007" [label="SQ0007
+User Create Reports", shape = rectangle, style = filled, color = gray]
 "SQ0001" -> "SQ0007"
-"SQ0008" [label="User Create Reports", shape = ellipse, style = filled, color = gray]
-"SQ0001" -> "SQ0008"
-"SQ0007" [label="Weekly Reports", shape = ellipse, style = filled, color = gray]
-"SQ0001" -> "SQ0007"
-"NF0001" [label="Non-Functional Requirements", shape = ellipse, style = filled, color = gray]
-"NF0002" [label="BillRows", shape = ellipse, style = filled, color = gray]
+"SQ0009" [label="SQ0009
+Weekly Reports", shape = rectangle, style = filled, color = gray]
+"SQ0001" -> "SQ0009"
+"DZ0001" [label="DZ0001
+Correct Zip File", shape = rectangle, style = filled, color = gray]
+"SQ0002" -> "DZ0001"
+"DZ0002" [label="DZ0002
+Zip File Destination", shape = rectangle, style = filled, color = gray]
+"SQ0002" -> "DZ0002"
+"DZ0003" [label="DZ0003
+On Starting Download", shape = rectangle, style = filled, color = gray]
+"SQ0002" -> "DZ0003"
+"DZ0004" [label="DZ0004
+On Completing Download", shape = rectangle, style = filled, color = gray]
+"SQ0002" -> "DZ0004"
+"OP0001" [label="OP0001
+No Data Carry-Over", shape = rectangle, style = filled, color = gray]
+"SQ0003" -> "OP0001"
+"OP0002" [label="OP0002
+Replace Text Files", shape = rectangle, style = filled, color = gray]
+"OP0003" -> "OP0002"
+"OP0003" [label="OP0003
+Select Most Recent Bill Versions", shape = rectangle, style = filled, color = gray]
+"OP0001" -> "OP0003"
+"OP0004" [label="OP0004
+Replace Table Files", shape = rectangle, style = filled, color = gray]
+"OP0001" -> "OP0004"
+"NF0001" [label="NF0001
+Non-Functional Requirements", shape = rectangle, style = filled, color = gray]
+"NF0002" [label="NF0002
+BillRows", shape = rectangle, style = filled, color = gray]
 "NF0001" -> "NF0002"
-"NF0003" [label="BillRows Persistence", shape = ellipse, style = filled, color = gray]
-"NF0001" -> "NF0003"
+"NF0003" [label="NF0003
+BillRows Persistence", shape = rectangle, style = filled, color = gray]
+"NF0002" -> "NF0003"
+"BR0001" [label="BR0001
+From BILL_TBL.dat", shape = rectangle, style = filled, color = gray]
+"NF0002" -> "BR0001"
+"BR0002" [label="BR0002
+Position Taken", shape = rectangle, style = filled, color = gray]
+"NF0002" -> "BR0002"
+"IR0001" [label="IR0001
+Reports on Individual Bills", shape = rectangle, style = filled, color = gray]
+"NF0001" -> "IR0001"
+"IR0002" [label="IR0002
+Individual Report, Title", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0002"
+"IR0003" [label="IR0003
+Individual Report, Summary", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0003"
+"IR0004" [label="IR0004
+Individual Report, Short Summary", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0004"
+"IR0005" [label="IR0005
+Individual Report, Position", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0005"
+"IR0006" [label="IR0006
+Individual Report, Status", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0006"
+"IR0007" [label="IR0007
+Individual Report, History", shape = rectangle, style = filled, color = gray]
+"IR0001" -> "IR0007"
+"WR0001" [label="WR0001
+Weekly Reports", shape = rectangle, style = filled, color = gray]
+"NF0001" -> "WR0001"
+"WR0002" [label="WR0002
+Weekly Reports, New This Week", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0002"
+"WR0003" [label="WR0003
+Weekly Reports, Highest Priority", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0003"
+"WR0004" [label="WR0004
+Weekly Reports, changes This Week", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0004"
+"WR0005" [label="WR0005
+Weekly Reports, Upcoming Committee Hearings", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0005"
+"WR0006" [label="WR0006
+Weekly Reports, Bills Opposed", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0006"
+"WR0007" [label="WR0007
+Weekly Reports, Bills Monitored", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0007"
+"WR0008" [label="WR0008
+Weekly Reports, Bills Chaptered", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0008"
+"WR0009" [label="WR0009
+Weekly Reports, Remaining Legislature Schedule", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0009"
+"WR0010" [label="WR0010
+Weekly Reports, Definitions", shape = rectangle, style = filled, color = gray]
+"WR0001" -> "WR0010"
+"F0001" -> "NF0001" [style=invis]
 }
 

@@ -37,7 +37,19 @@ namespace Scout2.Utility {
       /// <param name="bill">Bill house & measure, e.g. AB123</param>
       /// <returns>Bill house & measure, no-leading-zeros measure ensured</returns>
       public static string EnsureNoLeadingZerosBill(string bill) { return Regex.Replace(NoDash(bill), "B0+", "B"); }
-      
+
+      /// <summary>
+      /// Ensure the Measure/BillID has no leading zeroes, e.g. AB-123 instead of AB-0123
+      /// and that the Measure/BillID has includes a dash.
+      /// </summary>
+      /// <param name="bill">Bill house & measure, e.g. AB123</param>
+      /// <returns>Bill house & measure, 4-digit measure ensured</returns>
+      public static string EnsureDashAndNoLeadingZeros(string bill) {
+         var no_leading_zeros = EnsureNoLeadingZerosBill(bill);
+         ExtractHouseNumber(NoDash(no_leading_zeros), out string house, out string number);
+         return $"{house}-{number}";
+      }
+
       /// <summary>
       /// Extract house and number from bill id, returning house and number through argument references
       /// </summary>

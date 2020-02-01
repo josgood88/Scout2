@@ -99,7 +99,7 @@ namespace Scout2.Sequence {
             bill_row.CurrentHouse  = item.Current_house;         // e.g. Assembly
             bill_row.CurrentStatus = item.Current_status;        // e.g. In Committee Process
 
-            // Obtain the author, title, lob file path, and positive/negataive scores from the profile for this bill
+            // Obtain the author, title, lob file path, and positive/negative scores from the profile for this bill
             var four_digit_billid = BillUtils.Ensure4DigitNumber(bill_row.Bill);
             var profile = (from x in profiles where x.Identifier.BillID == four_digit_billid select x).First();
             if (profile != null) {

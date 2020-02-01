@@ -26,7 +26,7 @@ namespace Scout2.Report {
          Append_If("      <tr><td>Jan. 20 </td><td>Martin Luther King, Jr.System.Windows.Forms.Day.</td></tr>");
          Append_If("      <tr><td>Jan. 24 </td><td>Last day for any committee to hear and report to the floor bills introduced in that house in the odd-numbered year(J.R. 61(b)(2)).Last day to submit bill requests to the Office of Legislative Counsel.</td></tr>");
          Append_If("      <tr><td>Jan. 31 </td><td>Last day for each house to pass bills introduced in that house in the odd-numbered year(Art.IV, Sec. 10(c)), (J.R. 61(b)(3)).</td></tr>");
-         Append_If("      <tr><td>Feb. 17 </td><td>Presidents' System.Windows.Forms.Day.</td></tr>");
+         Append_If("      <tr><td>Feb. 17 </td><td>Presidents' Day.</td></tr>");
          Append_If("      <tr><td>Feb. 21 </td><td>Last day for bills to be introduced(J.R. 61(b)(4)), (J.R. 54(a)).</td></tr>");
          Append_If("      <tr><td>Mar. 27 </td><td>Cesar Chavez Day observed</td></tr>");
          Append_If("      <tr><td>Apr. 2  </td><td>Spring Recess begins upon adjournment of this day's session(J.R. 51(b)(1)). </td></tr>");

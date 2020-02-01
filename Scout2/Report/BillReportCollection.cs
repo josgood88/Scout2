@@ -68,12 +68,14 @@ namespace Scout2.Report {
                MatchCollection matches = Regex.Matches(contents, match_string);
                WIC = matches.Count > 0 ? "Yes" : "No";   // Is WIC if WIC referenced
                LPS = "No";                               // LPS defaults to "No"
-               foreach (var match in matches) {
-                  var str = match.ToString();
-                  var section_number = Regex.Match(str, @"\d+").ToString();
-                  if (Int64.TryParse(section_number, out long numberResult)) {
-                     // If section is between 5000 and 6000, Lanterman-Petris_Short is referenced
-                     if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
+               if (WIC == "Yes") {
+                  foreach (var match in matches) {
+                     var str = match.ToString();
+                     var section_number = Regex.Match(str, @"\d+").ToString();
+                     if (Int64.TryParse(section_number, out long numberResult)) {
+                        // If section is between 5000 and 6000, Lanterman-Petris_Short is referenced
+                        if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
+                     }
                   }
                }
             } else {
@@ -161,6 +163,9 @@ namespace Scout2.Report {
       public BillReportCollection(string _report_folder) {
          report_folder = _report_folder;
          reports = new List<BillReport>();
+         if (GlobalData.MostRecentEachBill.Count == 0) { // True if starting later in sequence than "Import Into Database"
+            GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
+         }
          List<string> files = Directory.GetFiles(report_folder,"*.html").ToList();
          foreach (var file in files) {
             if (!file.Contains("WeeklyNewsMonitoredBills")) reports.Add(new BillReport(file));
