@@ -104,7 +104,7 @@ namespace Scout2.Sequence {
          string bill_id = row.Bill;
          string fiscal = bv_row.FiscalCommittee;
          string house = history.First().PrimaryLocation;
-         string last_action = history.First().Action;
+         string last_action = FindLastAction(row);
          string location = location_code_row == null ? string.Empty : location_code_row.Description;
          string local_pgm = bv_row.LocalProgram;
          string number = row.MeasureNum.TrimStart('0');
@@ -205,6 +205,28 @@ namespace Scout2.Sequence {
          } else {
             PreviousReport.From(path, summary, position);
          }
+      }
+      /// <summary>
+      /// Before a bill is chaptered, the last action is the .First() line in the history.
+      /// When a bill is chaptered, its history may not end with the "Chaptered by Secretary of State" because
+      /// usually multiple actions take place on the same day.  Therefore, for a chaptered bill, report
+      /// the line containing "Chaptered by Secretary of State".  It may not be the first line in the history.
+      /// </summary>
+      /// <param name="row">BillRow describing the bill being processed</param>
+      /// <returns></returns>
+      public static string FindLastAction(BillRow row) {
+         string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
+         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
+         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
+
+         string result = "Could not find last action.";
+         if (row.MeasureState != "Chaptered") {
+            result = history.First().Action;
+         } else {
+            var want_this = history.Find(x => x.Action.Contains("Chaptered by Secretary of State"));
+            result = want_this.Action;
+         }
+         return result;
       }
    }
 }

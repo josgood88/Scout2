@@ -143,6 +143,9 @@ namespace Scout2.Report {
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
          var line = lines.Find(x => x.Contains("This bill is dead"));
+         if (line == default(string)) {
+            line = lines.Find(x => x.Contains("Vetoed by Governor"));
+         }
          return (line != null) ? true : false;
       }
    }

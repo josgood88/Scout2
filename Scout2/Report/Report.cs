@@ -31,15 +31,16 @@ namespace Scout2.Report {
          var past_week = PastWeek();
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
-            NewThisWeek(reports, past_week, sw);
-            HighestPriority(reports, sw);
-            ChangesThisWeek(reports, past_week, sw);
-            UpcomingCommitteeHearingsOfInterest(sw);
-            Oppose(sw, reports);
-            Modify_Monitor(sw, reports);
-            Chaptered(sw, reports);
-            RemainingLegislativeSchedule(sw);
-            Definitions(sw);
+            NewThisWeek(reports, past_week, sw);      // New bills of interest this week
+            HighestPriority(reports, sw);             // Our highest priority bills
+            ChangesThisWeek(reports, past_week, sw);  // Changes this week in bills of interest
+            UpcomingCommitteeHearingsOfInterest(sw);  // Committee hearings for bills of interest
+            Oppose(sw, reports);                      // Bills for which our position is Oppose
+            Modify_Monitor(sw, reports);              // Bills for which our position is Monitor or Modify
+            Chaptered(sw, reports);                   // Bills of interest which chaptered this biennium
+            Dead(sw, reports);                        // Bills of interest which died this biennium
+            RemainingLegislativeSchedule(sw);         // What's left on this year's schedule
+            Definitions(sw);                          // Definitions of terms
             End(sw);
          }
       }
@@ -66,7 +67,7 @@ namespace Scout2.Report {
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
       private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
-         StartTable(sw,"New This Week");
+         StartTable(sw,"New Of-Interest Bills This Week");
          foreach (var report in reports) {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             string contents = File.ReadAllText(path);
@@ -98,7 +99,7 @@ namespace Scout2.Report {
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
       private void ChangesThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
-         StartTable(sw, "Changes This Week");
+         StartTable(sw, "Changes This Week in Bills Of Interest");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
 
@@ -153,13 +154,23 @@ namespace Scout2.Report {
       }
 
       private void Chaptered(StreamWriter sw, BillReportCollection reports) {
-         StartTable(sw, "Chaptered");
+         StartTable(sw, "Of-Interest Bills Chaptered This Biennium");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
             if (report.IsChaptered()) ReportOneBill(sw, report);
          }
          EndTable(sw);
       }
+
+      private void Dead(StreamWriter sw, BillReportCollection reports) {
+         StartTable(sw, "Of-Interest Bills Dead This Biennium");
+         foreach (var report in reports) {
+            if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+            if (report.IsDead()) ReportOneBill(sw, report);
+         }
+         EndTable(sw);
+      }
+
 
       private void RemainingLegislativeSchedule(StreamWriter sw) {
          sw.WriteLine(RemainingSchedule.AsString());

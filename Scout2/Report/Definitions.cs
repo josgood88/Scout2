@@ -8,7 +8,7 @@ namespace Scout2.Report {
          sb.Append("      <caption>Definitions, (from California code when applicable)</caption>");
          sb.Append("      <tr>");
          sb.Append("         <th>Term</th>");
-         sb.Append("         <th></th>");
+         sb.Append("         <th>Code</th>");
          sb.Append("         <th>Definition</th>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
@@ -65,6 +65,14 @@ namespace Scout2.Report {
          sb.Append("         <td></td>");
          sb.Append("         <td>");
          sb.Append("            Bill Analysis Available (legislative analyst has written analysis of the bill). See NBA.");
+         sb.Append("         </td>");
+         sb.Append("      </tr>");
+         sb.Append("      <tr>");
+         sb.Append("         <td>Biennium</td>");
+         sb.Append("         <td></td>");
+         sb.Append("         <td>");
+         sb.Append("            a period of two years.  The California legislature works in periods of two years.  ");
+         sb.Append("            The first year is an odd year, such as 2019.  All bills will pass or fail by the end of the even year.");
          sb.Append("         </td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
