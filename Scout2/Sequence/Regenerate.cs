@@ -14,11 +14,8 @@ namespace Scout2.Sequence {
          var start_time = DateTime.Now;
          LogAndDisplay(form1.txtRegenProgress, "Updating bill history on individual bill reports.");
          try {
-            string bill = string.Empty;
-            List<string> bills = new List<string>();
-            if (bill == string.Empty) 
-               bills = form1.IsRegenerateAll() ? SelectAllBills () : RecognizeChangedBills();
-            else bills.Add(bill);
+            //List<string> bills = form1.IsRegenerateAll() ? SelectAllBills () : RecognizeChangedBills();
+            List<string> bills = SelectAllBills();
             if (bills.Count > 0) {
                foreach (var item in bills) {
                   (new IndividualReport.IndividualReport(verbose, update)).Run(item);

@@ -23,7 +23,7 @@ namespace Scout2.Sequence {
                update_form.AddRows(updated_bills);
                update_form.ShowDialog();
             } else {
-               MessageBox.Show("No bills have changed.  There is nothing to update");
+               //MessageBox.Show("No bills have changed.  There is nothing to update");
             }
          } catch (Exception ex) {
             LogAndThrow($"UpdateExistingReports.Run: {ex.Message}.");

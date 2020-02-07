@@ -2,25 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Library;
 using Library.Database;
 using Scout2.Report;
 
 namespace Scout2.Sequence {
-   //public class UpdateNeeded {
-   //   public string Measure { private set; get; }
-   //   public string Position { private set; get; }
-   //   public string BillLastAction { private set; get; }
-   //   public string HistoryLastAction { private set; get; }
-   //   public UpdateNeeded(string a, string b, string c, string d) {
-   //      Measure = a; Position = b; BillLastAction = c; HistoryLastAction = d;
-   //   }
-   //}
-
    public class Changes : BaseController {
       ///
       /// Collect all bills that have been updated since the last report written on that bill.
@@ -33,17 +20,6 @@ namespace Scout2.Sequence {
             var history = BillHistoryRow.RowSet();
             var individual_bill_reports = new BillReportCollection(Config.Instance.HtmlFolder);
 
-            // Collect those bills that are new.
-            //var new_bills = new List<UpdateNeeded>();
-            //var line = GlobalData.BillRows.Find(x => x.CurrentHouse=="AB" && x.MeasureNum=="8");
-            //foreach (var bill in individual_bill_reports) {
-            //   if (IsUpdated(bill, history, out string history_latest_action)) {
-            //      string last_action_date = ExtractLeadingDate(bill.LastAction);
-            //      var is_new_bill = $"NEW Bill {history_latest_action}";
-            //      new_bills.Add(new UpdateNeeded(bill.Measure, bill.Position, last_action_date, is_new_bill));
-            //   }
-            //}
-
             // Collect those bills that have been updated since the last report written on that bill.
             var updated_bills = new List<ChangedBillForDisplay>();
             foreach (var bill in individual_bill_reports) {
@@ -54,7 +30,6 @@ namespace Scout2.Sequence {
             }
             update_form.PrepareDataGridView();
             update_form.AddRows(updated_bills);
-            //update_form.AddRows(new_bills);
             update_form.ShowDialog();
          } catch (Exception ex) {
             LogAndThrow($"BillUpdates.Run: {ex.Message}.");

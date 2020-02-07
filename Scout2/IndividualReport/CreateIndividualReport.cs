@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Library;
 using Library.Database;
+using Scout2.Sequence;
 
 namespace Scout2.IndividualReport {
    public class CreateIndividualReport {
@@ -21,7 +22,7 @@ namespace Scout2.IndividualReport {
          string bill_id       = row.Bill;
          string fiscal        = bv_row.FiscalCommittee;
          string house         = history.First().PrimaryLocation;
-         string last_action   = history.First().Action;
+         string last_action   = CreateNewReports.FindLastAction(row);
          string location      = location_code_row == null ? string.Empty : location_code_row.Description;
          string local_pgm     = bv_row.LocalProgram;
          string number        = row.MeasureNum.TrimStart('0');
