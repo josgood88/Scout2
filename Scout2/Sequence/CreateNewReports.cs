@@ -32,7 +32,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"CreateNewReports.Run: {ex.Message}."); //
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtCreatesProgress, $"Through with bill report creation. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtCreatesProgress, $"Through with bill report creation. Elapsed Time: {elapsed.ToString("c")} ");
       }
       /// <summary>
       /// Bills with no recorded positions are considered bills with no reports.

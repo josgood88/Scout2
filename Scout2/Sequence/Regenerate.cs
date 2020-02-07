@@ -27,7 +27,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"Regenerate.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtRegenProgress, $"Bill reports re-generation complete. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtRegenProgress, $"Bill reports re-generation complete. Elapsed Time: {elapsed.ToString("c")} ");
       }
 
       private List<string> RecognizeChangedBills() {

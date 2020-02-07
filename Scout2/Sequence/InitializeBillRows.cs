@@ -39,7 +39,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"InitializeBillRows.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtImportProgress, $"BillRows initialization complete. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtImportProgress, $"BillRows initialization complete. Elapsed Time: {elapsed.ToString("c")} ");
       }
       /// <summary>
       /// Wrap Bill_Identifiers into BillProfiles, in preparation for ranking the bills

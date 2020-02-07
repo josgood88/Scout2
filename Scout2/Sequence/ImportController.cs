@@ -31,7 +31,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"ZipController.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtImportProgress, $"Data has been imported from legislative files to the local database. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtImportProgress, $"Data has been imported from legislative files to the local database. Elapsed Time: {elapsed.ToString("c")} ");
       }
    }
 }

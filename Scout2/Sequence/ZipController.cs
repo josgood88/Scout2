@@ -25,7 +25,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"ZipController.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtZipProgress, $"Extraction complete. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtZipProgress, $"Extraction complete. Elapsed Time: {elapsed.ToString("c")} ");
       }
 
       /// Remove bill analysis files from the download folder. 

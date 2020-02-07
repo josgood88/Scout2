@@ -227,12 +227,13 @@ namespace Scout2.Report {
       private DateRange PastWeek() {
          DateRange result = new DateRange();
          result.end = MiscUtils.NextMonday();
+         result.end = new DateTime(result.end.Year, result.end.Month, result.end.Day);
          result.start = result.end - TimeSpan.FromDays(7);
          return result;
       }
 
       private DateTime DateFromLastAction(BillReport report) {
-         var text_date = Regex.Match(report.LastAction, @"^\w+.\s+\w+.\s+\w+").ToString();
+         var text_date = Regex.Match(report.LastAction, @"^\w+\s+\w+\s+\w+").ToString();
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
       }
    }

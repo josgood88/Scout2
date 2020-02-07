@@ -2,10 +2,11 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Library {
    public class HttpClientDownloadWithProgress : IDisposable {
-      private const int BUFFER_SIZE = 8192;
+      private const int BUFFER_SIZE = 32*1024;
       private readonly string _downloadUrl;
       private readonly string _destinationFilePath;
       private HttpClient _httpClient;
@@ -18,17 +19,23 @@ namespace Library {
       }
 
       public async Task StartDownload() {
-         
-         _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) /*TimeSpan.FromDays(1)*/ };
-         using (var response = await _httpClient.GetAsync(_downloadUrl, HttpCompletionOption.ResponseHeadersRead))
-            await DownloadFileFromHttpResponseMessage(response);
+         try {
+            _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
+            using (var response = await _httpClient.GetAsync(_downloadUrl, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false)) {
+               await DownloadFileFromHttpResponseMessage(response);
+            }
+         } catch (Exception ex) {
+            MessageBox.Show(ex.Message, "HttpClientDownloadWithProgress exception");
+            throw;
+         }
       }
 
       private async Task DownloadFileFromHttpResponseMessage(HttpResponseMessage response) {
          response.EnsureSuccessStatusCode();
          var totalBytes = response.Content.Headers.ContentLength;
-         using (var contentStream = await response.Content.ReadAsStreamAsync())
+         using (var contentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false)) {
             await ProcessContentStream(totalBytes, contentStream);
+         }
       }
 
       private async Task ProcessContentStream(long? totalDownloadSize, Stream contentStream) {
@@ -39,13 +46,13 @@ namespace Library {
 
          using (var fileStream = new FileStream(_destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, BUFFER_SIZE, true)) {
             do {
-               var bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+               var bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
                if (bytesRead == 0) {
                   isMoreToRead = false;
                   TriggerProgressChanged(totalDownloadSize, totalBytesRead);
                   continue;
                }
-               await fileStream.WriteAsync(buffer, 0, bytesRead);
+               await fileStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
                totalBytesRead += bytesRead;
                readCount += 1;
                if (readCount % 100 == 0)

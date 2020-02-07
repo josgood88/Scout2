@@ -48,11 +48,7 @@ namespace Scout2.Sequence {
             while (seq != SeqPoint.complete) {        // While the main sequence is not complete
                switch (seq) {                         // Perform the current step in the sequence
                   case SeqPoint.importFromLegSite:
-                     form.TopMost = true;             // Don't let Selenium hide this program's form
-                     Task<int> import = new LegSiteController().Run(form);  // Download the latest leginfo zip file, which is a zipped file.
-                     form.TopMost = false;            // For now.  Remove once download actually working
-                     import.Wait();                   // Wait for the download to complete
-                     form.TopMost = false;            // Selenium dialog is gone, so don't need topmost any more
+                     new LegSiteController().Run(form);  // Download the latest leginfo zip file, which is a zipped file.
                      seq++;
                      break;
                   case SeqPoint.extractFromZip:

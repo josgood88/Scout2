@@ -12,38 +12,43 @@ namespace Scout2.Sequence {
    public partial class LegSiteController : BaseController {
       private IWebDriver Driver { get; set; }
 
-      public async Task<int> Run(Form1 form1) {
-         LogThis($"Connecting to {Config.Instance.LegSite}.");
+      public void Run(Form1 form1) {
          var start_time = DateTime.Now;
-         try {
-            InitializeChrome();
-            FindLastModified().Click();         // Sort zip files in ascending date order
-            FindLastModified().Click();         // Sort zip files in descending date order (stale fields, hence call again)
-            var rows = ViewHrefs().ToList();    // Collect hrefs of the available zip files
-            using (var etr = rows.GetEnumerator()) {
-               bool found_zip = false;
-               while (!found_zip) {
-                  if (!etr.MoveNext()) {
-                     LogAndThrow("LegsiteController.Run failed to find any pubinfo zip files.");
-                  } else if (etr.Current != null) {
-                     if (etr.Current.Text.Contains("pubinfo_daily")) {
-                        found_zip = true;
-                        Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
-                        //await DownloadLegSiteFileAsync(etr.Current.Text, form1);
-                        MessageBox.Show($"Please download {etr.Current.Text}");
+         form1.TopMost = true;             // Don't let Selenium hide this program's form
+         LogAndDisplay(form1.txtLegSiteCompletion, "Downloading latest zip file.");
+
+         Task t = Task.Run(async () => {
+            LogThis($"Connecting to {Config.Instance.LegSite}.");
+            try {
+               InitializeChrome();
+               FindLastModified().Click();         // Sort zip files in ascending date order
+               FindLastModified().Click();         // Sort zip files in descending date order (stale fields, hence call again)
+               var rows = ViewHrefs().ToList();    // Collect hrefs of the available zip files
+               using (var etr = rows.GetEnumerator()) {
+                  bool found_zip = false;
+                  while (!found_zip) {
+                     if (!etr.MoveNext()) {
+                        LogAndThrow("LegsiteController.Run failed to find any pubinfo zip files.");
+                     } else if (etr.Current != null) {
+                        if (etr.Current.Text.Contains("pubinfo_daily")) {
+                           found_zip = true;
+                           Driver.Manage().Window.Minimize();  // Hide the chrome window, making the application visable again
+                           await DownloadLegSiteFileAsync(etr.Current.Text, form1);
+                        }
                      }
                   }
                }
+            } catch (Exception ex) {
+               LogAndShow($"LegSiteController.Run: {ex.Message}");
+            } finally {
+               CloseChrome();
             }
-         } catch (Exception ex) {
-            LogAndShow($"LegSiteController.Run: {ex.Message}");
-         } finally {
-            CloseChrome();
-            form1.TopMost = false;
-            var elapsed = DateTime.Now - start_time;
-            LogAndDisplay(form1.txtLegSiteCompletion, $"Latest zip file fetched. {elapsed.ToString("c")} ");
-         }
-         return 0;
+         });
+
+         t.Wait();
+         form1.TopMost = false;           // Don't let Selenium hide this program's form
+         var elapsed = DateTime.Now - start_time;
+         LogAndDisplay(form1.txtLegSiteCompletion, $"Latest zip file fetched. Elapsed Time: {elapsed.ToString("c")} ");
       }
 
       private void InitializeChrome() {
@@ -92,7 +97,7 @@ namespace Scout2.Sequence {
          using (var client = new HttpClientDownloadWithProgress(leg_site_path, output_path)) {
             client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
                LogThis($"{progressPercentage} % ({totalBytesDownloaded}/{totalFileSize})");
-               progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
+               //progress.Invoke(new Action(() => progress.Value = Convert.ToInt32(progressPercentage)));
             };
             await client.StartDownload();
          }

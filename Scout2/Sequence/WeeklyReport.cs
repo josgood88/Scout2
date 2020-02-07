@@ -15,7 +15,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"ReportController.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtReportProgress, $"Report generation complete. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtReportProgress, $"Report generation complete. Elapsed Time: {elapsed.ToString("c")} ");
       }
    }
 }

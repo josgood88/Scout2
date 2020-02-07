@@ -81,6 +81,5 @@ namespace Scout2.Utility {
       public static bool DateIsInPastWeek(DateTime dt, Report.Report.DateRange range) {
          return dt >= range.start && dt <= range.end;
       }
-
    }
 }

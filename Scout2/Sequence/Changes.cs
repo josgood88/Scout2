@@ -35,7 +35,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"BillUpdates.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         var message = $"Bill Updates report complete. {elapsed.ToString("c")} ";
+         var message = $"Bill Updates report complete. Elapsed Time: {elapsed.ToString("c")} ";
          LogThis(message);
          form1.txtBillUpdatesProgress.Text = message;
          form1.txtBillUpdatesProgress.Update();

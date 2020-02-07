@@ -29,7 +29,7 @@ namespace Scout2.Sequence {
             LogAndThrow($"UpdateExistingReports.Run: {ex.Message}.");
          }
          var elapsed = DateTime.Now - start_time;
-         LogAndDisplay(form1.txtBillUpdatesProgress, $"Through with updating bill reports. {elapsed.ToString("c")} ");
+         LogAndDisplay(form1.txtBillUpdatesProgress, $"Through with updating bill reports. Elapsed Time: {elapsed.ToString("c")} ");
       }
 
       private List<ChangedBillForDisplay> CollectUpdatedBills(Form1 form1, UpdatedBillsForm update_form) {
