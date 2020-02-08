@@ -31,10 +31,10 @@ namespace Scout2.Report {
          var past_week = PastWeek();
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
-            NewThisWeek(reports, past_week, sw);      // New bills of interest this week
             HighestPriority(reports, sw);             // Our highest priority bills
+            NewThisWeek(reports, past_week, sw);      // New bills of interest this week
             ChangesThisWeek(reports, past_week, sw);  // Changes this week in bills of interest
-            UpcomingCommitteeHearingsOfInterest(sw);  // Committee hearings for bills of interest
+            //UpcomingCommitteeHearingsOfInterest(sw);  // Committee hearings for bills of interest
             Oppose(sw, reports);                      // Bills for which our position is Oppose
             Modify_Monitor(sw, reports);              // Bills for which our position is Monitor or Modify
             Chaptered(sw, reports);                   // Bills of interest which chaptered this biennium
@@ -102,6 +102,7 @@ namespace Scout2.Report {
          StartTable(sw, "Changes This Week in Bills Of Interest");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+            if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
 
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             string contents = File.ReadAllText(path);
