@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Library;
 using OpenQA.Selenium.Support.UI;
 using Scout2.Sequence;
@@ -34,9 +35,10 @@ namespace Scout2.Report {
             HighestPriority(reports, sw);             // Our highest priority bills
             NewThisWeek(reports, past_week, sw);      // New bills of interest this week
             ChangesThisWeek(reports, past_week, sw);  // Changes this week in bills of interest
-            //UpcomingCommitteeHearingsOfInterest(sw);  // Committee hearings for bills of interest
+            //UpcomingCommitteeHearingsOfInterest(sw);// Committee hearings for bills of interest
             Oppose(sw, reports);                      // Bills for which our position is Oppose
             Modify_Monitor(sw, reports);              // Bills for which our position is Monitor or Modify
+            Predictions(reports, past_week, sw);      // Per-bill expected path through committees
             Chaptered(sw, reports);                   // Bills of interest which chaptered this biennium
             Dead(sw, reports);                        // Bills of interest which died this biennium
             RemainingLegislativeSchedule(sw);         // What's left on this year's schedule
@@ -114,6 +116,35 @@ namespace Scout2.Report {
             }
          }
          EndTable(sw);
+      }
+
+      private void Predictions(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
+         sw.WriteLine("");
+         sw.WriteLine("   <table border=\"1\">");
+         sw.WriteLine("      <caption><b>Predicted Committee Routing</b></caption>");
+         sw.WriteLine("      <tr>");
+         sw.WriteLine("         <th>Measure</th>");
+         sw.WriteLine("         <th>Topic</th>");
+         sw.WriteLine("         <th>Prediction</th>");
+         sw.WriteLine("         <th>Passage Likelihood</th>");
+         sw.WriteLine("      </tr>");
+
+         foreach (var report in reports) {
+            if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+            if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
+            string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
+            string committees = IndividualReport.PreviousReport.Prediction(path);
+            string likelihood = IndividualReport.PreviousReport.Likelihood(path);
+            if (committees.Length > 0 || likelihood.Length > 0) {
+               sw.WriteLine($"<tr>");
+               sw.WriteLine($"<td>{report.Measure}</td> <td>{report.Title}</td> <td>{committees}</td>");
+               sw.WriteLine($"<td>{likelihood}</td>");
+               sw.WriteLine($"</tr>");
+            }
+         }
+         sw.WriteLine("   </table>");
+         sw.WriteLine("   <br />");
+         sw.WriteLine("   <br />");
       }
 
       private void UpcomingCommitteeHearingsOfInterest(StreamWriter sw) {

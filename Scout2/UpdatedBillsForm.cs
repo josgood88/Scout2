@@ -99,10 +99,6 @@ namespace Scout2 {
          else BaseController.LogAndShow($"CreateNewReports.GenerateCanonicalReport: Failed to start Notepad for {path}.");
          // Update the database position
          BillRow.UpdatePosition(BillUtils.Ensure4DigitNumber(measure), "");
-         //GetPositionAndSummary(path, out List<string> summary, out List<string> position_list);
-         //string first_line = position_list.FirstOrDefault();
-         //string position = first_line != null ? Regex.Replace(first_line, ".*?:(.*)", "$1") : "None Specified";
-         //BillRow.UpdatePosition(measure, position.Trim());
          BaseController.LogAndShow($"Update for {path} is complete.");
       }
    }

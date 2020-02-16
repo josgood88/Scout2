@@ -34,7 +34,7 @@ namespace Scout2.IndividualReport {
          // These data come from the previous version of the bill report
          var summary = new List<string>();
          var position = new List<string>();
-         PreviousReport.From(path,summary,position);
+         PreviousReport.From(path,summary,position, out string shortsummary, out string committees, out string likelihood);
 
          // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
          result.Add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
@@ -69,13 +69,13 @@ namespace Scout2.IndividualReport {
             result.Add("</p>");
          }
 
-         // Short Summary
-         result.Add("<p>");
-         result.Add("   <b>ShortSummary</b>: ");
-         result.Add("</p>");
+         // Short Summary, Committees and Likelihood
+         result.Add($"   <br /><b>ShortSummary</b>: {shortsummary}");
+         result.Add($"   <br /><b>Committees</b>: {committees}");
+         result.Add($"   <br /><b>Likelihood</b>: {likelihood}");
 
          // Status, Location, etc
-         if (position.Count == 0) result.Add("<p>");
+         result.Add("<p>");
          result.Add("<b>Status</b>:");
          result.Add($"<br /> Location: {location}");
          string str_date = String.Empty;

@@ -15,10 +15,9 @@ namespace Scout2.Sequence {
       public void Run(Form1 form1) {
          var start_time = DateTime.Now;
          form1.TopMost = true;             // Don't let Selenium hide this program's form
-         LogAndDisplay(form1.txtLegSiteCompletion, "Downloading latest zip file.");
+         LogAndDisplay(form1.txtLegSiteCompletion, "Finding and then downloading latest zip file.  This can take 10-20 minutes.");
 
          Task t = Task.Run(async () => {
-            LogThis($"Connecting to {Config.Instance.LegSite}.");
             try {
                InitializeChrome();
                FindLastModified().Click();         // Sort zip files in ascending date order
@@ -28,7 +27,7 @@ namespace Scout2.Sequence {
                   bool found_zip = false;
                   while (!found_zip) {
                      if (!etr.MoveNext()) {
-                        LogAndThrow("LegsiteController.Run failed to find any pubinfo zip files.");
+                        MessageBox.Show("LegsiteController.Run failed to find any pubinfo zip files.");
                      } else if (etr.Current != null) {
                         if (etr.Current.Text.Contains("pubinfo_daily")) {
                            found_zip = true;
@@ -39,7 +38,7 @@ namespace Scout2.Sequence {
                   }
                }
             } catch (Exception ex) {
-               LogAndShow($"LegSiteController.Run: {ex.Message}");
+               MessageBox.Show($"LegSiteController.Run: {ex.Message}");
             } finally {
                CloseChrome();
             }
