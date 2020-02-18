@@ -124,7 +124,7 @@ namespace Scout2.Report {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
             if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
-            string committees = IndividualReport.PreviousReport.Prediction(path);
+            string committees = IndividualReport.PreviousReport.Committees(path);
             string likelihood = IndividualReport.PreviousReport.Likelihood(path);
             if (committees.Length > 0 || likelihood.Length > 0) {
                ReportPrediction(sw, report, committees, likelihood);

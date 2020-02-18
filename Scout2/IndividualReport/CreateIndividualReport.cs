@@ -32,9 +32,11 @@ namespace Scout2.IndividualReport {
          string vote          = bv_row.VoteRequired;
 
          // These data come from the previous version of the bill report
-         var summary = new List<string>();
-         var position = new List<string>();
-         PreviousReport.From(path,summary,position, out string shortsummary, out string committees, out string likelihood);
+         var summary = PreviousReport.Summary(path);
+         var position = PreviousReport.Position(path);
+         var shortsummary = PreviousReport.ShortSummary(path);
+         var committees = PreviousReport.Committees(path);
+         var likelihood = PreviousReport.Likelihood(path);
 
          // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
          result.Add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");

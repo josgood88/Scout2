@@ -19,25 +19,39 @@ namespace Scout2.IndividualReport {
          signal_comm, signal_like, signal_posit, signal_short, signal_summ
       };
       /// <summary>
-      /// Extract several fields from the file on the path.  That file is expected to be an individual bill report.
+      /// Obtains the (potentially multi-line) Summary described in an individual bill report
       /// </summary>
       /// <param name="path">Path to the individual report file being examined</param>
-      /// <param name="summary">Receives the Summary section</param>
-      /// <param name="position">Receives the position being taken on the bill</param>
-      /// <param name="short_summary">Receives the one-line summary of the bill</param>
-      /// <param name="committees">Receives the predicted path through legislature committees</param>
-      /// <param name="likelihood">Receives our evaluation of the likelihood of bill passage</param>
-      public static void From(string path, List<string> summary, List<string> position,
-               out string short_summary, out string committees, out string likelihood) {
-         // Fetch multi-line fields from the file on the path.
-         // Clear unwanted <p> and </p> from the end of the lists
-         summary = RemoveTrailingParagraphs(FetchListFields(path, signal_summ, signal_end_of_section));
-         position = RemoveTrailingParagraphs(FetchListFields(path, signal_posit, signal_end_of_section));
-         // Fetch single-line items from the file on the path.
-         short_summary = FetchField(path, signal_short);
-         committees = FetchField(path, signal_comm);
-         likelihood = FetchField(path, signal_like);
+      /// <returns></returns>
+      public static List<string> Summary(string path) {
+         return FetchListFields(path, signal_summ, signal_end_of_section);
       }
+      /// <summary>
+      /// Obtains the (potentially multi-line) Position described in an individual bill report
+      /// </summary>
+      /// <param name="path">Path to the individual report file being examined</param>
+      /// <returns></returns>
+      public static List<string> Position(string path) {
+         return FetchListFields(path, signal_posit, signal_end_of_section);
+      }
+      /// <summary>
+      /// Obtains the ShortSummary described in an individual bill report
+      /// </summary>
+      /// <param name="path">Path to the individual report file being examined</param>
+      /// <returns></returns>
+      public static string ShortSummary(string path) { return FetchField(path, signal_short); }
+      /// <summary>
+      /// Obtains the predicted committee path described in an individual bill report
+      /// </summary>
+      /// <param name="path">Path to the individual report file being examined</param>
+      /// <returns></returns>
+      public static string Committees(string path) { return FetchField(path, signal_comm); }
+      /// <summary>
+      /// Obtains the passage likelihood described in an individual bill report
+      /// </summary>
+      /// <param name="path">Path to the individual report file being examined</param>
+      /// <returns></returns>
+      public static string Likelihood(string path) { return FetchField(path, signal_like); }
 
       public static List<string> History(string path) {
          var result = new List<string>();
@@ -50,7 +64,10 @@ namespace Scout2.IndividualReport {
                      result.Add(current_line);
                      while (!sr.EndOfStream) {
                         current_line = sr.ReadLine();
-                        result.Add(current_line);
+                        if (current_line != null) {
+                           current_line = current_line.Replace("''", "'"); // author''s becomes author's
+                           result.Add(current_line);
+                        }
                      }
                   }
                }
@@ -139,17 +156,5 @@ namespace Scout2.IndividualReport {
          }
          return result;
       }
-      /// <summary>
-      /// Obtains the predicted committee path described in an individual bill report
-      /// </summary>
-      /// <param name="path">Path to the individual report file being examined</param>
-      /// <returns></returns>
-      public static string Prediction(string path) { return FetchField(path, signal_comm); }
-      /// <summary>
-      /// Obtains the passage likelihood described in an individual bill report
-      /// </summary>
-      /// <param name="path">Path to the individual report file being examined</param>
-      /// <returns></returns>
-      public static string Likelihood(string path) { return FetchField(path, signal_like); }
    }
 }
