@@ -92,7 +92,7 @@ namespace Scout2.Report {
                ReportOneBill(sw, report);
             }
          }
-         EndTable(sw);
+         EndTable(sw); 
       }
       /// <summary>
       /// Report any bill that changed this week.
@@ -119,16 +119,7 @@ namespace Scout2.Report {
       }
 
       private void Predictions(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
-         sw.WriteLine("");
-         sw.WriteLine("   <table border=\"1\">");
-         sw.WriteLine("      <caption><b>Predicted Committee Routing</b></caption>");
-         sw.WriteLine("      <tr>");
-         sw.WriteLine("         <th>Measure</th>");
-         sw.WriteLine("         <th>Topic</th>");
-         sw.WriteLine("         <th>Prediction</th>");
-         sw.WriteLine("         <th>Passage Likelihood</th>");
-         sw.WriteLine("      </tr>");
-
+         StartPredictionTable(sw, "Predicted Committee Routing");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
             if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
@@ -136,15 +127,10 @@ namespace Scout2.Report {
             string committees = IndividualReport.PreviousReport.Prediction(path);
             string likelihood = IndividualReport.PreviousReport.Likelihood(path);
             if (committees.Length > 0 || likelihood.Length > 0) {
-               sw.WriteLine($"<tr>");
-               sw.WriteLine($"<td>{report.Measure}</td> <td>{report.Title}</td> <td>{committees}</td>");
-               sw.WriteLine($"<td>{likelihood}</td>");
-               sw.WriteLine($"</tr>");
+               ReportPrediction(sw, report, committees, likelihood);
             }
          }
-         sw.WriteLine("   </table>");
-         sw.WriteLine("   <br />");
-         sw.WriteLine("   <br />");
+         EndTable(sw);
       }
 
       private void UpcomingCommitteeHearingsOfInterest(StreamWriter sw) {
@@ -161,9 +147,7 @@ namespace Scout2.Report {
          sw.WriteLine("         <th>Day</th>");
          sw.WriteLine("         <th>Time</th>");
          sw.WriteLine("      </tr>");
-         sw.WriteLine("   </table>");
-         sw.WriteLine("   <br />");
-         sw.WriteLine("   <br />");
+         EndTable(sw);
       }
 
       private void Oppose(StreamWriter sw, BillReportCollection reports) {
@@ -219,12 +203,19 @@ namespace Scout2.Report {
 
       private void ReportOneBill(StreamWriter sw, BillReport report) {
          sw.WriteLine("<tr>");
-         sw.WriteLine($"<td>{report.Measure} {report.Title}</td>");
+         sw.WriteLine($"<td>{report.Measure} {report.Title} ({report.Author})</td>");
          sw.WriteLine($"  <td>{report.WIC}</td>");
          sw.WriteLine($"  <td>{report.LPS}</td>");
          sw.WriteLine($"  <td>{report.Position??"Null"}</td>");
          sw.WriteLine($"  <td>{report.OneLiner}</td>");
          sw.WriteLine($"  <td>{report.LastAction}</td>");
+         sw.WriteLine("</tr>");
+      }
+
+      private void ReportPrediction(StreamWriter sw, BillReport report, string committees, string likelihood) {
+         sw.WriteLine("<tr>");
+         sw.WriteLine($"<td>{report.Measure} {report.Title} ({report.Author})</td>");
+         sw.WriteLine($"<td>{committees}</td> <td>{likelihood}</td>");
          sw.WriteLine("</tr>");
       }
 
@@ -254,6 +245,17 @@ namespace Scout2.Report {
          sw.WriteLine("   </table>");
          sw.WriteLine("   <br />");
          sw.WriteLine("   <br />");
+      }
+
+      private void StartPredictionTable(StreamWriter sw, string title) {
+         sw.WriteLine("");
+         sw.WriteLine("   <table border=\"1\">");
+         sw.WriteLine($"      <caption><b>{title}</b></caption>");
+         sw.WriteLine("      <tr>");
+         sw.WriteLine("         <th>Measure</th>");
+         sw.WriteLine("         <th>Prediction</th>");
+         sw.WriteLine("         <th>Passage Likelihood</th>");
+         sw.WriteLine("      </tr>");
       }
 
       private DateRange PastWeek() {

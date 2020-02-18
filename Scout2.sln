@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scout2", "Scout2\Scout2.csproj", "{4D322F4B-5866-4FE0-BA7D-2888650A2E0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequirementsTraceability", "RequirementsTraceability\RequirementsTraceability.csproj", "{91AF7BBB-1F68-4BC9-9531-E63E7B9F59D2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{4D322F4B-5866-4FE0-BA7D-2888650A2E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D322F4B-5866-4FE0-BA7D-2888650A2E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D322F4B-5866-4FE0-BA7D-2888650A2E0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91AF7BBB-1F68-4BC9-9531-E63E7B9F59D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91AF7BBB-1F68-4BC9-9531-E63E7B9F59D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91AF7BBB-1F68-4BC9-9531-E63E7B9F59D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91AF7BBB-1F68-4BC9-9531-E63E7B9F59D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
