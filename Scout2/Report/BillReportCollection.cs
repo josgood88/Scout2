@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Library;
-using OpenQA.Selenium.Support.UI;
+using Library.Database;
 using Scout2.Sequence;
 using Scout2.Utility;
 
@@ -53,11 +51,16 @@ namespace Scout2.Report {
             index = line.IndexOf(':');                   // Summary follows colon
             OneLiner = line.Substring(index+1).Trim();   // At least one space before summary
 
-            // Find Last Action
-            line = lines.Find(x => x.Contains("Last Action:"));
-            if (line == null) throw new ApplicationException($"BillReport ctor: {file_path} contents has no Last Action.");
-            index = line.IndexOf(':');                   // Last Action follows colon
-            LastAction = line.Substring(index+1).Trim(); // At least one space before Last Action
+            // Find Last Action.  The correct source for Last Action is the history data imported from the 
+            // legislature site.  That data is assumed correct -- the previous report may be wrong due to 
+            // a coding error in this program.
+            BillUtils.ExtractHouseNumber(Measure, out string house, out string number);
+            var bill_id = $"{house}{number}";
+            List<BillHistoryRow> history = GlobalData.HistoryTable.RowSetFromHouseNumber(bill_id)
+               .OrderByDescending(item => item.ActionSequence).ToList();
+            var first = history.FirstOrDefault();
+            LastAction = string.Empty;
+            if (first != null) LastAction = $"{DateUtils.Date(first.ActionDate)} {first.Action}";
 
             // Find WIC (Welfare and Institutions Code) and LPS (Lanterman-Petris-Short Act)
             var most_recent = GlobalData.MostRecentEachBill

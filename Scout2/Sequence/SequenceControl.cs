@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Scout2.Sequence {
    /// <summary>

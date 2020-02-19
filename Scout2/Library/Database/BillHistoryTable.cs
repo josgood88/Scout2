@@ -56,5 +56,10 @@ namespace Library.Database {
          var result = (from item in Table where (item.BillID == bill_id) orderby item.ActionDate descending select item).ToList();
          return result;
       }
+
+      public List<BillHistoryRow> RowSetFromHouseNumber(string bill_id) {
+         var result = (from item in Table where (item.BillID.Contains(bill_id)) orderby item.ActionDate descending select item).ToList();
+         return result;
+      }
    }
 }

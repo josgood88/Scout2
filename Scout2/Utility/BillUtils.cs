@@ -53,12 +53,12 @@ namespace Scout2.Utility {
       /// <summary>
       /// Extract house and number from bill id, returning house and number through argument references
       /// </summary>
-      /// <param name="bill">Bill house & measure</param>
+      /// <param name="_bill">Bill house & measure</param>
       /// <param name="house">just the house, ma'am</param>
       /// <param name="number">just the number, ma'am</param>
       /// <returns></returns>
-      public static bool ExtractHouseNumber(string bill, out string house, out string number) {
-         house = number = string.Empty;
+      public static bool ExtractHouseNumber(string _bill, out string house, out string number) {
+         string bill = NoDash(_bill);
          house  = Regex.Match(bill, @"\D*").Value;
          number = bill.Substring(house.Length);
          bool correct = house != string.Empty && house != bill && number != string.Empty && number != bill;

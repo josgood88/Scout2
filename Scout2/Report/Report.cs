@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Library;
-using OpenQA.Selenium.Support.UI;
 using Scout2.Sequence;
 using Scout2.Utility;
 
