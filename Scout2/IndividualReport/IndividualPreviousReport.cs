@@ -15,7 +15,7 @@ namespace Scout2.IndividualReport {
       const string signal_summ  = "<b>Summary";
 
       static readonly List<string> signal_end_of_section = new List<string> {
-         signal_comm, signal_like, signal_posit, signal_short, signal_summ
+         signal_comm, signal_like, signal_posit, signal_short, signal_stat, signal_summ
       };
       /// <summary>
       /// Obtains the (potentially multi-line) Summary described in an individual bill report

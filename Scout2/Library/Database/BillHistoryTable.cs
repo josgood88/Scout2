@@ -53,13 +53,15 @@ namespace Library.Database {
       }
 
       public List<BillHistoryRow> RowSet(string bill_id) {
-         var result = (from item in Table where (item.BillID == bill_id) orderby item.ActionDate descending select item).ToList();
+         var result = (from item in Table where (item.BillID == bill_id) select item).ToList();
+         result.Sort((a, b) => a.SequenceAsInt().CompareTo(b.SequenceAsInt()));
          return result;
       }
 
-      public List<BillHistoryRow> RowSetFromHouseNumber(string bill_id) {
-         var result = (from item in Table where (item.BillID.Contains(bill_id)) orderby item.ActionDate descending select item).ToList();
-         return result;
+      public BillHistoryRow LatestFromHouseNumber(string bill_id) {
+         var result = (from item in Table where (item.BillID.EndsWith(bill_id)) select item).ToList();
+         result.Sort((a, b) => a.SequenceAsInt().CompareTo(b.SequenceAsInt()));
+         return result.Last();
       }
    }
 }

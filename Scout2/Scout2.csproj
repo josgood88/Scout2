@@ -81,6 +81,7 @@
     <Compile Include="Library\BillRanker.cs" />
     <Compile Include="Library\Bill_Tbl_Wrapper.cs" />
     <Compile Include="Sequence\BaseController.cs" />
+    <Compile Include="Sequence\BillReportBase.cs" />
     <Compile Include="Sequence\Changes.cs" />
     <Compile Include="IndividualReport\CreateIndividualReport.cs" />
     <Compile Include="Sequence\CreateNewReports.cs" />

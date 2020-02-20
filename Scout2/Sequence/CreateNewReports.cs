@@ -140,11 +140,6 @@ namespace Scout2.Sequence {
             result.Add("</p>");
          }
 
-         // Short Summary
-         result.Add("<p>");
-         result.Add("   <b>ShortSummary</b>: ");
-         result.Add("</p>");
-
          // Position
          if (position.Count > 0) {
             foreach (var line in position) result.Add(line);
@@ -154,6 +149,11 @@ namespace Scout2.Sequence {
             result.Add("   <br /> This is my reason.");
             result.Add("</p>");
          }
+
+         // Short Summary, Committees Prediction and Passage Likelihood
+         result.Add("      <b>ShortSummary</b>: ");
+         result.Add("<br /><b>Committees</b>: ");
+         result.Add("<br /><b>Likelihood</b>: ");
 
          // Status, Location, etc
          if (position.Count == 0) result.Add("<p>");

@@ -56,11 +56,8 @@ namespace Scout2.Report {
             // a coding error in this program.
             BillUtils.ExtractHouseNumber(Measure, out string house, out string number);
             var bill_id = $"{house}{number}";
-            List<BillHistoryRow> history = GlobalData.HistoryTable.RowSetFromHouseNumber(bill_id)
-               .OrderByDescending(item => item.ActionSequence).ToList();
-            var first = history.FirstOrDefault();
-            LastAction = string.Empty;
-            if (first != null) LastAction = $"{DateUtils.Date(first.ActionDate)} {first.Action}";
+            BillHistoryRow mostRecent = GlobalData.HistoryTable.LatestFromHouseNumber(bill_id);
+            LastAction = $"{DateUtils.Date(mostRecent.ActionDate)} {mostRecent.Action}";
 
             // Find WIC (Welfare and Institutions Code) and LPS (Lanterman-Petris-Short Act)
             var most_recent = GlobalData.MostRecentEachBill
@@ -135,6 +132,7 @@ namespace Scout2.Report {
          var line = lines.Find(x => x.Contains("Chaptered by Secretary of State"));
          return (line != null) ? true : false;
       }
+      public bool IsNotChaptered() { return !IsChaptered(); }
       /// <summary>
       /// Answer whether a bill is dead. Reviewer notes this by writing "This bill is dead" somewhere in the review.
       /// Notation is usually made as the first line in the Summary block of lines.
@@ -151,6 +149,7 @@ namespace Scout2.Report {
          }
          return (line != null) ? true : false;
       }
+      public bool IsNotDead() { return !IsDead();  }
    }
 
    /// <summary>

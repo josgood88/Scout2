@@ -62,6 +62,8 @@ namespace Library.Database {
          }
       }
 
+      public BillHistoryRow() { }
+
       public static void WriteRowset(IEnumerable<BillHistoryRow> collection) {
          DB.NonQuery("Delete from BillHistoryTable;", "BillHistoryRow.WriteRowset");
          var accumulator = new StringBuilder();   // Accumulate SQL statements here, submit as single statement
@@ -122,6 +124,9 @@ namespace Library.Database {
             throw;
          }
          return result;
+      }
+
+      public int SequenceAsInt() { return int.TryParse(ActionSequence, out int result) ? result : 0;
       }
    }
 }
