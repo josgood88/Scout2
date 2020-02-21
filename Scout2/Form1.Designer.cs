@@ -31,7 +31,6 @@
          this.txtRegenProgress = new System.Windows.Forms.TextBox();
          this.txtCreatesProgress = new System.Windows.Forms.TextBox();
          this.btnCreateReports = new System.Windows.Forms.Button();
-         this.chkRegenerateAll = new System.Windows.Forms.CheckBox();
          this.btnRegenerate = new System.Windows.Forms.Button();
          this.txtReportProgress = new System.Windows.Forms.TextBox();
          this.btnReport = new System.Windows.Forms.Button();
@@ -106,7 +105,6 @@
          this.groupBox1.Controls.Add(this.txtRegenProgress);
          this.groupBox1.Controls.Add(this.txtCreatesProgress);
          this.groupBox1.Controls.Add(this.btnCreateReports);
-         this.groupBox1.Controls.Add(this.chkRegenerateAll);
          this.groupBox1.Controls.Add(this.btnRegenerate);
          this.groupBox1.Controls.Add(this.txtReportProgress);
          this.groupBox1.Controls.Add(this.btnReport);
@@ -131,7 +129,7 @@
          this.txtRegenProgress.AccessibleName = "txtReportProgress";
          this.txtRegenProgress.Location = new System.Drawing.Point(162, 159);
          this.txtRegenProgress.Name = "txtRegenProgress";
-         this.txtRegenProgress.Size = new System.Drawing.Size(346, 20);
+         this.txtRegenProgress.Size = new System.Drawing.Size(461, 20);
          this.txtRegenProgress.TabIndex = 19;
          // 
          // txtCreatesProgress
@@ -151,16 +149,6 @@
          this.btnCreateReports.Text = "Create New Reports";
          this.btnCreateReports.UseVisualStyleBackColor = true;
          this.btnCreateReports.Click += new System.EventHandler(this.btnCreateReports_Click);
-         // 
-         // chkRegenerateAll
-         // 
-         this.chkRegenerateAll.AutoSize = true;
-         this.chkRegenerateAll.Location = new System.Drawing.Point(527, 161);
-         this.chkRegenerateAll.Name = "chkRegenerateAll";
-         this.chkRegenerateAll.Size = new System.Drawing.Size(96, 17);
-         this.chkRegenerateAll.TabIndex = 16;
-         this.chkRegenerateAll.Text = "Regenerate All";
-         this.chkRegenerateAll.UseVisualStyleBackColor = true;
          // 
          // btnRegenerate
          // 
@@ -419,7 +407,6 @@
       public System.Windows.Forms.TextBox txtReportProgress;
       private System.Windows.Forms.Button btnReport;
       private System.Windows.Forms.Button btnRegenerate;
-      private System.Windows.Forms.CheckBox chkRegenerateAll;
       public System.Windows.Forms.TextBox txtCreatesProgress;
       private System.Windows.Forms.Button btnCreateReports;
       public System.Windows.Forms.TextBox txtRegenProgress;

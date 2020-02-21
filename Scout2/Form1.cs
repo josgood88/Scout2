@@ -120,11 +120,6 @@ namespace Scout2 {
       /// </summary>
       /// <param name="value"></param>
       public void UpdateProgressLegSite(int value) { this.progressLegSite.Value = value; }
-      /// <summary>
-      /// Regnerate needs a way to know whether the "Regenerate All" checkbox is checked.
-      /// </summary>
-      /// <returns></returns>
-      public bool IsRegenerateAll() { return chkRegenerateAll.Checked;  }
 
       private void helpToolStripMenuItem_Click(object sender, EventArgs e) {
          MessageBox.Show("Clicked", "Define Constants");

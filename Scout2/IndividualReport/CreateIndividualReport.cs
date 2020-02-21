@@ -72,7 +72,7 @@ namespace Scout2.IndividualReport {
          }
 
          // Short Summary, Committees and Likelihood
-         result.Add($"      <b>ShortSummary</b>: {shortsummary}");
+         result.Add($"<b>ShortSummary</b>: {shortsummary}");
          result.Add($"<br /><b>Committees</b>: {committees}");
          result.Add($"<br /><b>Likelihood</b>: {likelihood}");
 

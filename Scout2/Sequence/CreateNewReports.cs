@@ -151,7 +151,7 @@ namespace Scout2.Sequence {
          }
 
          // Short Summary, Committees Prediction and Passage Likelihood
-         result.Add("      <b>ShortSummary</b>: ");
+         result.Add("<b>ShortSummary</b>: ");
          result.Add("<br /><b>Committees</b>: ");
          result.Add("<br /><b>Likelihood</b>: ");
 

@@ -81,5 +81,11 @@ namespace Scout2.Utility {
       public static bool DateIsInPastWeek(DateTime dt, Report.Report.DateRange range) {
          return dt >= range.start && dt <= range.end;
       }
+
+      public static string ContentsFromBillReport(BillReport report) {
+         string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
+         string contents = File.ReadAllText(path);
+         return contents;
+      }
    }
 }

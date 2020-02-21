@@ -124,7 +124,7 @@ namespace Scout2.Report {
             string committees = IndividualReport.PreviousReport.Committees(path);
             string likelihood = IndividualReport.PreviousReport.Likelihood(path);
             if (committees.Length > 0 || likelihood.Length > 0) {
-               ReportPrediction(sw, report, committees, likelihood);
+               ReportPrediction(sw, past_week, report, committees, likelihood);
             }
          }
          EndTable(sw);
@@ -209,9 +209,16 @@ namespace Scout2.Report {
          sw.WriteLine("</tr>");
       }
 
-      private void ReportPrediction(StreamWriter sw, BillReport report, string committees, string likelihood) {
+      private void ReportPrediction(StreamWriter sw, DateRange past_week, BillReport report, string committees, string likelihood) {
+         string report_contents = BillUtils.ContentsFromBillReport(report);
+         string new_prefix = BillUtils.IsNewThisWeek(report, report_contents, past_week) ? "(NEW)" : string.Empty;
+         string change_prefix = string.Empty;
+         if (new_prefix.Length == 0) {
+            var dt = DateFromLastAction(report);
+            change_prefix = BillUtils.DateIsInPastWeek(dt, past_week) ? "(UPDATED)" : string.Empty;
+         }
          sw.WriteLine("<tr>");
-         sw.WriteLine($"<td>{report.Measure} {report.Title} ({report.Author})</td>");
+         sw.WriteLine($"<td>{new_prefix}{change_prefix} {report.Measure} {report.Title} ({report.Author})</td>");
          sw.WriteLine($"<td>{committees}</td> <td>{likelihood}</td>");
          sw.WriteLine("</tr>");
       }
