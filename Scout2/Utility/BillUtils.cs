@@ -69,17 +69,13 @@ namespace Scout2.Utility {
       }
       public static bool IsNewThisWeek(BillReport report, string report_contents, Report.Report.DateRange past_week) {
          DateTime dt = DateOfInitialReview(report_contents);
-         return DateIsInPastWeek(dt, past_week);
+         return DateUtils.DateIsInPastWeek(dt, past_week);
       }
 
       public static DateTime DateOfInitialReview(string report_contents) {
          string s1 = Regex.Match(report_contents, @"\(Reviewed.*\)").ToString();
          string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)", "$1");
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
-      }
-
-      public static bool DateIsInPastWeek(DateTime dt, Report.Report.DateRange range) {
-         return dt >= range.start && dt <= range.end;
       }
 
       public static string ContentsFromBillReport(BillReport report) {

@@ -11,7 +11,7 @@ namespace Scout2.Report {
       private static StringBuilder sb = new StringBuilder();
 
       public static string AsString() {
-         last_monday = MiscUtils.LastMonday();
+         last_monday = DateUtils.LastMonday();
          sb = new StringBuilder();
          sb.Append("   <table border=\"1\">");
          sb.Append($"      <caption>Remaining Legislative Schedule, {DateTime.Now.ToString("yyyy")}</caption>");

@@ -1,6 +1,5 @@
 ﻿using System;
 using Library;
-using Scout2.Report;
 
 namespace Scout2.Sequence {
    public class WeeklyReport : BaseController {

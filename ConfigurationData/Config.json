@@ -1,1 +1,10 @@
-{"bills_folder":"D:/CCHR/2019-2020/LatestDownload/Bills/","database_folder":"D:/CCHR/Projects/Scout2/Data/","downloads_folder":"C:/Users/Joe/Downloads/","html_folder":"D:/CCHR/2019-2020/Html/","leg_site":"https://downloads.leginfo.legislature.ca.gov/","negative_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Negative.xml","positive_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Positive.xml","scout_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Scout.xml"}
+{
+   "bills_folder": "D:/CCHR/2019-2020/LatestDownload/Bills/",
+   "database_folder":"D:/CCHR/Projects/Scout2/Data/",
+   "downloads_folder":"C:/Users/Joe/Downloads/",
+   "html_folder":"D:/CCHR/2019-2020/Html/",
+   "leg_site":"https://downloads.leginfo.legislature.ca.gov/",
+   "negative_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Negative.xml",
+   "positive_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Positive.xml",
+   "scout_file":"D:/CCHR/Projects/Scout2/ConfigurationData/RegexScore - Scout.xml"
+}

@@ -108,7 +108,7 @@ namespace Scout2.Report {
             if (BillUtils.IsNewThisWeek(report, contents, past_week)) continue; // Don't report new bills.
 
             var dt = DateFromLastAction(report);
-            if (BillUtils.DateIsInPastWeek(dt, past_week)) {
+            if (DateUtils.DateIsInPastWeek(dt, past_week)) {
                ReportOneBill(sw, report);
             }
          }
@@ -215,7 +215,7 @@ namespace Scout2.Report {
          string change_prefix = string.Empty;
          if (new_prefix.Length == 0) {
             var dt = DateFromLastAction(report);
-            change_prefix = BillUtils.DateIsInPastWeek(dt, past_week) ? "(UPDATED)" : string.Empty;
+            change_prefix = DateUtils.DateIsInPastWeek(dt, past_week) ? "(UPDATED)" : CheckManualUpdate(report);
          }
          sw.WriteLine("<tr>");
          sw.WriteLine($"<td>{new_prefix}{change_prefix} {report.Measure} {report.Title} ({report.Author})</td>");
@@ -223,12 +223,18 @@ namespace Scout2.Report {
          sw.WriteLine("</tr>");
       }
 
+      private string CheckManualUpdate(BillReport report) {
+         var measure = BillUtils.NoDash(report.Measure);
+         var changes = Config.Instance.ManualCommitteeChanges;
+         var end_of_section = changes.FirstOrDefault(t => t == measure);
+         return end_of_section != null ? "(MANUAL)" : String.Empty;
+      }
       /// <summary>
       /// Report date is always the Monday following today
       /// </summary>
       /// <returns></returns>
       private string ReportDate() {
-         return MiscUtils.NextMonday().ToString("dd MMM yyyy");
+         return DateUtils.NextMonday().ToString("dd MMM yyyy");
       }
 
       private void StartTable(StreamWriter sw, string title) {
@@ -264,7 +270,7 @@ namespace Scout2.Report {
 
       private DateRange PastWeek() {
          DateRange result = new DateRange();
-         result.end = MiscUtils.NextMonday();
+         result.end = DateUtils.NextMonday();
          result.end = new DateTime(result.end.Year, result.end.Month, result.end.Day);
          result.start = result.end - TimeSpan.FromDays(7);
          return result;
