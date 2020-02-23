@@ -63,18 +63,20 @@ namespace Scout2.Report {
             var most_recent = GlobalData.MostRecentEachBill
                .Where(row => row.BillID == BillUtils.Ensure4DigitNumber(Measure)).FirstOrDefault();
             if (most_recent != null) {
-               var contents = File.ReadAllText(most_recent.LobPath);  // Need text without CRLF
-               var match_string = @"Section\s+\d+.*?Welfare\s+and\s+Institutions\s+Code";
-               MatchCollection matches = Regex.Matches(contents, match_string);
-               WIC = matches.Count > 0 ? "Yes" : "No";   // Is WIC if WIC referenced
-               LPS = "No";                               // LPS defaults to "No"
-               if (WIC == "Yes") {
-                  foreach (var match in matches) {
-                     var str = match.ToString();
-                     var section_number = Regex.Match(str, @"\d+").ToString();
-                     if (Int64.TryParse(section_number, out long numberResult)) {
-                        // If section is between 5000 and 6000, Lanterman-Petris_Short is referenced
-                        if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
+               if (File.Exists(most_recent.LobPath)) {
+                  var contents = FileUtils.FileContents(most_recent.LobPath);  // Need text without CRLF
+                  var match_string = @"Section\s+\d+.*?Welfare\s+and\s+Institutions\s+Code";
+                  MatchCollection matches = Regex.Matches(contents, match_string);
+                  WIC = matches.Count > 0 ? "Yes" : "No";   // Is WIC if WIC referenced
+                  LPS = "No";                               // LPS defaults to "No"
+                  if (WIC == "Yes") {
+                     foreach (var match in matches) {
+                        var str = match.ToString();
+                        var section_number = Regex.Match(str, @"\d+").ToString();
+                        if (Int64.TryParse(section_number, out long numberResult)) {
+                           // If section is between 5000 and 6000, Lanterman-Petris_Short is referenced
+                           if (numberResult >= 5000 && numberResult < 6000) LPS = "Yes";
+                        }
                      }
                   }
                }

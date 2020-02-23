@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Scout2.Utility;
 
 namespace Library {
    /// <summary>
@@ -60,7 +61,7 @@ namespace Library {
       }
       private void ReadConfigFileItems() {
          if (File.Exists(configuration_file)) {
-            var contents = File.ReadAllText(configuration_file);
+            var contents = FileUtils.FileContents(configuration_file);
             own = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
          } else { // If no configuration file, use hard-coded initial data
             own["bills_folder"]     = "D:/CCHR/2019-2020/LatestDownload/Bills/";
@@ -77,7 +78,7 @@ namespace Library {
       private void ReadHighestPriorityItems() {
          ManualCommitteesUpdate();
          if (File.Exists(high_priority_file)) {
-            var contents = File.ReadAllText(high_priority_file);
+            var contents = FileUtils.FileContents(high_priority_file);
             highest_priority = JsonConvert.DeserializeObject<List<string>>(contents);
          } else {
             highest_priority = new List<string>();

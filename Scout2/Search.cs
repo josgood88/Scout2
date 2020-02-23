@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Library;
 using Library.Database;
+using Scout2.Utility;
 
 namespace Scout2 {
    public partial class Form1 : Form {
@@ -107,10 +108,13 @@ namespace Scout2 {
       /// <param name="row"></param>
       /// <returns></returns>
       private static string ContentsWithHTML(BillRow row) {
-         var contents = File.ReadAllText(row.Lob);
-         var end_marker = "</caml:Preamble>";
-         var offset = contents.IndexOf(end_marker) + end_marker.Length;
-         contents = contents.Substring(offset);
+         var contents = string.Empty;
+         if (File.Exists(row.Lob)) {
+            contents = FileUtils.FileContents(row.Lob);
+            var end_marker = "</caml:Preamble>";
+            var offset = contents.IndexOf(end_marker) + end_marker.Length;
+            contents = contents.Substring(offset);
+         }
          return contents;
       }
 

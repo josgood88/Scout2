@@ -64,23 +64,46 @@ namespace Scout2.Utility {
          bool correct = house != string.Empty && house != bill && number != string.Empty && number != bill;
          return correct;
       }
+      /// <summary>
+      /// Returns an enumeration of the *.html files which are the individual bill reports and the weekly report.
+      /// </summary>
+      /// <returns></returns>
       public static List<string> HtmlFolderContents() {
          return Directory.EnumerateFiles(Config.Instance.HtmlFolder, "*.html").ToList();
       }
+      /// <summary>
+      /// Answers whether an individual bill report appears for the first time this week.
+      /// The bill review date is given on the summary line, e.g. Summary: (Reviewed 1/19/2019) 
+      /// </summary>
+      /// <param name="report">The individual bill report in question</param>
+      /// <param name="report_contents">The contents of that report</param>
+      /// <param name="past_week">The starting and ending dates that define last week.</param>
+      /// <returns></returns>
       public static bool IsNewThisWeek(BillReport report, string report_contents, Report.Report.DateRange past_week) {
          DateTime dt = DateOfInitialReview(report_contents);
          return DateUtils.DateIsInPastWeek(dt, past_week);
       }
-
+      /// <summary>
+      /// Returns the date this biennium when an individual bill report was first written.
+      /// </summary>
+      /// <param name="report_contents"></param>
+      /// <returns></returns>
       public static DateTime DateOfInitialReview(string report_contents) {
          string s1 = Regex.Match(report_contents, @"\(Reviewed.*\)").ToString();
          string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)", "$1");
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
       }
-
+      /// <summary>
+      /// Given a bill report, returns the contents of the report as a single string.
+      /// </summary>
+      /// <param name="report"></param>
+      /// <returns></returns>
       public static string ContentsFromBillReport(BillReport report) {
+         string contents = string.Empty;
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
-         string contents = File.ReadAllText(path);
+         if (File.Exists(path)) {
+            contents = FileUtils.FileContents(path);
+         }
          return contents;
       }
    }

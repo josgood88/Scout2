@@ -69,12 +69,14 @@ namespace Scout2.Report {
          StartTable(sw,"New Of-Interest Bills This Week");
          foreach (var report in reports) {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
-            string contents = File.ReadAllText(path);
-            if (BillUtils.IsNewThisWeek(report,contents,past_week)) {
-               if (report.IsDead()) continue;            // Don't bother reporting dead bills
-               if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
-               if (report.IsChaptered()) continue;       // Don't bother reporting chaptered bills
-               ReportOneBill(sw, report);
+            if (File.Exists(path)) { 
+               string contents = FileUtils.FileContents(path);
+               if (BillUtils.IsNewThisWeek(report, contents, past_week)) {
+                  if (report.IsDead()) continue;            // Don't bother reporting dead bills
+                  if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
+                  if (report.IsChaptered()) continue;       // Don't bother reporting chaptered bills
+                  ReportOneBill(sw, report);
+               }
             }
          }
          EndTable(sw);
@@ -104,12 +106,14 @@ namespace Scout2.Report {
             if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
 
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
-            string contents = File.ReadAllText(path);
-            if (BillUtils.IsNewThisWeek(report, contents, past_week)) continue; // Don't report new bills.
+            if (File.Exists(path)) {
+               string contents = FileUtils.FileContents(path);
+               if (BillUtils.IsNewThisWeek(report, contents, past_week)) continue; // Don't report new bills.
 
-            var dt = DateFromLastAction(report);
-            if (DateUtils.DateIsInPastWeek(dt, past_week)) {
-               ReportOneBill(sw, report);
+               var dt = DateFromLastAction(report);
+               if (DateUtils.DateIsInPastWeek(dt, past_week)) {
+                  ReportOneBill(sw, report);
+               }
             }
          }
          EndTable(sw);

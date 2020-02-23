@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Scout2.Utility;
 
 namespace Library {
    /// The public properties of this class uniquely identify each version of each bill within a biennium.
@@ -17,7 +18,7 @@ namespace Library {
       public Bill_Identifier(string path) { 
          if (File.Exists(path)) {
             LobPath = path;
-			   Contents = File.ReadAllText(path);
+			   Contents = FileUtils.FileContents(path);
             if (Contents.Contains("&lt;")) {  // < isn't always done correctly
                var re_lt = "&lt;";
                Contents = Regex.Replace(Contents,re_lt,"<").ToString();
