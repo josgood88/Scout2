@@ -21,7 +21,7 @@ namespace Scout2.Sequence {
       public string Title { protected set; get; }
       public string Author { protected set; get; }
       public UnreportedBillForDisplay(string a, string b, string c, string d) {
-         Measure = a; NegativeScore = BillUtils.Ensure4DigitNumber(b); Title = c; Author = d;
+         Measure = a; NegativeScore = b;  Title = c; Author = d;
       }
    }
 }

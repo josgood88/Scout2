@@ -52,8 +52,7 @@ namespace Scout2.Report {
             OneLiner = line.Substring(index+1).Trim();   // At least one space before summary
 
             // Find Last Action.  The correct source for Last Action is the history data imported from the 
-            // legislature site.  That data is assumed correct -- the previous report may be wrong due to 
-            // a coding error in this program.
+            // legislature site.  That data is considered original, data emitted by this program is derivative.
             BillUtils.ExtractHouseNumber(Measure, out string house, out string number);
             var bill_id = $"{house}{number}";
             BillHistoryRow mostRecent = GlobalData.HistoryTable.LatestFromHouseNumber(bill_id);

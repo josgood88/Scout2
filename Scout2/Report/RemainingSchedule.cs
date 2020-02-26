@@ -11,6 +11,7 @@ namespace Scout2.Report {
       private static StringBuilder sb = new StringBuilder();
 
       public static string AsString() {
+// TODO: Move the remaining schedule to a data file
          last_monday = DateUtils.LastMonday();
          sb = new StringBuilder();
          sb.Append("   <table border=\"1\">");

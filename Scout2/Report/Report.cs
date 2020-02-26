@@ -12,9 +12,19 @@ namespace Scout2.Report {
       private readonly string path_log_file;
       private readonly string report_folder;
 
+      // TODO DateRange private set
       public class DateRange {
          public DateTime start { get; set; }
          public DateTime end { get; set; }
+         public DateRange() { }
+         public DateRange(string _start, string _end) {
+            bool start_success = (DateTime.TryParse(_start, out DateTime start_date));
+            if (!start_success) throw new ApplicationException($"DateRange ctor: invalid start date {_start}");
+            bool end_success = (DateTime.TryParse(_end, out DateTime end_date));
+            if (!end_success) throw new ApplicationException($"DateRange ctor: invalid end date {_end}");
+            start = start_date;
+            end = end_date;
+         }
       }
 
       public Report(string output_folder, string path_log_file, string report_folder) {
@@ -71,7 +81,7 @@ namespace Scout2.Report {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             if (File.Exists(path)) { 
                string contents = FileUtils.FileContents(path);
-               if (BillUtils.IsNewThisWeek(report, contents, past_week)) {
+               if (BillUtils.IsNewThisWeek( contents, past_week)) {
                   if (report.IsDead()) continue;            // Don't bother reporting dead bills
                   if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
                   if (report.IsChaptered()) continue;       // Don't bother reporting chaptered bills
@@ -108,7 +118,7 @@ namespace Scout2.Report {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             if (File.Exists(path)) {
                string contents = FileUtils.FileContents(path);
-               if (BillUtils.IsNewThisWeek(report, contents, past_week)) continue; // Don't report new bills.
+               if (BillUtils.IsNewThisWeek(contents, past_week)) continue; // Don't report new bills.
 
                var dt = DateFromLastAction(report);
                if (DateUtils.DateIsInPastWeek(dt, past_week)) {
@@ -215,7 +225,7 @@ namespace Scout2.Report {
 
       private void ReportPrediction(StreamWriter sw, DateRange past_week, BillReport report, string committees, string likelihood) {
          string report_contents = BillUtils.ContentsFromBillReport(report);
-         string new_prefix = BillUtils.IsNewThisWeek(report, report_contents, past_week) ? "(NEW)" : string.Empty;
+         string new_prefix = BillUtils.IsNewThisWeek(report_contents, past_week) ? "(NEW)" : string.Empty;
          string change_prefix = string.Empty;
          if (new_prefix.Length == 0) {
             var dt = DateFromLastAction(report);

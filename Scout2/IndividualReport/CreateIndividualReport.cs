@@ -90,6 +90,7 @@ namespace Scout2.IndividualReport {
          result.Add("</p>");
 
          // Bill History
+         // TODO: Show latest item first
          result.Add("<p>");
          result.Add("   <b>Bill History</b>:");
          foreach (var item in history) {

@@ -150,6 +150,7 @@
       <DependentUpon>UpdatedBillsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\BillUtils.cs" />
+    <Compile Include="Utility\CommonUtils.cs" />
     <Compile Include="Utility\DateUtils.cs" />
     <Compile Include="Utility\FileUtils.cs" />
     <Compile Include="Utility\MiscUtils.cs" />
