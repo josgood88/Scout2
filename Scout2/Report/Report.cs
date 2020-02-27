@@ -12,11 +12,11 @@ namespace Scout2.Report {
       private readonly string path_log_file;
       private readonly string report_folder;
 
-      // TODO DateRange private set
       public class DateRange {
-         public DateTime start { get; set; }
-         public DateTime end { get; set; }
+         public DateTime start { get; private set; }
+         public DateTime end { get; private set; }
          public DateRange() { }
+         public DateRange(DateTime _start, DateTime _end) { start = _start; end = _end;  }
          public DateRange(string _start, string _end) {
             bool start_success = (DateTime.TryParse(_start, out DateTime start_date));
             if (!start_success) throw new ApplicationException($"DateRange ctor: invalid start date {_start}");
@@ -283,11 +283,10 @@ namespace Scout2.Report {
       }
 
       private DateRange PastWeek() {
-         DateRange result = new DateRange();
-         result.end = DateUtils.NextMonday();
-         result.end = new DateTime(result.end.Year, result.end.Month, result.end.Day);
-         result.start = result.end - TimeSpan.FromDays(7);
-         return result;
+         var range_end = DateUtils.NextMonday();
+         var end = new DateTime(range_end.Year, range_end.Month, range_end.Day);
+         var start = range_end - TimeSpan.FromDays(7);
+         return new DateRange(start,end);
       }
 
       private DateTime DateFromLastAction(BillReport report) {

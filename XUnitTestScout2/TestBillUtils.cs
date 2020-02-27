@@ -105,7 +105,7 @@ namespace Scout.Tests {
          if (right_number != null) Assert.True(number == right_number);
       }
 
-      //=====================ExtractHouseNumber=====================
+      //=====================IsNewThisWeek=====================
       [Theory]
       [InlineData(0, "2/23/2020", "2/24/2020", "3/1/2020")]
       [InlineData(0, "3/2/2020",  "2/24/2020", "3/1/2020")]

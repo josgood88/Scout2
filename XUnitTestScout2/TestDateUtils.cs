@@ -44,10 +44,8 @@ namespace Scout.Tests {
       [InlineData(1, "2/15/2020", "2/10/2020", "2/16/2020")]
       [InlineData(1, "2/16/2020", "2/10/2020", "2/16/2020")]
       public void TestDateIsInPastWeek(int is_in_range, string this_date, string start, string end) {
-         Report.DateRange range = new Report.DateRange();
          DateTime dt = DateTime.Parse(this_date);  // Test data assumed to have valid dates
-         range.start = DateTime.Parse(start);
-         range.end   = DateTime.Parse(end);
+         var range = new Report.DateRange(start, end);
          bool result = DateUtils.DateIsInPastWeek(dt, range);
          Assert.True(result == (is_in_range != 0));
       }

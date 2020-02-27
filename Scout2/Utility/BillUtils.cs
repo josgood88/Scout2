@@ -21,15 +21,15 @@ namespace Scout2.Utility {
       /// Ensure the Measure/BillID has a 4-digt number, e.g. AB0123.
       /// In the database BillRow table, BillID uses a 4-digit number so that when sorted by BillID, the sorting
       /// comes out as expected -- AB0003 preceeds AB0010.
+      /// This method does not require a house (chamber) to be specified.
+      /// It is focused on the measure number -- it only preserves the house if it is there.
       /// </summary>
-      /// <param name="bill">Bill house & measure, e.g. AB123</param>
+      /// <param name="measure">Bill house (usually) & measure, e.g. AB123</param>
       /// <returns>Bill house & measure, 4-digit measure ensured</returns>
-      public static string Ensure4DigitNumber(string bill) {
-         if (string.IsNullOrEmpty(bill))
+      public static string Ensure4DigitNumber(string measure) {
+         if (string.IsNullOrEmpty(measure))
             throw new ApplicationException("BillUtils.Ensure4DigitNumber: Bill is null or empty.");
-         ExtractHouseNumber(NoDash(bill), out string house, out string number);
-         if (string.IsNullOrEmpty(house))
-            throw new ApplicationException("BillUtils.Ensure4DigitNumber: {bill} does not specify chamber.");
+         ExtractHouseNumber(NoDash(measure), out string house, out string number);
          if (string.IsNullOrEmpty(number))
             throw new ApplicationException("BillUtils.Ensure4DigitNumber: {bill} does not specify bill number.");
          if (number.Length > 4)
