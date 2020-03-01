@@ -105,6 +105,7 @@ namespace Scout2.Sequence {
          string fiscal = bv_row.FiscalCommittee;
          string house = history.First().PrimaryLocation;
          string last_action = FindLastAction(row);
+         // TODO location is Desk if "Read first time.  To print." or "From printer.  May be heard in committee"
          string location = location_code_row == null ? string.Empty : location_code_row.Description;
          string local_pgm = bv_row.LocalProgram;
          string number = row.MeasureNum.TrimStart('0');
@@ -158,6 +159,7 @@ namespace Scout2.Sequence {
          // Status, Location, etc
          if (position.Count == 0) result.Add("<p>");
          result.Add("<b>Status</b>:");
+         // TODO location is blank when AB1275 Sep 14 2019 Ordered to inactive file at the request of Senator Bradford
          result.Add($"<br /> Location: {location}");
          string str_date = String.Empty;
          if (history.Count > 0) str_date = history.First().ActionDate;

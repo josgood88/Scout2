@@ -39,13 +39,13 @@ namespace Scout2.Report {
          var past_week = PastWeek();
          using (var sw = new StreamWriter(weekly_report_path)) {
             Header(sw);
-            HighestPriority(reports, sw);             // Our highest priority bills
-            NewThisWeek(reports, past_week, sw);      // New bills of interest this week
-            ChangesThisWeek(reports, past_week, sw);  // Changes this week in bills of interest
+            HighestPriority(sw, reports, past_week);  // Our highest priority bills
+            NewThisWeek(sw, reports, past_week);      // New bills of interest this week
+            ChangesThisWeek(sw, reports, past_week);  // Changes this week in bills of interest
             //UpcomingCommitteeHearingsOfInterest(sw);// Committee hearings for bills of interest
-            Oppose(sw, reports);                      // Bills for which our position is Oppose
-            Modify_Monitor(sw, reports);              // Bills for which our position is Monitor or Modify
-            Predictions(reports, past_week, sw);      // Per-bill expected path through committees
+            Oppose(sw, reports, past_week);           // Bills for which our position is Oppose
+            Modify_Monitor(sw, reports, past_week);   // Bills for which our position is Monitor or Modify
+            Predictions(sw, reports, past_week);      // Per-bill expected path through committees
             Chaptered(sw, reports);                   // Bills of interest which chaptered this biennium
             Dead(sw, reports);                        // Bills of interest which died this biennium
             RemainingLegislativeSchedule(sw);         // What's left on this year's schedule
@@ -75,7 +75,7 @@ namespace Scout2.Report {
       /// <param name="reports">Collected bill reports</param>
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
-      private void NewThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
+      private void NewThisWeek(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartTable(sw,"New Of-Interest Bills This Week");
          foreach (var report in reports) {
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
@@ -92,13 +92,14 @@ namespace Scout2.Report {
          EndTable(sw);
       }
 
-      private void HighestPriority(BillReportCollection reports, StreamWriter sw) {
+      private void HighestPriority(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartTable(sw, "Highest Priority Bills");
          foreach (string bill in Config.Instance.HighestPriority) {
             var measure = BillUtils.EnsureDashAndNoLeadingZeros(bill);
             var report = (from item in reports where (item.Measure == measure) select item).FirstOrDefault();
             if (report != null) {
-               ReportOneBill(sw, report);
+               string prefix = BillUtils.NewOrChangePrefix(past_week, report);
+               ReportOneBillWithPrefix(sw, report, prefix);
             }
          }
          EndTable(sw); 
@@ -109,7 +110,7 @@ namespace Scout2.Report {
       /// <param name="reports">Collected bill reports</param>
       /// <param name="past_week">The dates bounding the past calendar week</param>
       /// <param name="sw">StreamWriter which will be written to the report file</param>
-      private void ChangesThisWeek(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
+      private void ChangesThisWeek(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartTable(sw, "Changes This Week in Bills Of Interest");
          foreach (var report in reports) {
             if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
@@ -129,11 +130,12 @@ namespace Scout2.Report {
          EndTable(sw);
       }
 
-      private void Predictions(BillReportCollection reports, DateRange past_week, StreamWriter sw) {
+      private void Predictions(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartPredictionTable(sw, "Predicted Committee Routing");
          foreach (var report in reports) {
-            if (report.IsPositionNone()) continue;    // Don't bother reporting bills on which we have no position
-            if (report.IsDead()) continue;            // Don't bother reporting dead bills (e.g. Joint Rule 56)
+            if (report.IsPositionNone()) continue;    // Don't report bills on which we have no position
+            if (report.IsDead()) continue;            // Don't report dead bills (e.g. Joint Rule 56)
+            if (report.IsChaptered()) continue;       // Don't report chaptered bills
             string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
             string committees = IndividualReport.PreviousReport.Committees(path);
             string likelihood = IndividualReport.PreviousReport.Likelihood(path);
@@ -161,21 +163,28 @@ namespace Scout2.Report {
          EndTable(sw);
       }
 
-      private void Oppose(StreamWriter sw, BillReportCollection reports) {
+      private void Oppose(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartTable(sw, "Oppose");
          foreach (var report in reports) {
-            if (report.IsDead()) continue;   // Don't bother reporting dead bills
-            if (report.IsPositionOppose()) ReportOneBill(sw, report);
+            if (report.IsDead()) continue;      // Don't report dead bills
+            if (report.IsChaptered()) continue; // Chaptered bills are reported elsewhere
+            if (report.IsPositionOppose()) {
+               string prefix = BillUtils.NewOrChangePrefix(past_week, report);
+               ReportOneBillWithPrefix(sw, report, prefix);
+            }
          }
          EndTable(sw);
       }
 
-      private void Modify_Monitor(StreamWriter sw, BillReportCollection reports) {
+      private void Modify_Monitor(StreamWriter sw, BillReportCollection reports, DateRange past_week) {
          StartTable(sw, "Modify/Monitor");
          foreach (var report in reports) {
             if (report.IsDead()) continue;      // Don't bother reporting dead bills
             if (report.IsChaptered()) continue; // Chaptered bills are reported elsewhere
-            if (report.IsPositionModifyOrMonitor()) ReportOneBill(sw, report);
+            if (report.IsPositionModifyOrMonitor()) {
+               string prefix = BillUtils.NewOrChangePrefix(past_week, report);
+               ReportOneBillWithPrefix(sw, report,prefix);
+            }
          }
          EndTable(sw);
       }
@@ -223,25 +232,23 @@ namespace Scout2.Report {
          sw.WriteLine("</tr>");
       }
 
-      private void ReportPrediction(StreamWriter sw, DateRange past_week, BillReport report, string committees, string likelihood) {
-         string report_contents = BillUtils.ContentsFromBillReport(report);
-         string new_prefix = BillUtils.IsNewThisWeek(report_contents, past_week) ? "(NEW)" : string.Empty;
-         string change_prefix = string.Empty;
-         if (new_prefix.Length == 0) {
-            var dt = DateFromLastAction(report);
-            change_prefix = DateUtils.DateIsInPastWeek(dt, past_week) ? "(UPDATED)" : CheckManualUpdate(report);
-         }
+      private void ReportOneBillWithPrefix(StreamWriter sw, BillReport report, string prefix) {
          sw.WriteLine("<tr>");
-         sw.WriteLine($"<td>{new_prefix}{change_prefix} {report.Measure} {report.Title} ({report.Author})</td>");
-         sw.WriteLine($"<td>{committees}</td> <td>{likelihood}</td>");
+         sw.WriteLine($"<td>{prefix}{report.Measure} {report.Title} ({report.Author})</td>");
+         sw.WriteLine($"  <td>{report.WIC}</td>");
+         sw.WriteLine($"  <td>{report.LPS}</td>");
+         sw.WriteLine($"  <td>{report.Position??"Null"}</td>");
+         sw.WriteLine($"  <td>{report.OneLiner}</td>");
+         sw.WriteLine($"  <td>{report.LastAction}</td>");
          sw.WriteLine("</tr>");
       }
 
-      private string CheckManualUpdate(BillReport report) {
-         var measure = BillUtils.NoDash(report.Measure);
-         var changes = Config.Instance.ManualCommitteeChanges;
-         var end_of_section = changes.FirstOrDefault(t => t == measure);
-         return end_of_section != null ? "(MANUAL)" : String.Empty;
+      private void ReportPrediction(StreamWriter sw, DateRange past_week, BillReport report, string committees, string likelihood) {
+         string prefix = BillUtils.NewOrChangePrefix(past_week, report);
+         sw.WriteLine("<tr>");
+         sw.WriteLine($"<td>{prefix} {report.Measure} {report.Title} ({report.Author})</td>");
+         sw.WriteLine($"<td>{committees}</td> <td>{likelihood}</td>");
+         sw.WriteLine("</tr>");
       }
       /// <summary>
       /// Report date is always the Monday following today

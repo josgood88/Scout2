@@ -54,7 +54,8 @@ namespace Library.Database {
 
       public List<BillHistoryRow> RowSet(string bill_id) {
          var result = (from item in Table where (item.BillID == bill_id) select item).ToList();
-         result.Sort((a, b) => a.SequenceAsInt().CompareTo(b.SequenceAsInt()));
+         // Sort by sequence descending
+         result.Sort((a, b) => b.SequenceAsInt().CompareTo(a.SequenceAsInt()));
          return result;
       }
 

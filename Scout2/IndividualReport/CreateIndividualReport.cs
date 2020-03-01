@@ -23,6 +23,7 @@ namespace Scout2.IndividualReport {
          string fiscal        = bv_row.FiscalCommittee;
          string house         = history.First().PrimaryLocation;
          string last_action   = CreateNewReports.FindLastAction(row);
+         // TODO location is Desk if "Read first time.  To print." or "From printer.  May be heard in committee"
          string location      = location_code_row == null ? string.Empty : location_code_row.Description;
          string local_pgm     = bv_row.LocalProgram;
          string number        = row.MeasureNum.TrimStart('0');
@@ -50,10 +51,10 @@ namespace Scout2.IndividualReport {
          result.Add("</p>");
 
          // Review
-         result.Add("<p>");
          if (summary.Count > 0) {
             foreach (var line in summary) result.Add(line);
          } else {
+            result.Add("<p>");
             result.Add($"<b>Summary</b>: (Reviewed {DateTime.Now.ToShortDateString()})");
             result.Add("   <br /> (Quotations taken directly from the bill's language, or from current code)");
             result.Add("   <br />");
@@ -79,18 +80,18 @@ namespace Scout2.IndividualReport {
          // Status, Location, etc
          result.Add("<p>");
          result.Add("<b>Status</b>:");
+         // TODO location is blank when AB1275 Sep 14 2019 Ordered to inactive file at the request of Senator Bradford
          result.Add($"<br /> Location: {location}");
          string str_date = String.Empty;
          if (history.Count > 0) str_date = history.First().ActionDate;
-         result.Add($"<br /> Last Action:  {FormatDate(str_date)} {last_action}");
          result.Add("<table cellspacing=\"0\" cellpadding=\"0\">");
-         result.Add($"   <tr><td> Vote: {vote}             </td><td> &nbsp; &nbsp; Appropriation: {appropriation}</td></tr>");
-         result.Add($"   <tr><td> Fiscal committee: {fiscal} </td><td> &nbsp; &nbsp; State-mandated local program: {local_pgm} </td></tr>");
+         result.Add($"   <tr><td> Last Action: {FormatDate(str_date)} </td><td> &nbsp; &nbsp; {last_action}</td></tr>");
+         result.Add($"   <tr><td> Vote: {vote}                        </td><td> &nbsp; &nbsp; Appropriation: {appropriation}</td></tr>");
+         result.Add($"   <tr><td> Fiscal committee: {fiscal}          </td><td> &nbsp; &nbsp; State-mandated local program: {local_pgm} </td></tr>");
          result.Add("</table>");
          result.Add("</p>");
 
          // Bill History
-         // TODO: Show latest item first
          result.Add("<p>");
          result.Add("   <b>Bill History</b>:");
          foreach (var item in history) {

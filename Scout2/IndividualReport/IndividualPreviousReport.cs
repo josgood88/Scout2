@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
    public class PreviousReport {
@@ -19,19 +20,37 @@ namespace Scout2.IndividualReport {
       };
       /// <summary>
       /// Obtains the (potentially multi-line) Summary described in an individual bill report
+      /// Summary is terminated by Position.  There may be intervening lines between the actual end
+      /// of the Summary and the Position marker.  Delete those lines and ensure that the summary
+      /// is contained by <p></p>
       /// </summary>
       /// <param name="path">Path to the individual report file being examined</param>
       /// <returns></returns>
       public static List<string> Summary(string path) {
-         return FetchListFields(path, signal_summ, signal_end_of_section);
+         var result = FetchListFields(path, signal_summ, signal_end_of_section);
+         while (result.Last().Contains("/html") || result.Last().Contains("<p>") || result.Last().Contains("</p")) {
+            result.RemoveAt(result.Count-1);
+         }
+         result.Insert(0, "<p>");
+         result.Add("</p>");
+         return result;
       }
       /// <summary>
       /// Obtains the (potentially multi-line) Position described in an individual bill report
+      /// Position is terminated by ShortSummary.  There may be intervening lines between the actual end
+      /// of the Position and the ShortSummary marker.  Delete those lines and ensure that the position
+      /// is contained by <p></p>
       /// </summary>
       /// <param name="path">Path to the individual report file being examined</param>
       /// <returns></returns>
       public static List<string> Position(string path) {
-         return FetchListFields(path, signal_posit, signal_end_of_section);
+         var result = FetchListFields(path, signal_posit, signal_end_of_section);
+         while (result.Last().Contains("/html") || result.Last().Contains("<p>") || result.Last().Contains("</p")) {
+            result.RemoveAt(result.Count-1);
+         }
+         result.Insert(0, "<p>");
+         result.Add("</p>");
+         return result;
       }
       /// <summary>
       /// Obtains the ShortSummary described in an individual bill report

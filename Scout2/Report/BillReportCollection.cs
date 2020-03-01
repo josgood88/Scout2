@@ -11,17 +11,17 @@ using Scout2.Utility;
 
 namespace Scout2.Report {
    public class BillReport {
-      public string Author     { get; private set; }
-      public string Measure    { get; private set; }
-      public string WIC        { get; private set; }
-      public string LPS        { get; private set; }
-      public string Position   { get; private set; }
-      public string OneLiner   { get; private set; } // One-line summation
+      public string Author { get; private set; }
+      public string Measure { get; private set; }
+      public string WIC { get; private set; }
+      public string LPS { get; private set; }
+      public string Position { get; private set; }
+      public string OneLiner { get; private set; } // One-line summation
       public string LastAction { get; private set; }
-      public string Title      { get; private set; }
+      public string Title { get; private set; }
 
       private readonly Regex rx_measure = new Regex(@".B-\d+");
-      private readonly Regex rx_author  = new Regex("\\(.*\\)");
+      private readonly Regex rx_author = new Regex("\\(.*\\)");
 
       public BillReport(string file_path) {
          try {
@@ -99,8 +99,8 @@ namespace Scout2.Report {
          return i_lhs.CompareTo(i_rhs);
       }
 
-      private string House(string measure) { return Regex.Match(measure, "^[A-Z]+").ToString();  }
-      private string BillNumber(string measure) { return Regex.Replace(measure,@".*?(\d+)","$1").ToString(); }
+      private string House(string measure) { return Regex.Match(measure, "^[A-Z]+").ToString(); }
+      private string BillNumber(string measure) { return Regex.Replace(measure, @".*?(\d+)", "$1").ToString(); }
       /// <summary>
       /// Answer whether our position on a bill is None -- we have no position.
       /// </summary>
@@ -144,13 +144,21 @@ namespace Scout2.Report {
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
+         // TODO search for matches in a string[] rather than if else if etc
          var line = lines.Find(x => x.Contains("This bill is dead"));
-         if (line == default(string)) {
+         // Died at Desk
+         if (line == default) {
             line = lines.Find(x => x.Contains("Vetoed by Governor"));
+            if (line == default) {
+               line = lines.Find(x => x.Contains("pursuant to Joint Rule 56"));
+               if (line == default) {
+                  line = lines.Find(x => x.Contains("Stricken from file"));
+               }
+            }
          }
          return (line != null) ? true : false;
       }
-      public bool IsNotDead() { return !IsDead();  }
+      public bool IsNotDead() { return !IsDead(); }
    }
 
    /// <summary>
@@ -172,7 +180,7 @@ namespace Scout2.Report {
          if (GlobalData.MostRecentEachBill.Count == 0) { // True if starting later in sequence than "Import Into Database"
             GlobalData.MostRecentEachBill = MostRecentBills.Identify(Config.Instance.BillsFolder);
          }
-         List<string> files = Directory.GetFiles(report_folder,"*.html").ToList();
+         List<string> files = Directory.GetFiles(report_folder, "*.html").ToList();
          foreach (var file in files) {
             if (!file.Contains("WeeklyNewsMonitoredBills")) reports.Add(new BillReport(file));
          }

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scout2", "Scout2\Scout2.csproj", "{4D322F4B-5866-4FE0-BA7D-2888650A2E0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scout.Tests", "XUnitTestScout2\Scout.Tests.csproj", "{1471A9AF-DDD0-4FBD-AF7A-3B27BCFD7A07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scout.Tests", "XUnitTestScout2\Scout.Tests.csproj", "{1471A9AF-DDD0-4FBD-AF7A-3B27BCFD7A07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

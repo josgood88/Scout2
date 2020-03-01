@@ -86,6 +86,11 @@ namespace Scout2.Report {
          sb.Append("         <td>A group of noncontroversial bills passed by a committee to another committee or the full Assembly or Senate. Bills may be placed upon the Consent Calendar if they are reported to the Floor with that recommendation and (1) have received no \"no\" votes in committee and(2) have had no opposition expressed by any person present at the hearing.</td>");
          sb.Append("      </tr>");
          sb.Append("      <tr>");
+         sb.Append("         <td>Declaratory </td>");
+         sb.Append("         <td></td>");
+         sb.Append("         <td>Something which explains, or ascertains what before was uncertain or doubtful; as a declaratory statute, which is one passed to put an end to a doubt as to what the law is, and which declares what it is, and what it has been. 1 Bl. Com. 86. </td>");
+         sb.Append("      </tr>");
+         sb.Append("      <tr>");
          sb.Append("         <td>Enrolled</td>");
          sb.Append("         <td></td>");
          sb.Append("         <td>Once a bill has passed the legislature, it goes to the governor for signature.The \"enrollment\" process includes the notation of the exact date and time each bill is sent to the Governor to sign or veto, or he may allow it to become law without signing.</td>");

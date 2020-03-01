@@ -117,5 +117,30 @@ namespace Scout2.Utility {
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
          return FileUtils.FileContents(path);
       }
+
+      public static string NewOrChangePrefix(Report.Report.DateRange past_week, BillReport report) {
+         const string prefix_new = "<span style=\"color: #ff0000\">NEW</span><br />";
+         const string prefix_update = "<span style=\"color: #ff0000\">UPDATED</span><br />";
+         string report_contents = BillUtils.ContentsFromBillReport(report);
+         string prefix = BillUtils.IsNewThisWeek(report_contents, past_week) ? prefix_new : string.Empty;
+         if (prefix.Length == 0) {
+            var dt = DateFromLastAction(report);
+            prefix = DateUtils.DateIsInPastWeek(dt, past_week) ? prefix_update : CheckManualUpdate(report);
+         }
+         return prefix;
+      }
+
+      private static string CheckManualUpdate(BillReport report) {
+         const string prefix_manual = "<span style=\"color: #ff0000\">MANUAL</span><br />";
+         var measure = BillUtils.NoDash(report.Measure);
+         var changes = Config.Instance.ManualCommitteeChanges;
+         var end_of_section = changes.FirstOrDefault(t => t == measure);
+         return end_of_section != null ? prefix_manual : string.Empty;
+      }
+
+      public static DateTime DateFromLastAction(BillReport report) {
+         var text_date = Regex.Match(report.LastAction, @"^\w+\s+\w+\s+\w+").ToString();
+         return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
+      }
    }
 }
