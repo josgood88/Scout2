@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
+using Library.Database;
 using Scout2.Report;
 
 namespace Scout2.Utility {
@@ -141,6 +142,26 @@ namespace Scout2.Utility {
       public static DateTime DateFromLastAction(BillReport report) {
          var text_date = Regex.Match(report.LastAction, @"^\w+\s+\w+\s+\w+").ToString();
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
+      }
+      /// <summary>
+      /// When the location code is null, the location code may be determined by the first line of
+      /// the history file (sorted from most recent to earliest);
+      /// </summary>
+      /// <param name="history"></param>
+      /// <returns></returns>
+      public static string WhenNullLocationCode(List<BillHistoryRow> history) {
+         string first_line = history.First().Action;
+         if (first_line.Contains("Read first time.")) return "Desk";
+         if (first_line.Contains("To print.")) return "Desk";
+         if (first_line.Contains("Died at Desk.")) return "Desk";
+         if (first_line.Contains("From printer.")) return "Desk";
+         if (first_line.Contains("Chaptered")) return "California Code";
+         if (first_line.Contains("stricken from file.")) return "Stricken";
+         if (first_line.Contains("Stricken from file.")) return "Stricken";
+         if (first_line.Contains("Ordered to inactive file")) return "Inactive";
+         if (first_line.Contains("Died on file pursuant to Joint Rule 56.")) return "Dead - Joint Rule 56";
+         if (first_line.Contains("Veto sustained.")) return "Vetoed";
+         return string.Empty;
       }
    }
 }

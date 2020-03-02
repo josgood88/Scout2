@@ -20,7 +20,7 @@ namespace Scout2.Sequence {
             LogAndDisplay(form1.txtCreatesProgress, "Showing bills that have no report.");
             var bills_with_no_position = CollectNoPositionBills();
             var bills_for_display = Convert(bills_with_no_position);
-            // Display those bills that have no report, or else a MessageBox saying all bills have a report.
+            // Display those bills that have no report.
             if (bills_for_display.Any()) {
                upreported_form.PrepareDataGridView();
                upreported_form.AddRows(bills_for_display);
@@ -105,8 +105,7 @@ namespace Scout2.Sequence {
          string fiscal = bv_row.FiscalCommittee;
          string house = history.First().PrimaryLocation;
          string last_action = FindLastAction(row);
-         // TODO location is Desk if "Read first time.  To print." or "From printer.  May be heard in committee"
-         string location = location_code_row == null ? string.Empty : location_code_row.Description;
+         string location = location_code_row == null ? BillUtils.WhenNullLocationCode(history) : location_code_row.Description;
          string local_pgm = bv_row.LocalProgram;
          string number = row.MeasureNum.TrimStart('0');
          string title = row.Title;

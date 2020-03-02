@@ -138,26 +138,15 @@ namespace Scout2.Report {
       /// Answer whether a bill is dead. Reviewer notes this by writing "This bill is dead" somewhere in the review.
       /// Notation is usually made as the first line in the Summary block of lines.
       /// </summary>
-      /// <returns></returns>
+      /// <returns>Whether any line in the report contains an IsDead signature</returns>
       public bool IsDead() {
          if (Position.Contains("Dead")) return true;
          var measure = Regex.Replace(Measure, "(.*?)-(.*)", "$1$2");
          var location = Path.Combine(Config.Instance.HtmlFolder, $"{measure}.html");
          var lines = File.ReadLines(location).ToList();
-         // TODO search for matches in a string[] rather than if else if etc
-         var line = lines.Find(x => x.Contains("This bill is dead"));
-         // Died at Desk
-         if (line == default) {
-            line = lines.Find(x => x.Contains("Vetoed by Governor"));
-            if (line == default) {
-               line = lines.Find(x => x.Contains("pursuant to Joint Rule 56"));
-               if (line == default) {
-                  line = lines.Find(x => x.Contains("Stricken from file"));
-               }
-            }
-         }
-         return (line != null) ? true : false;
+         return Whether.Instance.IsDeadSignature(lines);
       }
+
       public bool IsNotDead() { return !IsDead(); }
    }
 

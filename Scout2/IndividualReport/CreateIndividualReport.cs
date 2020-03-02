@@ -5,6 +5,7 @@ using System.Linq;
 using Library;
 using Library.Database;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
    public class CreateIndividualReport {
@@ -23,8 +24,7 @@ namespace Scout2.IndividualReport {
          string fiscal        = bv_row.FiscalCommittee;
          string house         = history.First().PrimaryLocation;
          string last_action   = CreateNewReports.FindLastAction(row);
-         // TODO location is Desk if "Read first time.  To print." or "From printer.  May be heard in committee"
-         string location      = location_code_row == null ? string.Empty : location_code_row.Description;
+         string location      = location_code_row == null ? BillUtils.WhenNullLocationCode(history) : location_code_row.Description;
          string local_pgm     = bv_row.LocalProgram;
          string number        = row.MeasureNum.TrimStart('0');
          string title         = row.Title;
