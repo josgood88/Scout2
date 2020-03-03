@@ -158,7 +158,6 @@ namespace Scout2.Sequence {
          // Status, Location, etc
          if (position.Count == 0) result.Add("<p>");
          result.Add("<b>Status</b>:");
-         // TODO location is blank when AB1275 Sep 14 2019 Ordered to inactive file at the request of Senator Bradford
          result.Add($"<br /> Location: {location}");
          string str_date = String.Empty;
          if (history.Count > 0) str_date = history.First().ActionDate;

@@ -65,7 +65,7 @@ namespace Scout2.Report {
          string of_interest = Regex.Replace(candidate.Trim(), $"{preface}([^<]+).*", "$1"); // Extract day and month
          of_interest += $" {DateTime.Now.Year.ToString()}";    // Append year
          if (DateTime.TryParse(of_interest, out DateTime event_date)) {
-            if (event_date > last_monday) {  // If the candidate date islater than last Monday
+            if (event_date > last_monday) {  // If the candidate date is later than last Monday
                sb.Append(candidate);         // Then add the candidate to the StringBuilder
             }
          }

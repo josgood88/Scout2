@@ -24,7 +24,6 @@ namespace Scout.Tests {
       [InlineData("")]
       [InlineData("AB")]
       [InlineData("SB")]
-      [InlineData("12")]
       [InlineData("AB12345")]
       [InlineData("AB-12345")]
       public void TestEnsure4DigitNumberThrow(string input) {
