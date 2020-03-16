@@ -7,11 +7,7 @@ using Scout2.Sequence;
 using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
-   public class IndividualReport {
-      private bool verbose;
-      private bool update;
-
-      public IndividualReport(bool _verbose, bool _update) { verbose = _verbose; update = _update; }
+   public class IndividualReport : IndividualReportCommon {
 
       public void Run(string _bill) {
          var path = FilePath(_bill);
@@ -26,12 +22,6 @@ namespace Scout2.IndividualReport {
          WriteTextFile(contents, path);
          var message = $"Regenerated {row.Bill} report.";
          BaseController.LogThis(message);
-      }
-
-      private void WriteTextFile(List<string> contents, string path) {
-         using (System.IO.StreamWriter file = new System.IO.StreamWriter(path)) {
-            foreach (string line in contents) { file.WriteLine(line); }
-         }
       }
    }
 }

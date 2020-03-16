@@ -10,7 +10,7 @@ using Library.Database;
 using Scout2.Utility;
 
 namespace Scout2.Sequence {
-   public class CreateNewReports : Scout2.IndividualReport.PreviousReport {
+   public class CreateNewReports : IndividualReport.PreviousReport {
       ///
       /// Give the user an opportunity to create new reports
       /// for those bills having the highest scores.
@@ -72,7 +72,7 @@ namespace Scout2.Sequence {
          List<string> contents = BaseReportContents(row, string.Empty);
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(measure))}.html";
          WriteTextFile(contents, path);
-         // Let the user edit the canonical bill
+         // Let the user edit the canonical bill, which has been written to disk.
          var process = Process.Start("notepad.exe", path);
          if (process != null) process.WaitForExit();
          else LogAndShow($"CreateNewReports.GenerateCanonicalReport: Failed to start Notepad for {path}.");
@@ -84,13 +84,6 @@ namespace Scout2.Sequence {
          BillRow.UpdatePosition(measure, position.Trim());
          LogAndShow($"Completed {path}");
       }
-
-      private static void WriteTextFile(List<string> contents, string path) {
-         using (System.IO.StreamWriter file = new System.IO.StreamWriter(path)) {
-            foreach (string line in contents) { file.WriteLine(line); }
-         }
-      }
-
       /// <summary>
       /// Obtain the position and summary information from the specified bill report.
       /// </summary>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 using Scout2.Sequence;
@@ -39,7 +38,6 @@ namespace Scout2.IndividualReport {
       /// <param name="path">Path to the .lob file for the bill's current version</param>
       /// <returns></returns>
       protected static List<string> BaseReportContents(BillRow row, string path) {
-         LogThis("Scout2.Sequence.CreateNewReports.ReportContents");
          string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
          BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
          List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
@@ -78,7 +76,8 @@ namespace Scout2.IndividualReport {
             likelihood = PreviousReport.Likelihood(path);
          }
 
-         // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
+         // With all necessary data obtained, generate the report file.
+         // Both initial creation (new bill) and re-generation are processed here.
          List<string> result = BeginIndividualReport(type_house, number, author, title);
          // Review
          result.AddRange(ReportReview(summary));
@@ -114,7 +113,7 @@ namespace Scout2.IndividualReport {
          };
          return result;
       }
-      // Review
+      // Report Review
       protected static List<string> ReportReview(List<string> summary) {
          if (summary.Count > 0) {
             return summary;
@@ -130,7 +129,7 @@ namespace Scout2.IndividualReport {
             return result;
          }
       }
-      // Position
+      // Report Position
       protected static List<string> ReportPosition(List<string> position) {
          if (position.Count > 0) return position;
          List<string> result = new List<string> {
@@ -141,7 +140,7 @@ namespace Scout2.IndividualReport {
          };
          return result;
       }
-      // Short Summary, Committees Prediction and Passage Likelihood
+      // Report Short Summary, Committees Prediction and Passage Likelihood
       protected static List<string> ReportSummaryPredictLikelihood(string shortsummary, string committees, string likelihood) {
          List<string> result = new List<string> {
             $"<b>ShortSummary</b>: {shortsummary}",
@@ -150,7 +149,7 @@ namespace Scout2.IndividualReport {
          };
          return result;
       }
-      // Status, Location Etc
+      // Report Status, Location Etc
       protected static List<string> ReportStatusLocationEtc(
          string location, string last_action, string vote, string appropriation, 
          string fiscal, string local_pgm, List<BillHistoryRow> history) {
@@ -169,7 +168,7 @@ namespace Scout2.IndividualReport {
          };
          return result;
       }
-      // Bill History
+      // Report Bill History
       protected static List<string> ReportHistory(List<BillHistoryRow> history) {
          List<string> part1 = new List<string> {
             "<p>",
@@ -235,42 +234,15 @@ namespace Scout2.IndividualReport {
             }
          }
       }
-      public static List<string> History(string path) {
-         var result = new List<string>();
-         if (File.Exists(path)) {
-            using (var sr = new StreamReader(path)) {
-               while (!sr.EndOfStream) {
-                  string current_line = sr.ReadLine();
-                  if (String.IsNullOrEmpty(current_line)) current_line = String.Empty;
-                  if (current_line.Trim().StartsWith("<b>Bill History")) {
-                     result.Add(current_line);
-                     while (!sr.EndOfStream) {
-                        current_line = sr.ReadLine();
-                        result.Add(current_line);
-                     }
-                  }
-               }
-            }
+      /// <summary>
+      /// Write a List of String to a text file.  Existing file is overwritten.
+      /// </summary>
+      /// <param name="contents">The contents of the file</param>
+      /// <param name="path">The path to the file</param>
+      public static void WriteTextFile(List<string> contents, string path) {
+         using (System.IO.StreamWriter file = new System.IO.StreamWriter(path)) {
+            foreach (string line in contents) { file.WriteLine(line); }
          }
-         return result;
-      }
-
-      public static string Position(string path) {
-         const string strPosition = "<b>Position";
-         var result = String.Empty;
-         if (File.Exists(path)) {
-            using (var sr = new StreamReader(path)) {
-               while (!sr.EndOfStream) {
-                  string current_line = sr.ReadLine();
-                  if (String.IsNullOrEmpty(current_line)) current_line = String.Empty;
-                  if (current_line.Trim().StartsWith(strPosition)) {
-                     var format = $"{strPosition}</b>:(.*)";
-                     result = Regex.Replace(current_line.Trim(), format, "$1");
-                  }
-               }
-            }
-         }
-         return result;
       }
    }
 }

@@ -18,7 +18,7 @@ namespace Scout2.Sequence {
             List<string> bills = SelectAllBills();
             if (bills.Count > 0) {
                foreach (var item in bills) {
-                  (new IndividualReport.IndividualReport(verbose, update)).Run(item);
+                  (new IndividualReport.IndividualReport()).Run(item);
                }
             } else {
                LogAndDisplay(form1.txtRegenProgress, "No bill history updates were necessary.");
