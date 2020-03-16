@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
+using Scout2.IndividualReport;
 using Scout2.Utility;
 
 namespace Scout2.Sequence {
-   public class Regenerate : BaseController {
+   public class Regenerate : Scout2.IndividualReport.PreviousReport {
       public void Run(Form1 form1) {
          const bool verbose = false, update = false;
          var start_time = DateTime.Now;
@@ -39,9 +40,9 @@ namespace Scout2.Sequence {
                DateTime latest_history_date = DateFromHistoryTable(path);
                if (latest_history_date > latest_report_date) {
                   result.Add(Path.GetFileNameWithoutExtension(path));
-                  String bill = Path.GetFileNameWithoutExtension(path);
-                  String position = PreviousReport.Position(path);
-                  var message = $"{bill} ({position.Trim()}) has changed.";
+                  var bill = Path.GetFileNameWithoutExtension(path);
+                  var position = PreviousReport.Position(path);
+                  var message = $"{bill} ({position[0].Trim()}) has changed.";
                   LogThis(message);
                }
             }
@@ -72,7 +73,7 @@ namespace Scout2.Sequence {
       }
 
       private DateTime DateFromHistoryTable(string path) {
-         String bill = Path.GetFileNameWithoutExtension(path);
+         string bill = Path.GetFileNameWithoutExtension(path);
          BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(bill));
          string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
          BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);

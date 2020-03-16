@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Graphviz2.38\bin\dot" %1 -Tpdf -o %2

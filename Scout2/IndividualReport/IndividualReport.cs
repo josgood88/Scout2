@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Library;
 using Library.Database;
@@ -7,7 +8,6 @@ using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
    public class IndividualReport {
-      //private string bill;
       private bool verbose;
       private bool update;
 
@@ -22,8 +22,8 @@ namespace Scout2.IndividualReport {
 
       private void Create(string bill, string path) {
          BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(bill));
-         List<string> contents = CreateIndividualReport.ReportContents(row,path);
-         WriteTextFile(contents,path);
+         List<string> contents = CreateIndividualReport.ReportContents(row, path);
+         WriteTextFile(contents, path);
          var message = $"Regenerated {row.Bill} report.";
          BaseController.LogThis(message);
       }

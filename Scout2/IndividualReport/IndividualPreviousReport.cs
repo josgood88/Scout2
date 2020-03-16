@@ -4,10 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Scout2.Sequence;
-using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
-   public class PreviousReport {
+   public class PreviousReport : Scout2.IndividualReport.IndividualReportCommon {
       const string signal_comm  = "<b>Committees";
       const string signal_like  = "<b>Likelihood";
       const string signal_posit = "<b>Position";
@@ -43,6 +42,7 @@ namespace Scout2.IndividualReport {
       /// </summary>
       /// <param name="path">Path to the individual report file being examined</param>
       /// <returns></returns>
+      /// TODO Hides IndividualReportCommon.Position.  What is desired?
       public static List<string> Position(string path) {
          var result = FetchListFields(path, signal_posit, signal_end_of_section);
          while (result.Last().Contains("/html") || result.Last().Contains("<p>") || result.Last().Contains("</p")) {
@@ -71,6 +71,7 @@ namespace Scout2.IndividualReport {
       /// <returns></returns>
       public static string Likelihood(string path) { return FetchField(path, signal_like); }
 
+      /// TODO Hides IndividualReportCommon.History.  What is desired?
       public static List<string> History(string path) {
          var result = new List<string>();
          if (File.Exists(path)) {
@@ -165,14 +166,6 @@ namespace Scout2.IndividualReport {
             }
          }
          throw new ApplicationException($"Stream does not contain signature {signature}.");
-      }
-
-      private static List<string> RemoveTrailingParagraphs(List<string> items) {
-         var result = items;
-         while (result.Last().Contains("<p>") || result.Last().Contains("</p>")) {
-            result.RemoveAt(result.Count - 1);
-         }
-         return result;
       }
    }
 }

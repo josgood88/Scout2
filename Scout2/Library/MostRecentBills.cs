@@ -21,7 +21,7 @@ namespace Library {
 
       static IEnumerable<Bill_Identifier> FindMostRecentBillVersions(string folder) {
          List<Bill_Identifier> all_bills = new List<Bill_Identifier>();
-         Log.Instance.Info("FindMostRecentBillVersions: Listing all files in {folder}.");
+         Log.Instance.Info($"FindMostRecentBillVersions: Listing all files in {folder}.");
          string[] filePaths = Directory.GetFiles(folder,"*.lob",SearchOption.TopDirectoryOnly);
          Log.Instance.Info("...Creating List<BillIdentifier>, one entry for each file.");
          foreach (var path in filePaths) all_bills.Add(new Bill_Identifier(path));

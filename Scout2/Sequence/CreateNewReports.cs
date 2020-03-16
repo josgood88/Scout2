@@ -10,7 +10,7 @@ using Library.Database;
 using Scout2.Utility;
 
 namespace Scout2.Sequence {
-   public class CreateNewReports : BaseController {
+   public class CreateNewReports : Scout2.IndividualReport.PreviousReport {
       ///
       /// Give the user an opportunity to create new reports
       /// for those bills having the highest scores.
@@ -92,7 +92,7 @@ namespace Scout2.Sequence {
       }
 
       private static List<string> ReportContents(BillRow row, string path) {
-         List<string> result = new List<string>();
+         LogThis("Scout2.Sequence.CreateNewReports.ReportContents");
          string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
          BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
          List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
@@ -115,18 +115,24 @@ namespace Scout2.Sequence {
 
          // Position and Summary data come from the previous version of the bill report
          // If the passed path is null or empty, then this method was called when no previous report exists.
-         GetPositionAndSummary(path, out List<string> summary, out List<string> position);
+         // When regenerating a report, there is a previous report.
+         var summary = new List<string>();
+         var position = new List<string>();
+         var shortsummary = string.Empty;
+         var committees = string.Empty;
+         var likelihood = string.Empty;
+         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(path)) {
+            // do nothing
+         } else {
+            summary = Summary(path);
+            position = Position(path);
+            shortsummary = ShortSummary(path);
+            committees = Committees(path);
+            likelihood = Likelihood(path);
+         }
 
          // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
-         result.Add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-         result.Add("<html xmlns=\"http://www.w3.org/1999/xhtml\" > ");
-         result.Add("<head>");
-         result.Add($"   <title> {type_house}-{number} ({author}) {title}</title>");
-         result.Add("</head>");
-         result.Add("<body>");
-         result.Add("<p>");
-         result.Add($"<b>Title</b>: {type_house}-{number} ({author}) {title}");
-         result.Add("</p>");
+		   var result = BeginIndividualReport(type_house, number,author, title);
 
          // Review
          result.Add("<p>");
@@ -141,54 +147,19 @@ namespace Scout2.Sequence {
          }
 
          // Position
-         if (position.Count > 0) {
-            foreach (var line in position) result.Add(line);
-         } else {
-            if (summary.Count == 0) result.Add("<p>");
-            result.Add("   <b>Position</b>: ");
-            result.Add("   <br /> This is my reason.");
-            result.Add("</p>");
-         }
+         result.AddRange(ReportPosition(position));
 
          // Short Summary, Committees Prediction and Passage Likelihood
-         result.Add("<b>ShortSummary</b>: ");
-         result.Add("<br /><b>Committees</b>: ");
-         result.Add("<br /><b>Likelihood</b>: ");
+		   result.AddRange(ReportSummaryPredictLikelihood(shortsummary, committees, likelihood));
 
          // Status, Location, etc
-         if (position.Count == 0) result.Add("<p>");
-         result.Add("<b>Status</b>:");
-         result.Add($"<br /> Location: {location}");
-         string str_date = String.Empty;
-         if (history.Count > 0) str_date = history.First().ActionDate;
-         result.Add($"<br /> Last Action:  {FormatDate(str_date)} {last_action}");
-         result.Add("<table cellspacing=\"0\" cellpadding=\"0\">");
-         result.Add($"   <tr><td> Vote: {vote}             </td><td> &nbsp; &nbsp; Appropriation: {appropriation}</td></tr>");
-         result.Add($"   <tr><td> Fiscal committee: {fiscal} </td><td> &nbsp; &nbsp; State-mandated local program: {local_pgm} </td></tr>");
-         result.Add("</table>");
-         result.Add("</p>");
+         result.AddRange(ReportStatusLocationEtc(location, last_action, vote, appropriation, fiscal, local_pgm, history));
 
          // Bill History
-         result.Add("<p>");
-         result.Add("   <b>Bill History</b>:");
-         foreach (var item in history) {
-            result.Add($"   <br /> {FormatDate(item.ActionDate)} {item.Action}");
-         }
-         result.Add("</p>");
-         result.Add("</body>");
-         result.Add("</html>");
+		 result.AddRange(ReportHistory(history));
          return result;
       }
 
-      private static string FormatDate(string str_date) {
-         string result = string.Empty;
-         DateTime date_result = default(DateTime);
-         if (DateTime.TryParse(str_date, out date_result))
-            result = $"{date_result.ToString("MMM d yyyy")}";
-         else
-            result = "(invalid date)";
-         return result;
-      }
       /// <summary>
       /// Obtain the position and summary information from the specified bill report.
       /// </summary>
@@ -203,30 +174,8 @@ namespace Scout2.Sequence {
          if (string.IsNullOrEmpty(path)) {
             // Do nothing
          } else {
-            PreviousReport.From(path, summary, position);
+            From(path, summary, position);
          }
-      }
-      /// <summary>
-      /// Before a bill is chaptered, the last action is the .First() line in the history.
-      /// When a bill is chaptered, its history may not end with the "Chaptered by Secretary of State" because
-      /// usually multiple actions take place on the same day.  Therefore, for a chaptered bill, report
-      /// the line containing "Chaptered by Secretary of State".  It may not be the first line in the history.
-      /// </summary>
-      /// <param name="row">BillRow describing the bill being processed</param>
-      /// <returns></returns>
-      public static string FindLastAction(BillRow row) {
-         string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
-         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
-         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
-
-         string result = "Could not find last action.";
-         if (row.MeasureState != "Chaptered") {
-            result = history.First().Action;
-         } else {
-            var want_this = history.Find(x => x.Action.Contains("Chaptered by Secretary of State"));
-            result = want_this.Action;
-         }
-         return result;
       }
    }
 }

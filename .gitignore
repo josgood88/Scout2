@@ -36,7 +36,8 @@ bld/
 Generated\ Files/
 
 # Doxygen
-Doxygen/Html
+Documentation/Doxygen/Html
+Documentation/Doxygen/Html/Html
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

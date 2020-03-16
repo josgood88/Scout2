@@ -1,0 +1,17 @@
+#
+digraph diagram
+{
+#  rankdir = LR;
+#  concentrate = true;
+#  edge[samehead=h1, sametail=t1];
+   edge[samehead=h1];
+
+"Base"           [label="BaseController",shape = ellipse,style = filled,color = gray]
+"Common"         [label="IndividualReportCommon",shape = ellipse,style = filled,color = gray]
+"PreviousReport" [label="PreviousReport",shape = ellipse,style = filled,color = gray]
+"Regenerate"     [label="Regenerate",shape = ellipse,style = filled,color = gray]
+
+"Base"           -> "Common"
+"Common"         -> "PreviousReport"
+"PreviousReport" -> "Regenerate"
+}
