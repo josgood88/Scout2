@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 using Scout2.Sequence;
+using Scout2.Utility;
 
 namespace Scout2.IndividualReport {
    public class IndividualReportCommon : BaseController {
@@ -32,6 +33,66 @@ namespace Scout2.IndividualReport {
          return result;
       }
       /// <summary>
+      /// Generate a new individual report or re-generate one that already exists.
+      /// </summary>
+      /// <param name="row">Bill description from the BillRows table</param>
+      /// <param name="path">Path to the .lob file for the bill's current version</param>
+      /// <returns></returns>
+      protected static List<string> BaseReportContents(BillRow row, string path) {
+         LogThis("Scout2.Sequence.CreateNewReports.ReportContents");
+         string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
+         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
+         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
+         var location_code = history.First().TernaryLocation;
+         var location_code_row = GlobalData.LocationTable.Scalar(location_code);
+
+         string appropriation = bv_row.Appropriation;
+         string author = row.Author;
+         string bill_id = row.Bill;
+         string fiscal = bv_row.FiscalCommittee;
+         string house = history.First().PrimaryLocation;
+         string last_action = FindLastAction(row);
+         string location = location_code_row == null ? BillUtils.WhenNullLocationCode(history) : location_code_row.Description;
+         string local_pgm = bv_row.LocalProgram;
+         string number = row.MeasureNum.TrimStart('0');
+         string title = row.Title;
+         string type_house = $"{bill_id.First()}B";
+         string vers_id = row.BillVersionID;
+         string vote = bv_row.VoteRequired;
+
+         // Position and Summary data come from the previous version of the bill report
+         // If the passed path is null or empty, then this method was called when no previous report exists.
+         // When regenerating a report, there is a previous report.
+         var summary = new List<string>();
+         var position = new List<string>();
+         var shortsummary = string.Empty;
+         var committees = string.Empty;
+         var likelihood = string.Empty;
+         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(path)) {
+            // do nothing
+         } else {
+            summary = PreviousReport.Summary(path);
+            position = PreviousReport.Position(path);
+            shortsummary = PreviousReport.ShortSummary(path);
+            committees = PreviousReport.Committees(path);
+            likelihood = PreviousReport.Likelihood(path);
+         }
+
+         // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
+         List<string> result = BeginIndividualReport(type_house, number, author, title);
+         // Review
+         result.AddRange(ReportReview(summary));
+         // Position
+         result.AddRange(ReportPosition(position));
+         // Short Summary, Committees Prediction and Passage Likelihood
+         result.AddRange(ReportSummaryPredictLikelihood(shortsummary, committees, likelihood));
+         // Status, Location, etc
+         result.AddRange(ReportStatusLocationEtc(location, last_action, vote, appropriation, fiscal, local_pgm, history));
+         // Bill History
+         result.AddRange(ReportHistory(history));
+         return result;
+      }
+      /// <summary>
       /// Write the beginning of an individual report.  This include the XML header and the report title.
       /// </summary>
       /// <param name="type_house">BillRow describing the bill being processed</param>
@@ -53,6 +114,23 @@ namespace Scout2.IndividualReport {
          };
          return result;
       }
+      // Review
+      protected static List<string> ReportReview(List<string> summary) {
+         if (summary.Count > 0) {
+            return summary;
+         } else {
+            List<string> result = new List<string> {
+               "<p>",
+               $"<b>Summary</b>: (Reviewed {DateTime.Now.ToShortDateString()})",
+               "   <br /> (Quotations taken directly from the bill's language, or from current code)",
+               "   <br />",
+               "   <br /> This is my review",
+               "</p>"
+            };
+            return result;
+         }
+      }
+      // Position
       protected static List<string> ReportPosition(List<string> position) {
          if (position.Count > 0) return position;
          List<string> result = new List<string> {

@@ -69,7 +69,7 @@ namespace Scout2.Sequence {
       public static void GenerateCanonicalReport(string measure) {
          // Generate the canonical bill
          BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(measure));
-         List<string> contents = ReportContents(row, string.Empty);
+         List<string> contents = BaseReportContents(row, string.Empty);
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(measure))}.html";
          WriteTextFile(contents, path);
          // Let the user edit the canonical bill
@@ -89,75 +89,6 @@ namespace Scout2.Sequence {
          using (System.IO.StreamWriter file = new System.IO.StreamWriter(path)) {
             foreach (string line in contents) { file.WriteLine(line); }
          }
-      }
-
-      private static List<string> ReportContents(BillRow row, string path) {
-         LogThis("Scout2.Sequence.CreateNewReports.ReportContents");
-         string name_ext = Path.GetFileName(row.Lob);                   // BillVersionTable bill_xml is unique
-         BillVersionRow bv_row = GlobalData.VersionTable.Scalar(name_ext);
-         List<BillHistoryRow> history = GlobalData.HistoryTable.RowSet(bv_row.BillID);
-         var location_code = history.First().TernaryLocation;
-         var location_code_row = GlobalData.LocationTable.Scalar(location_code);
-
-         string appropriation = bv_row.Appropriation;
-         string author = row.Author;
-         string bill_id = row.Bill;
-         string fiscal = bv_row.FiscalCommittee;
-         string house = history.First().PrimaryLocation;
-         string last_action = FindLastAction(row);
-         string location = location_code_row == null ? BillUtils.WhenNullLocationCode(history) : location_code_row.Description;
-         string local_pgm = bv_row.LocalProgram;
-         string number = row.MeasureNum.TrimStart('0');
-         string title = row.Title;
-         string type_house = $"{bill_id.First()}B";
-         string vers_id = row.BillVersionID;
-         string vote = bv_row.VoteRequired;
-
-         // Position and Summary data come from the previous version of the bill report
-         // If the passed path is null or empty, then this method was called when no previous report exists.
-         // When regenerating a report, there is a previous report.
-         var summary = new List<string>();
-         var position = new List<string>();
-         var shortsummary = string.Empty;
-         var committees = string.Empty;
-         var likelihood = string.Empty;
-         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(path)) {
-            // do nothing
-         } else {
-            summary = Summary(path);
-            position = Position(path);
-            shortsummary = ShortSummary(path);
-            committees = Committees(path);
-            likelihood = Likelihood(path);
-         }
-
-         // With all necessary data obtained, generate the report file template.  This sets things up for entering the report manually.
-		   var result = BeginIndividualReport(type_house, number,author, title);
-
-         // Review
-         result.Add("<p>");
-         if (summary.Count > 0) {
-            foreach (var line in summary) result.Add(line);
-         } else {
-            result.Add($"<b>Summary</b>: (Reviewed {DateTime.Now.ToShortDateString()})");
-            result.Add("   <br /> (Quotations taken directly from the bill's language, or from current code)");
-            result.Add("   <br />");
-            result.Add("   <br /> This is my review");
-            result.Add("</p>");
-         }
-
-         // Position
-         result.AddRange(ReportPosition(position));
-
-         // Short Summary, Committees Prediction and Passage Likelihood
-		   result.AddRange(ReportSummaryPredictLikelihood(shortsummary, committees, likelihood));
-
-         // Status, Location, etc
-         result.AddRange(ReportStatusLocationEtc(location, last_action, vote, appropriation, fiscal, local_pgm, history));
-
-         // Bill History
-		 result.AddRange(ReportHistory(history));
-         return result;
       }
 
       /// <summary>
