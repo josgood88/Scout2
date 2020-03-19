@@ -7,6 +7,7 @@ namespace Scout2 {
    public class Hearing {
       public string measure { get; set; }
       public string date { get; set; }
+      public Hearing(string d, string m) { date = d; measure = m; }
    }
    /// <summary>
    /// A committee has an agenda of bills that it intends to review in a public hearing.

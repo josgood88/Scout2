@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Library;
@@ -128,43 +130,46 @@ namespace Scout2.Sequence {
       }
       /// <summary>
       /// Committees like Assembly Health show their agenda items as a list of hot links to pdf documents.
-      /// This method handles that case
+      /// This method handles that case.
       /// </summary>
       /// <param name="agendas_url"></param>
       /// <returns></returns>
       private List<Hearing> FetchFromListOfPDFs(string agendas_url, Form1 form1) {
          var result = new List<Hearing>();
+         var list_offset = -1;
          var pdf_documents = ItemsByText("{pdf}");
-         foreach (var item in pdf_documents) {
-            item.Click();
-            // https://ahea.assembly.ca.gov/sites/ahea.assembly.ca.gov/files/March%2019%202019%20Agenda.pdf
-            var path = "https://ahea.assembly.ca.gov/sites/ahea.assembly.ca.gov/files/March%2019%202019%20Agenda.pdf";
-            SimpleDownload(path, form1);
-            ConvertPdfToText(Path.Combine(Config.Instance.DownloadsFolder, "March 19 2019 Agenda.pdf"));
+         try {
+            while (++list_offset < pdf_documents.Count()) {
+               pdf_documents[list_offset].Click();
+               // Download this hearing's pdf file from the leg site
+               var current_url = Driver.Url ?? string.Empty;
+               var pdf_file_path = Path.Combine(Config.Instance.DownloadsFolder, Path.GetFileName(current_url)).ToString();
+               SimpleDownload(current_url, pdf_file_path, form1);
 
-            //// https://ahea.assembly.ca.gov/sites/ahea.assembly.ca.gov/files/March%2019%202019%20Agenda.pdf
-            //string filename = item.Text.Replace("{pdf}", string.Empty);
-            //string item_month = Regex.Replace(filename, @"(\w+) .*", "$1").ToString();
-            //string item_day = Regex.Replace(filename, @"\w+\s+(\d+).*", "$1").ToString();
-            //string item_year = Regex.Replace(filename, @".*?,\s+(\d+).*", "$1").ToString();
-            //if (!int.TryParse(item_year, out int int_year)) 
-            //   throw new ApplicationException($"FetchFromListOfPDFs: Unable to convert parse year from {filename}");
-            //DateUtils.Biennium(out int first_year, out int second_year);
-            //string xx = $"{item_month}%{first_year}%{second_year}{item_day}%{int_year%100}Agenda.pdf";
+               // Convert the pdf file to a text file
+               var text_file_path = Path.Combine(Config.Instance.DownloadsFolder, "March 19 2019 Agenda.txt").ToString();
+               ConvertPdfToText(pdf_file_path, text_file_path);
 
-            //var new_documents = ItemsByText("{pdf}");
-            //Driver.Navigate().GoToUrl("https://google.com/");
-            Actions a = new Actions(Driver);
-            //a.SendKeys(Keys.End);
-            //a.KeyDown(OpenQA.Selenium.Keys.Shift).SendKeys("ThisWillBePrintedCAPS")
-            // .KeyUp(OpenQA.Selenium.Keys.Shift).SendKeys("ThisWillBePrintedRegular").Build().Perform();
-            a.KeyDown(OpenQA.Selenium.Keys.Control).SendKeys("S")    // "Ctrl + s" Open options to save the current page
-             .KeyUp(OpenQA.Selenium.Keys.Control).Build().Perform();
-            Actions b = new Actions(Driver);
-            b.KeyDown(Keys.Alt).SendKeys("S").Build().Perform();     // "Alt + s"  Press the Save button
-            b.KeyUp(Keys.Alt);
-
-            Driver.Navigate().Back();  // Back to the list of pdf documents
+               // Extract the hearings from the text file
+               var contents = File.ReadAllText(text_file_path);
+               var sections = Regex.Split(contents, @"\d+\.");
+               var date = HearingDate(sections.First());
+               for (int i = 1; i < sections.Length; ++i) {
+                  const string chamber = "(AB|SB)";
+                  const string number = @"\d{1,4}";
+                  var line = sections[i].Trim();
+                  var bill = Regex.Match(sections[i], $"{chamber}\\s+{number}").ToString();
+                  result.Add(new Hearing(date, bill));
+               }
+               // Cleanup
+               File.Delete(pdf_file_path);
+               File.Delete(text_file_path);
+               Driver.Navigate().Back();
+               pdf_documents = ItemsByText("{pdf}");  // Previous collection has gone stale, refresh
+            }
+         } catch (Exception ex) {
+            var msg = $"LegSiteController.FetchFromListOfPDFs: {ex.Message}";
+            LogAndShow(msg);
          }
          return result;
       }
@@ -222,18 +227,25 @@ namespace Scout2.Sequence {
          return interval;
       }
 
-      private void SimpleDownload(string url, Form1 form1) {
+      private void SimpleDownload(string url, string output_path, Form1 form1) {
+         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(url)) throw new ApplicationException("LegSiteController.SimpleDownload: URL is null, empty or whitespace.");
          try {
-            using (var client = new WebClient()) {
-               var contents = client.DownloadString(url);
-               var output_path = OutputPath(Path.GetFileName(url));   // Throw if output file cannot be created.
-               FileUtils.WriteTextFile(contents, output_path);
+            using (var wc = new WebClient()) {
+               wc.DownloadFile(url, output_path);
             }
          } catch (Exception ex) {
             var msg = $"LegSiteController.SimpleDownload: Exception \"{ex.Message}\" downloading {url}.";
             LogAndDisplay(form1.txtLegSiteCompletion, msg);
             throw new ApplicationException(msg);
          }
+      }
+
+      private static string HearingDate(string section) {
+         const string months = @"(Jan\w+ |Feb\w+ |Mar\w+ |Apr\w+ |May |Jun\w+ |Jul\w+ |Aug\w+ |Sep\w+ |Oct\w+ |Nov\w+ |Dec\w+ )";
+         const string day = @"\d{1,2}, ";
+         const string year = @"20\d\d ";
+         var extract = Regex.Match(section, $"{months}{day}{year}").ToString();
+         return extract;
       }
 
       /// <summary>
@@ -253,21 +265,15 @@ namespace Scout2.Sequence {
       /// <summary>
       /// Convert a PDF file to text.  Return the text.
       /// </summary>
-      /// <param name="input_path">Path to the PDF file</param>
+      /// <param name="pdf_path">Path to the input PDF file</param>
+      /// <param name="text_path">Path to the output text file</param>
       /// <returns></returns>
-      private void ConvertPdfToText(string input_path) {
-         var result = new List<string>();
+      private void ConvertPdfToText(string pdf_path, string text_path) {
          try {
             var pdfParser = new PdfToText.PDFParser();
-            var filename = Path.GetFileNameWithoutExtension(input_path) + ".txt";
-            if (string.IsNullOrEmpty(filename)) throw new ApplicationException($"ConvertPdfToText: Null filename in {input_path}");
-            filename += ".txt";
-            var folder = Path.GetDirectoryName(input_path);
-            if (string.IsNullOrEmpty(folder)) throw new ApplicationException($"ConvertPdfToText: Null folder in {input_path}");
-            var output_path = Path.Combine(folder, filename);
-            pdfParser.ExtractText(input_path, output_path);
+            pdfParser.ExtractText(pdf_path, text_path);
          } catch (Exception ex) {
-            string msg = $"ConvertPdfToText: Error \"{ex.Message}\" processing {input_path}.";
+            string msg = $"ConvertPdfToText: Error \"{ex.Message}\" processing {pdf_path}.";
             LogAndThrow(msg);
          }
       }
