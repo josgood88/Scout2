@@ -17,11 +17,15 @@ namespace Scout2.IndividualReport {
       private string FilePath(string bill) { return $"{Path.Combine(Config.Instance.HtmlFolder,bill)}.html"; }
 
       private void Create(string bill, string path) {
+         try { 
          BillRow row = BillRow.Row(BillUtils.Ensure4DigitNumber(bill));
          List<string> contents = CreateIndividualReport.ReportContents(row, path);
          WriteTextFile(contents, path);
          var message = $"Regenerated {row.Bill} report.";
          BaseController.LogThis(message);
+         } catch (Exception ex) {
+            LogAndThrow($"IndividualReport.Create: {ex.Message}.");
+         }
       }
    }
 }

@@ -53,5 +53,20 @@ namespace Scout2.Utility {
       public static bool DateIsInPastWeek(DateTime dt, Report.Report.DateRange range) {
          return dt >= range.start && dt <= range.end;
       }
+      /// <summary>
+      /// Define the starting and ending years of the current biennium
+      /// </summary>
+      /// <param name="first_year">First year of the biennium</param>
+      /// <param name="second_year">Last year of the biennium</param>
+      public static void Biennium(out int first_year, out int second_year) {
+         var this_year = DateTime.Now.Year;
+         if (MiscUtils.IsEven(this_year)) {
+            first_year = this_year - 1;
+            second_year = this_year;
+         } else {
+            first_year = this_year;
+            second_year = this_year + 1;
+         }
+      }
    }
 }

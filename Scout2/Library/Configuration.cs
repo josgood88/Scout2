@@ -8,7 +8,8 @@ namespace Library {
    /// Singleton ownership of configuration data.
    /// </summary>
    public sealed class Config {
-      private Dictionary<string, string> own = new Dictionary<string, string>();  // This contains the configuration information
+      private Dictionary<string, string> own = new Dictionary<string, string>();     // This contains the configuration information
+      private Dictionary<string, string> agendas = new Dictionary<string, string>(); // This contains the committee agenda URLs
       private List<string> highest_priority = new List<string>(); // Define the highest-priority bills
       private List<string> manualCommittees = new List<string>(); // Define the manual changes to committee sequences
       private static Config instance = null;
@@ -36,6 +37,7 @@ namespace Library {
       public string ScoutFile       { get { return ValueFor("scout_file"); } }
       public List<string> HighestPriority { get { return highest_priority;  } }
       public List<string> ManualCommitteeChanges { get { return manualCommittees; } }
+      public Dictionary<string, string> Agendas { get { return agendas; } }
 
       // Guarantee no exception when accessing configuration data
       private string ValueFor(string key) {
@@ -47,7 +49,8 @@ namespace Library {
          return result;
       }
 
-      // File location is hardwired
+      // File locations are hardwired
+      private const string committee_agendas  = "D:/CCHR/Projects/Scout2/ConfigurationData/Committees.json";
       private const string configuration_file = "D:/CCHR/Projects/Scout2/ConfigurationData/Config.json";
       private const string high_priority_file = "D:/CCHR/Projects/Scout2/ConfigurationData/HighestPriority.json";
       private const string manual_comm_file   = "D:/CCHR/Projects/Scout2/ConfigurationData/NewManualRouting.json";
@@ -58,6 +61,7 @@ namespace Library {
          ReadConfigFileItems();
          ReadHighestPriorityItems();
          manualCommittees = ManualCommitteesUpdate();
+         agendas = ReadCommitteeAgendaURLs();
       }
       private void ReadConfigFileItems() {
          if (File.Exists(configuration_file)) {
@@ -92,6 +96,14 @@ namespace Library {
             result = JsonConvert.DeserializeObject<List<string>>(contents);
          }
          return result;
+      }
+
+      private Dictionary<string, string> ReadCommitteeAgendaURLs() {
+         if (File.Exists(committee_agendas)) {
+            var contents = FileUtils.FileContents(committee_agendas);
+            agendas = JsonConvert.DeserializeObject<Dictionary<string, string>>(contents);
+         }
+         return agendas;
       }
 
       // Calling program given responsibilty for persisting configuration data.
