@@ -105,9 +105,13 @@ namespace Scout2.Utility {
       /// <param name="report_contents"></param>
       /// <returns></returns>
       public static DateTime DateOfInitialReview(string report_contents) {
+         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(report_contents))
+            throw new ApplicationException("BillUtils.DateOfInitialReview: report_contents is null, empty or whitespace.");
          string s1 = Regex.Match(report_contents, @"\(Reviewed.*\)").ToString();
+         if (s1 == string.Empty) throw new ApplicationException($"BillUtils.DateOfInitialReview: {report_contents} doesn not contain a review date.");
          string text_date = Regex.Replace(s1, @".Reviewed\s+(.*)\)", "$1");
-         return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);
+         if (DateTime.TryParse(text_date, out DateTime result)) return result;
+         else throw new ApplicationException($"BillUtils.DateOfInitialReview: {text_date} is not a valid date.");
       }
       /// <summary>
       /// Given a bill report, returns the contents of the report as a single string.

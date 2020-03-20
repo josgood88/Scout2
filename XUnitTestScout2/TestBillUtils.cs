@@ -122,5 +122,23 @@ namespace Scout.Tests {
          bool test = is_new_week == BillUtils.IsNewThisWeek(report_contents, range);
          Assert.True(is_new_week == BillUtils.IsNewThisWeek(report_contents, range));
       }
+
+      //=====================DateOfInitialReview=====================
+      [Theory]
+      [InlineData(1, "12/15/2018", "   <b>Summary</b>: (Reviewed 12/15/2018)")]
+      [InlineData(0, "01/01/0001", null)]
+      [InlineData(0, "01/01/0001", "")]
+      [InlineData(0, "01/01/0001", " ")]
+      [InlineData(0, "01/01/0001", "abc")]
+      public void TestDateOfInitialReview(int is_valid, string right_answer, string report_contents) {
+         DateTime.TryParse(right_answer, out DateTime correct);
+         try {
+            var result = BillUtils.DateOfInitialReview(report_contents);
+            if (is_valid == 0) Assert.True(false, $"Unexpected DateOfInitialReview success parsing {report_contents}");
+            Assert.True(correct.Year==result.Year && correct.Month==result.Month&& correct.Day==result.Day);
+         } catch (Exception ) {
+            if (is_valid == 1) Assert.True(false, $"Unexpected DateOfInitialReview failure parsing {report_contents}");
+         }
+      }
    }
 }
