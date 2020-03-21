@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
 using Scout2.Report;
+// Allows Testing to access private methods
+[assembly: InternalsVisibleTo("Scout.Tests")]
 
 namespace Scout2.Utility {
    public class BillUtils : CommonUtils {
@@ -80,6 +83,7 @@ namespace Scout2.Utility {
          bool correct = house != string.Empty && house != bill && number != string.Empty && number != bill;
          return correct;
       }
+
       /// <summary>
       /// Returns an enumeration of the *.html files which are the individual bill reports and the weekly report.
       /// This is not unit tested.  It is too simple to require testing and the necessary mock isn't worth the effort.
@@ -88,6 +92,7 @@ namespace Scout2.Utility {
       public static List<string> HtmlFolderContents() {
          return Directory.EnumerateFiles(Config.Instance.HtmlFolder, "*.html").ToList();
       }
+
       /// <summary>
       /// Answers whether an individual bill report appears for the first time this week.
       /// The bill review date is given on the summary line, e.g. Summary: (Reviewed 1/19/2019) 
@@ -99,6 +104,7 @@ namespace Scout2.Utility {
          DateTime dt = DateOfInitialReview(report_contents);
          return DateUtils.DateIsInPastWeek(dt, past_week);
       }
+
       /// <summary>
       /// Returns the date this biennium when an individual bill report was first written.
       /// </summary>
@@ -113,6 +119,7 @@ namespace Scout2.Utility {
          if (DateTime.TryParse(text_date, out DateTime result)) return result;
          else throw new ApplicationException($"BillUtils.DateOfInitialReview: {text_date} is not a valid date.");
       }
+
       /// <summary>
       /// Given a bill report, returns the contents of the report as a single string.
       /// This is not unit tested.  It is too simple to require testing and the necessary mock isn't worth the effort.
@@ -123,6 +130,7 @@ namespace Scout2.Utility {
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
          return FileUtils.FileContents(path);
       }
+
       /// <summary>
       /// In the "Highest Priority", "Oppose", "Modify/Monitor" and "Prediction" sections of the weekly report, bills that are
       /// new or have been updated are shown with a red prefix of NEW or UPDATED.  This makes them stand out from all the
@@ -141,19 +149,38 @@ namespace Scout2.Utility {
          string prefix = BillUtils.IsNewThisWeek(report_contents, past_week) ? prefix_new : string.Empty;
          if (prefix.Length == 0) {
             var dt = DateFromLastAction(report);
-            prefix = DateUtils.DateIsInPastWeek(dt, past_week) ? prefix_update : CheckManualUpdate(report);
+            prefix = DateUtils.DateIsInPastWeek(dt, past_week) ? prefix_update : CheckManualUpdate(report.Measure);
          }
          return prefix;
       }
 
-      private static string CheckManualUpdate(BillReport report) {
+      /// <summary>
+      /// In addition to the automatically generated NEW and UPDATED prefixes, Scout2 supports a MANUAL prefix.
+      /// The bill reviewer uses MANUAL when making a change to a bill report that is sufficiently meaningful
+      /// that it should be called out in the weekly report, just as NEW and UPDATED are called out.
+      ///
+      /// The bill reviewer indicates this manual report change by including the bill measure, eg AB1234,
+      /// in Scout2/ConfigurationData/NewManualRouting.json.  That file has the form
+      /// [
+      ///   "AB1946", "AB2025", "SB66", "SB360", "SB582", "SB590", "SB803", "SB855"
+      /// ]
+      /// </summary>
+      /// <param name="measure">The measure number, e.g. "AB1234"</param>
+      /// <returns></returns>
+      internal static string CheckManualUpdate(string _measure) {
          const string prefix_manual = "<span style=\"color: #ff0000\">MANUAL</span><br />";
-         var measure = BillUtils.NoDash(report.Measure);
+         if (Config.Instance.ManualCommitteeChanges is null) return string.Empty;
+         if (CommonUtils.IsNullOrEmptyOrWhiteSpace(_measure)) return string.Empty;
+         var measure = BillUtils.NoDash(_measure);
          var changes = Config.Instance.ManualCommitteeChanges;
          var end_of_section = changes.FirstOrDefault(t => t == measure);
          return end_of_section != null ? prefix_manual : string.Empty;
       }
-
+      /// <summary>
+      /// Obtain the date of the last action shown in a BillReport
+      /// </summary>
+      /// <param name="report">A BillReport struct generated from an actual bill report</param>
+      /// <returns>The date of the last action</returns>
       public static DateTime DateFromLastAction(BillReport report) {
          var text_date = Regex.Match(report.LastAction, @"^\w+\s+\w+\s+\w+").ToString();
          return (DateTime.TryParse(text_date, out DateTime result)) ? result : default(DateTime);

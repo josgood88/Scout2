@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Scout2.Utility;
+// Allows Testing to access private methods
+[assembly: InternalsVisibleTo("Scout.Tests")]
 
 namespace Library {
    /// <summary>
@@ -36,7 +39,7 @@ namespace Library {
       public string PositiveFile    { get { return ValueFor("positive_file"); } }
       public string ScoutFile       { get { return ValueFor("scout_file"); } }
       public List<string> HighestPriority { get { return highest_priority;  } }
-      public List<string> ManualCommitteeChanges { get { return manualCommittees; } }
+      public List<string> ManualCommitteeChanges { get; set; }
       public Dictionary<string, string> Agendas { get { return agendas; } }
 
       // Guarantee no exception when accessing configuration data
