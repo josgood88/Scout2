@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Xunit;
 using Scout2.Report;
+using Scout2.Sequence;
 using Scout2.Utility;
 
 
@@ -138,6 +140,38 @@ namespace Scout.Tests {
             Assert.True(correct.Year==result.Year && correct.Month==result.Month&& correct.Day==result.Day);
          } catch (Exception ) {
             if (is_valid == 1) Assert.True(false, $"Unexpected DateOfInitialReview failure parsing {report_contents}");
+         }
+      }
+
+      //=====================DateNewOrChangePrefix=====================
+      // This test depends on actual bill reports being present in the TestData folder, which is a subfolder of
+      // the folder which contains Scout.Tests.csproj.
+      [Theory]
+      [InlineData("New",    "02/24/2020", "03/01/2020", "../../../TestData/SB1200WeekEnding20200308.html")]
+      [InlineData("Update", "03/16/2020", "03/22/2020", "../../../TestData/AB1976WeekEnding20200315.html")]
+      [InlineData("None",   "03/16/2020", "03/22/2020", "../../../TestData/AB3285WeekEnding20200315.html")]
+      public void TestNewOrChangePrefix(string say_right_answer, string week_start, string week_end, string report_file_path) {
+         if (File.Exists(report_file_path)) {
+            BaseController.EnsureGlobalData();  // Report constructor requires GlobalHistoryTable
+            var range = new Report.DateRange(week_start, week_end);
+            var report = new BillReport(report_file_path);
+            var answer = BillUtils.NewOrChangePrefix(range, report);
+            switch (say_right_answer) {
+               case "New":
+                  Assert.True(answer.Contains("NEW"), $"TestNewOrChangePrefix: {answer} is not correct, should contain NEW.");
+                  break;
+               case "Update":
+                  Assert.True(answer.Contains("UPDATED"), $"TestNewOrChangePrefix: {answer} is not correct, should contain UPDATED.");
+                  break;
+               case "None":
+                  Assert.True(answer.Length == 0, $"TestNewOrChangePrefix: {answer} is not correct, should be of 0 length.");
+                  break;
+               default:
+                  Assert.True(false, $"TestNewOrChangePrefix: {answer} is not a valid NewOrChangePrefix response.");
+                  break;
+            }
+         } else {
+            Assert.True(false, $"TestNewOrChangePrefix: {report_file_path} does not exist.");
          }
       }
    }

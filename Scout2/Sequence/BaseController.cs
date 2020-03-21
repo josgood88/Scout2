@@ -31,8 +31,9 @@ namespace Scout2.Sequence {
       /// Sets contents of some database tables, using data from table files contained in the zipped download.
       /// </summary>
       /// <returns>True if all is well, False if unable to access table files expected to be present</returns>
-      private static bool EnsureGlobalData() {
+      public static bool EnsureGlobalData() {   // public so that XUnit TestNewOrChangePrefix can ensure table contents are available
          bool result = true;
+         Config.Instance.ReadYourself();  // Start of configuration data lifetime
          GlobalData.Profiles = new List<BillProfile>();
          if (GlobalData.BillRows == null)
             GlobalData.BillRows = BillRow.RowSet();

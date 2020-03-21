@@ -82,7 +82,7 @@ namespace Scout2.Utility {
       }
       /// <summary>
       /// Returns an enumeration of the *.html files which are the individual bill reports and the weekly report.
-      /// This is not unit testing.  It is too simple to require testing and the necessary mock isn't worth the effort.
+      /// This is not unit tested.  It is too simple to require testing and the necessary mock isn't worth the effort.
       /// </summary>
       /// <returns></returns>
       public static List<string> HtmlFolderContents() {
@@ -115,6 +115,7 @@ namespace Scout2.Utility {
       }
       /// <summary>
       /// Given a bill report, returns the contents of the report as a single string.
+      /// This is not unit tested.  It is too simple to require testing and the necessary mock isn't worth the effort.
       /// </summary>
       /// <param name="report">BillReport telling chamber and bill number, specifying bill, allowing bill report to be read</param>
       /// <returns></returns>
@@ -122,7 +123,17 @@ namespace Scout2.Utility {
          string path = $"{Path.Combine(Config.Instance.HtmlFolder, BillUtils.EnsureNoLeadingZerosBill(report.Measure))}.html";
          return FileUtils.FileContents(path);
       }
-
+      /// <summary>
+      /// In the "Highest Priority", "Oppose", "Modify/Monitor" and "Prediction" sections of the weekly report, bills that are
+      /// new or have been updated are shown with a red prefix of NEW or UPDATED.  This makes them stand out from all the
+      /// other bills listed in the report.
+      ///
+      /// If the bill's first review date was during this past week, the NEW prefix is shown.
+      /// if the date of the bill's last action was during this past week, the UPDATED prefix is shown.
+      /// </summary>
+      /// <param name="past_week">Starting and ending dates of the previous week</param>
+      /// <param name="report">The contents of an individual bill report</param>
+      /// <returns></returns>
       public static string NewOrChangePrefix(Report.Report.DateRange past_week, BillReport report) {
          const string prefix_new = "<span style=\"color: #ff0000\">NEW</span><br />";
          const string prefix_update = "<span style=\"color: #ff0000\">UPDATED</span><br />";

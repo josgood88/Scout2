@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Want these dlls in the repo
+!PdfToText/*
+
 # User-specific files
 *.rsuser
 *.suo

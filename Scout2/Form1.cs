@@ -9,7 +9,6 @@ namespace Scout2 {
 
       public Form1() {
          InitializeComponent();
-         Config.Instance.ReadYourself();  // Start of configuration data lifetime
       }
 
       private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
