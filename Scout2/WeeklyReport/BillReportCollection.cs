@@ -57,6 +57,7 @@ namespace Scout2.WeeklyReport {
             var bill_id = $"{house}{number}";
             BillHistoryRow mostRecent = GlobalData.HistoryTable.LatestFromHouseNumber(bill_id);
             LastAction = $"{DateUtils.Date(mostRecent.ActionDate)} {mostRecent.Action}";
+            LastAction = LastAction.Replace("''", "'"); // Governor''s becomes Governor's
 
             // Find WIC (Welfare and Institutions Code) and LPS (Lanterman-Petris-Short Act)
             var most_recent = GlobalData.MostRecentEachBill
