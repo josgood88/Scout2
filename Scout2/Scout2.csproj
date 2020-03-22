@@ -144,10 +144,10 @@
     <Compile Include="Library\PartialScore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Report\BillReportCollection.cs" />
-    <Compile Include="Report\Definitions.cs" />
-    <Compile Include="Report\RemainingSchedule.cs" />
-    <Compile Include="Report\Report.cs" />
+    <Compile Include="WeeklyReport\BillReportCollection.cs" />
+    <Compile Include="WeeklyReport\Definitions.cs" />
+    <Compile Include="WeeklyReport\RemainingSchedule.cs" />
+    <Compile Include="WeeklyReport\WeeklyReport.cs" />
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>

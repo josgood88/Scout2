@@ -6,8 +6,8 @@ using Library;
 using Scout2.Sequence;
 using Scout2.Utility;
 
-namespace Scout2.Report {
-   public class Report : BaseController {
+namespace Scout2.WeeklyReport {
+   public class WeeklyReport : BaseController {
       private readonly string output_folder;
       private readonly string path_log_file;
       private readonly string report_folder;
@@ -27,7 +27,7 @@ namespace Scout2.Report {
          }
       }
 
-      public Report(string output_folder, string path_log_file, string report_folder) {
+      public WeeklyReport(string output_folder, string path_log_file, string report_folder) {
          this.output_folder = output_folder; 
          this.path_log_file = path_log_file;
          this.report_folder = report_folder;
@@ -213,7 +213,7 @@ namespace Scout2.Report {
       }
 
       private void Definitions(StreamWriter sw) {
-         sw.WriteLine(Scout2.Report.Definitions.AsString());
+         sw.WriteLine(Scout2.WeeklyReport.Definitions.AsString());
       }
 
       private void End(StreamWriter sw) {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Library;
 using Library.Database;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 
 namespace Scout2.Sequence {
    public class UpdateExistingReports : BillReportBase {

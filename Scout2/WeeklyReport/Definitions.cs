@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Scout2.Report {
+namespace Scout2.WeeklyReport {
    public class Definitions {
       public static string AsString() {
          var sb = new StringBuilder();

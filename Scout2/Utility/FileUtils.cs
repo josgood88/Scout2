@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
-using Library;
 
 namespace Scout2.Utility {
    public class FileUtils {

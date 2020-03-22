@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using Library.Database;
 using OpenQA.Selenium.Support.UI;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 using Scout2.Utility;
 
 namespace Scout2.Sequence {

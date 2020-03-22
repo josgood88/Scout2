@@ -1,9 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Windows.Forms.VisualStyles;
-using OpenQA.Selenium.Support.UI;
 
 namespace Scout2.Utility {
    public class Whether {

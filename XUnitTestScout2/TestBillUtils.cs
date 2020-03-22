@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Library;
-using Newtonsoft.Json;
 using Xunit;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 using Scout2.Sequence;
 using Scout2.Utility;
-
 
 namespace Scout.Tests {
    public class TestBillUtils {
@@ -122,7 +120,7 @@ namespace Scout.Tests {
       [InlineData(1, "3/1/2020",  "2/24/2020", "3/1/2020")]
       public void TestIsNewThisWeek(int new_week, string report_date, string week_start, string week_end) {
          string report_contents = $"   <b>Summary</b>: (Reviewed {report_date})";
-         var range = new Report.DateRange(week_start, week_end);
+         var range = new Scout2.WeeklyReport.WeeklyReport.DateRange(week_start, week_end);
          bool is_new_week = new_week != 0;
          bool test = is_new_week == BillUtils.IsNewThisWeek(report_contents, range);
          Assert.True(is_new_week == BillUtils.IsNewThisWeek(report_contents, range));
@@ -156,7 +154,7 @@ namespace Scout.Tests {
       public void TestNewOrChangePrefix(string right_answer, string week_start, string week_end, string report_file_path) {
          if (File.Exists(report_file_path)) {
             BaseController.EnsureGlobalData();  // Report constructor requires GlobalHistoryTable
-            var range = new Report.DateRange(week_start, week_end);
+            var range = new Scout2.WeeklyReport.WeeklyReport.DateRange(week_start, week_end);
             var report = new BillReport(report_file_path);
             var answer = BillUtils.NewOrChangePrefix(range, report);
             switch (right_answer) {
@@ -228,5 +226,8 @@ namespace Scout.Tests {
             Assert.True(false, $"TestNewOrChangePrefix: {report_file_path} does not exist.");
          }
       }
+
+      //=====================WhenNullLocationCode=====================
+      // WhenNullLocationCode isn't unit tested.  It is simple enough that inspection is deemed sufficient.
    }
 }

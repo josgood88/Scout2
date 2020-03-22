@@ -9,7 +9,7 @@ using Library.Database;
 using Scout2.Sequence;
 using Scout2.Utility;
 
-namespace Scout2.Report {
+namespace Scout2.WeeklyReport {
    public class BillReport {
       public string Author { get; private set; }
       public string Measure { get; private set; }

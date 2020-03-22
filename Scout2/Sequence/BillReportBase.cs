@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Library.Database;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 
 namespace Scout2.Sequence {
    public class BillReportBase : BaseController {

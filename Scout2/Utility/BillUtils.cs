@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Library;
 using Library.Database;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 // Allows Testing to access private methods
 [assembly: InternalsVisibleTo("Scout.Tests")]
 
@@ -100,7 +100,7 @@ namespace Scout2.Utility {
       /// <param name="report_contents">The contents of the individual bill report in question</param>
       /// <param name="past_week">The starting and ending dates that define last week.</param>
       /// <returns></returns>
-      public static bool IsNewThisWeek(string report_contents, Report.Report.DateRange past_week) {
+      public static bool IsNewThisWeek(string report_contents, WeeklyReport.WeeklyReport.DateRange past_week) {
          DateTime dt = DateOfInitialReview(report_contents);
          return DateUtils.DateIsInPastWeek(dt, past_week);
       }
@@ -142,7 +142,7 @@ namespace Scout2.Utility {
       /// <param name="past_week">Starting and ending dates of the previous week</param>
       /// <param name="report">The contents of an individual bill report</param>
       /// <returns></returns>
-      public static string NewOrChangePrefix(Report.Report.DateRange past_week, BillReport report) {
+      public static string NewOrChangePrefix(WeeklyReport.WeeklyReport.DateRange past_week, BillReport report) {
          const string prefix_new = "<span style=\"color: #ff0000\">NEW</span><br />";
          const string prefix_update = "<span style=\"color: #ff0000\">UPDATED</span><br />";
          string report_contents = BillUtils.ContentsFromBillReport(report);

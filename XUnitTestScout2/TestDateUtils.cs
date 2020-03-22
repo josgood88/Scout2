@@ -1,10 +1,11 @@
 using Scout2.Utility;
 using System;
-using Scout2.Report;
+using Scout2.WeeklyReport;
 using Xunit;
 
 namespace Scout.Tests {
    public class TestDateUtils {
+      //=====================Date=====================
       /// <summary>
       /// 
       /// </summary>
@@ -25,7 +26,7 @@ namespace Scout.Tests {
             else throw;
          }
       }
-
+      //=====================NextMonday=====================
       // NextMonday_private is not tested with garbage data because its only caller passes DateTime.Now.
       // Because NextMonday_private is only called with DateTime.Now, it is not expected to throw
       [Theory]
@@ -50,7 +51,7 @@ namespace Scout.Tests {
          DateTime result = DateUtils.NextMonday_private(test_data);
          Assert.True(result == correct_answer);
       }
-
+      //=====================LastMonday=====================
       // LastMonday_private is like NextMonday_private in that it is not tested with garbage data
       // because its only caller passes DateTime.Now.
       // Because LastMonday_private is only called with DateTime.Now, it is not expected to throw
@@ -76,7 +77,7 @@ namespace Scout.Tests {
          DateTime result = DateUtils.LastMonday_private(test_data);
          Assert.True(result == correct_answer);
       }
-
+      //=====================DateIsInPastWeek=====================
       [Theory]
       [InlineData(1, "2/10/2020", "2/10/2020", "2/16/2020")]
       [InlineData(1, "2/11/2020", "2/10/2020", "2/16/2020")]
@@ -87,9 +88,11 @@ namespace Scout.Tests {
       [InlineData(1, "2/16/2020", "2/10/2020", "2/16/2020")]
       public void TestDateIsInPastWeek(int is_in_range, string this_date, string start, string end) {
          DateTime dt = DateTime.Parse(this_date);  // Test data assumed to have valid dates
-         var range = new Report.DateRange(start, end);
+         var range = new WeeklyReport.DateRange(start, end);
          bool result = DateUtils.DateIsInPastWeek(dt, range);
          Assert.True(result == (is_in_range != 0));
       }
+      //=====================Biennium=====================
+      // Biennium isn't unit tested.  It is simple enough that inspection is deemed sufficient.
    }
 }

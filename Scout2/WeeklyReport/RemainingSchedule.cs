@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Scout2.Utility;
 
-namespace Scout2.Report {
+namespace Scout2.WeeklyReport {
    class RemainingSchedule {
       private static DateTime last_monday = default(DateTime);
       private static StringBuilder sb = new StringBuilder();
